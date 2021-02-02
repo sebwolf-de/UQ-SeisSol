@@ -5,6 +5,8 @@
 #include "UQ/MIInterpolation.h"
 #include "UQ/SamplingProblem.h"
 
+#include "SeisSol/Runner.h"
+
 std::shared_ptr<UQ::MCMCProposal> UQ::MyMIComponentFactory::Proposal(
     std::shared_ptr<MultiIndex> const& index,
     std::shared_ptr<AbstractSamplingProblem> const& samplingProblem) {
@@ -39,7 +41,7 @@ std::shared_ptr<UQ::MCMCProposal> UQ::MyMIComponentFactory::CoarseProposal(
 
 std::shared_ptr<UQ::AbstractSamplingProblem>
 UQ::MyMIComponentFactory::SamplingProblem(std::shared_ptr<MultiIndex> const& index) {
-  return std::make_shared<MySamplingProblem>(index);
+  return std::make_shared<MySamplingProblem>(index, runner);
 }
 
 std::shared_ptr<UQ::MIInterpolation>
@@ -54,4 +56,4 @@ Eigen::VectorXd UQ::MyMIComponentFactory::StartingPoint(std::shared_ptr<MultiInd
   return start;
 }
 
-UQ::MyMIComponentFactory::MyMIComponentFactory(std::string filename) {}
+UQ::MyMIComponentFactory::MyMIComponentFactory(SeisSol::Runner runner) : runner(runner) {}

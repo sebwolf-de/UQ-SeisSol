@@ -1,14 +1,16 @@
 #include "UQ/SamplingProblem.h"
 
-UQ::MySamplingProblem::MySamplingProblem(std::shared_ptr<MultiIndex> index)
+UQ::MySamplingProblem::MySamplingProblem(std::shared_ptr<MultiIndex> index, const SeisSol::Runner & runner)
     : AbstractSamplingProblem(Eigen::VectorXi::Constant(1, NUM_PARAM),
-                              Eigen::VectorXi::Constant(1, NUM_PARAM)) {
+                              Eigen::VectorXi::Constant(1, NUM_PARAM)),
+      runner(runner) {
   this->index = index;
   std::cout << "Run Sampling Problem with index" << index->GetValue(0) << std::endl;
 }
 
 double UQ::MySamplingProblem::LogDensity(std::shared_ptr<SamplingState> const& state) {
-  // Call SeisSol
+  int result = runner.run();
+
   return 0.0;
 }
 

@@ -10,9 +10,14 @@
 #include "UQ/MIInterpolation.h"
 #include "UQ/SamplingProblem.h"
 
-int main(int argc, char** argv) {
+#include "SeisSol/Runner.h"
 
-  auto localFactory = std::make_shared<UQ::MyMIComponentFactory>("true_solution.dat");
+int main(int argc, char** argv) {
+  assert(argc == 2);
+
+  SeisSol::Runner runner = SeisSol::Runner(argv[1]);
+
+  auto localFactory = std::make_shared<UQ::MyMIComponentFactory>(runner);
 
   boost::property_tree::ptree pt;
   const size_t N = 1e4;

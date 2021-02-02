@@ -10,28 +10,34 @@
 #include "MUQ/SamplingAlgorithms/SubsamplingMIProposal.h"
 #include "MUQ/Utilities/MultiIndices/MultiIndex.h"
 
+#include "SeisSol/Runner.h"
+
 namespace UQ {
 
-using namespace muq::Modeling;
-using namespace muq::SamplingAlgorithms;
-using namespace muq::Utilities;
+  using namespace muq::Modeling;
+  using namespace muq::SamplingAlgorithms;
+  using namespace muq::Utilities;
 
-class MyMIComponentFactory : public MIComponentFactory {
-  public:
-  virtual std::shared_ptr<MCMCProposal>
-  Proposal(std::shared_ptr<MultiIndex> const& index,
-           std::shared_ptr<AbstractSamplingProblem> const& samplingProblem) override;
-  virtual std::shared_ptr<MultiIndex> FinestIndex() override;
-  virtual std::shared_ptr<MCMCProposal>
-  CoarseProposal(std::shared_ptr<MultiIndex> const& index,
-                 std::shared_ptr<AbstractSamplingProblem> const& coarseProblem,
-                 std::shared_ptr<SingleChainMCMC> const& coarseChain) override;
-  virtual std::shared_ptr<AbstractSamplingProblem>
-  SamplingProblem(std::shared_ptr<MultiIndex> const& index) override;
-  virtual std::shared_ptr<MIInterpolation>
-  Interpolation(std::shared_ptr<MultiIndex> const& index) override;
-  virtual Eigen::VectorXd StartingPoint(std::shared_ptr<MultiIndex> const& index) override;
+  class MyMIComponentFactory : public MIComponentFactory {
+    public:
+      virtual std::shared_ptr<MCMCProposal>
+      Proposal(std::shared_ptr<MultiIndex> const& index,
+              std::shared_ptr<AbstractSamplingProblem> const& samplingProblem) override;
+      virtual std::shared_ptr<MultiIndex> FinestIndex() override;
+      virtual std::shared_ptr<MCMCProposal>
+      CoarseProposal(std::shared_ptr<MultiIndex> const& index,
+                    std::shared_ptr<AbstractSamplingProblem> const& coarseProblem,
+                    std::shared_ptr<SingleChainMCMC> const& coarseChain) override;
+      virtual std::shared_ptr<AbstractSamplingProblem>
+      SamplingProblem(std::shared_ptr<MultiIndex> const& index) override;
+      virtual std::shared_ptr<MIInterpolation>
+      Interpolation(std::shared_ptr<MultiIndex> const& index) override;
+      virtual Eigen::VectorXd StartingPoint(std::shared_ptr<MultiIndex> const& index) override;
 
-  MyMIComponentFactory(std::string filename);
-};
+      MyMIComponentFactory(const SeisSol::Runner runner);
+
+      private:
+        const SeisSol::Runner runner;
+  };
+
 } // namespace UQ
