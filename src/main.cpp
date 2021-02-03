@@ -15,7 +15,7 @@
 int main(int argc, char** argv) {
   assert(argc == 2);
 
-  SeisSol::Runner runner = SeisSol::Runner(argv[1]);
+  auto runner = std::make_shared<SeisSol::Runner>(argv[1]);
 
   auto localFactory = std::make_shared<UQ::MyMIComponentFactory>(runner);
 

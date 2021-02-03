@@ -22,7 +22,7 @@ namespace UQ {
 
   class MySamplingProblem : public AbstractSamplingProblem {
     public:
-      MySamplingProblem(std::shared_ptr<MultiIndex> index, const SeisSol::Runner & runner);
+      MySamplingProblem(std::shared_ptr<MultiIndex> index, std::shared_ptr<SeisSol::Runner> runner);
 
       virtual ~MySamplingProblem(){};
 
@@ -30,7 +30,7 @@ namespace UQ {
       virtual std::shared_ptr<SamplingState> QOI() override;
 
     private:
-      const SeisSol::Runner & runner;
+      std::shared_ptr<SeisSol::Runner> runner;
       std::shared_ptr<SamplingState> lastState = nullptr;
       std::shared_ptr<MultiIndex> index;
   };

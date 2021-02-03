@@ -56,4 +56,4 @@ Eigen::VectorXd UQ::MyMIComponentFactory::StartingPoint(std::shared_ptr<MultiInd
   return start;
 }
 
-UQ::MyMIComponentFactory::MyMIComponentFactory(SeisSol::Runner runner) : runner(runner) {}
+UQ::MyMIComponentFactory::MyMIComponentFactory(std::shared_ptr<SeisSol::Runner> runner) : runner(runner) {}

@@ -34,10 +34,10 @@ namespace UQ {
       Interpolation(std::shared_ptr<MultiIndex> const& index) override;
       virtual Eigen::VectorXd StartingPoint(std::shared_ptr<MultiIndex> const& index) override;
 
-      MyMIComponentFactory(const SeisSol::Runner runner);
+      MyMIComponentFactory(std::shared_ptr<SeisSol::Runner> runner);
 
       private:
-        const SeisSol::Runner runner;
+        std::shared_ptr<SeisSol::Runner> runner;
   };
 
 } // namespace UQ
