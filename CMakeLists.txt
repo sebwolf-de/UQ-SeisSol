@@ -8,11 +8,13 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 add_library(uq 
   src/UQ/SamplingProblem.cpp
   src/UQ/MIInterpolation.cpp
-  src/UQ/MIComponentFactory.cpp
+  src/UQ/MIComponentFactory.cpp)
+add_library(seissol
   src/SeisSol/Runner.cpp)
 
 add_executable(main src/main.cpp)
 target_link_libraries(main uq)
+target_link_libraries(main seissol)
 
 include_directories(${CMAKE_CURRENT_LIST_DIR}/src/)
 
