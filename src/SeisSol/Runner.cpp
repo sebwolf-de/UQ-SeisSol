@@ -19,6 +19,9 @@ int SeisSol::Runner::run() const {
     std::cout << "Child process creation to run SeisSol was unsuccessful, exiting UQ-SeisSol. " << std::endl;
     exit(1);
   } else if (pid == 0) {
+    freopen("SeisSol_stdout.txt", "w", stdout);
+    freopen("SeisSol_stderr.txt", "w", stderr);
+
     // execl returns -1 if there was an error
     // execl does not return if the command was successful
     seissolError = execl(binaryPath, binaryPath, NULL);
@@ -29,6 +32,7 @@ int SeisSol::Runner::run() const {
 
     if (WEXITSTATUS(status) != 0) {
       std::cout << "SeisSol exited with an error exit code, exiting UQ-SeisSol." << std::endl;
+      std::cout << "You can check 'SeisSol_stderr.txt' for more information." << std::endl;
       exit(1);
     }
 
