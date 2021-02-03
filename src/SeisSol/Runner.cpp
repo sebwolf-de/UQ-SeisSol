@@ -4,7 +4,7 @@
 #include <unistd.h>
 #include <sys/wait.h>
 
-SeisSol::Runner::Runner(char path[]) : binaryPath(path) {};
+SeisSol::Runner::Runner(std::string path) : binaryPath(path) {};
 
 int SeisSol::Runner::run() const {
   int pid, status;
@@ -12,7 +12,7 @@ int SeisSol::Runner::run() const {
   if (pid = fork()) {
     waitpid(pid, &status, 0);
   } else {
-    execl(binaryPath, binaryPath, NULL);
+    execl(binaryPath.c_str(), binaryPath.c_str(), NULL);
   }
 
   std::cout << "Executed SeisSol." << std::endl;

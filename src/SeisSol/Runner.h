@@ -1,14 +1,16 @@
 #pragma once
 
+#include <string>
+
 namespace SeisSol {
 
   class Runner {
     public:
-      Runner(char * path);
+      Runner(std::string path);
       int run() const;
     
     private:
-      char * binaryPath;
+      std::string binaryPath;
 
   };
 
