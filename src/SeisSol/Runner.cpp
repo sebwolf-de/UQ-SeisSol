@@ -24,12 +24,10 @@ int SeisSol::Runner::run() const {
 
     // execl returns -1 if there was an error
     // execl does not return if the command was successful
-    seissolError = execl(binaryPath, binaryPath, NULL);
+    seissolError = execl(binaryPath.c_str(), binaryPath.c_str(), NULL);
 
     if (seissolError == -1) exit(1);
   } else {
-    execl(binaryPath.c_str(), binaryPath.c_str(), NULL);
-  }
     waitpid(pid, &status, 0);
 
     if (WEXITSTATUS(status) != 0) {
