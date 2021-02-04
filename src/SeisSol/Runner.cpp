@@ -4,7 +4,7 @@
 #include <unistd.h>
 #include <sys/wait.h>
 
-SeisSol::Runner::Runner(char path[]) : binaryPath(path) {};
+SeisSol::Runner::Runner(std::string path) : binaryPath(path) {};
 
 int SeisSol::Runner::run() const {
   int status;
@@ -28,6 +28,8 @@ int SeisSol::Runner::run() const {
 
     if (seissolError == -1) exit(1);
   } else {
+    execl(binaryPath.c_str(), binaryPath.c_str(), NULL);
+  }
     waitpid(pid, &status, 0);
 
     if (WEXITSTATUS(status) != 0) {
@@ -35,6 +37,7 @@ int SeisSol::Runner::run() const {
       std::cout << "You can check 'SeisSol_stderr.txt' for more information." << std::endl;
       exit(1);
     }
+
 
     std::cout << "Executed SeisSol." << std::endl;
   }
