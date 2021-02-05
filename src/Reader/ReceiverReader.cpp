@@ -1,5 +1,6 @@
 #include "ReceiverReader.h"
 #include <cassert>
+#include <cmath>
 #include <string>
 #include <iostream>
 #include <sstream>
@@ -32,10 +33,17 @@ void Reader::ReceiverReader::getReceiver(size_t number, SeisSol::Receiver& recei
     std::string item;
     size_t i = 0;
     while (std::getline(ss, item, ' ')) {
-      try {
-      elems[i] = std::stod(item);
-      i++;
-      } catch (std::exception e) {}
+      //if there are several whitespaces after one another as a delimiter, ignore these.
+      if (item == std::string("")) {
+        continue;
+      } else {
+        double candidate = std::stod(item);
+        if (!std::isfinite(candidate)) {
+          throw std::invalid_argument("Found non-finite value in receiver input.");
+        }
+        elems[i] = candidate;
+        i++;
+      }
     }
     return elems;
   };
