@@ -1,4 +1,4 @@
-SeisSol:                "SeisSol_Release_dhsw_6_elastic"
-ObservationDir:         "observations"
-Prefix:                 "tpv5-receiver"
-ReceiverNumber:         5 
+SeisSolBinary:          "SeisSol_Release_dhsw_6_elastic"
+ObservationDirectory:   "observations"
+ReceiverPrefix:         "tpv5-receiver"
+NumberOfReceivers:      5 

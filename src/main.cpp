@@ -13,25 +13,25 @@
 #include "SeisSol/Runner.h"
 #include "Reader/ParameterReader.h"
 #include "Reader/ReceiverReader.h"
-#include "SeisSol/ReceiverDB.h"
+#include "SeisSol/ReceiverList.h"
 
 int main(int argc, char** argv) {
   assert(argc == 2);
 
   auto parameterReader = Reader::ParameterReader(argv[1]);
 
-  size_t numReceivers = parameterReader.getReceiverNumber();
+  size_t numReceivers = parameterReader.getNumberOfReceivers();
   std::cout << "Reading " << numReceivers << " receivers" << std::endl;
   
-  SeisSol::ReceiverDB receiverDB(parameterReader.getObservationDir(), parameterReader.getPrefix());
+  SeisSol::ReceiverList ReceiverList(parameterReader.getObservationDir(), parameterReader.getReceiverPrefix());
   for (size_t i = 1; i < numReceivers+1; i++) {
-    receiverDB.addReceiver(i);
+    ReceiverList.addReceiver(i);
   }
 
   //Just for Debug purposes
   std::cout << "L1 difference between the 1st and the last read receivers: " << std::endl;
-  const auto& someReceiver = receiverDB.getReceiver(numReceivers);
-  std::cout << receiverDB.l1Difference(1, someReceiver) << std::endl;
+  const auto& someReceiver = ReceiverList.getReceiver(numReceivers);
+  std::cout << ReceiverList.l1Difference(1, someReceiver) << std::endl;
 
 
   auto runner = std::make_shared<SeisSol::Runner>(parameterReader.getSeisSolBinary());

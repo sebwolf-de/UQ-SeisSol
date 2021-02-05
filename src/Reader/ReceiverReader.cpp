@@ -9,7 +9,7 @@ Reader::ReceiverReader::ReceiverReader(std::string dir, std::string prefix) :
   observationsDirectory(dir), receiverPrefix(prefix) {};
 
 
-void Reader::ReceiverReader::getReceiver(size_t number, SeisSol::Receiver& receiver) const {
+void Reader::ReceiverReader::parseReceiver(size_t number, SeisSol::Receiver& receiver) const {
   //TODO don't make this hardcoded
   const std::string fileName = observationsDirectory + "/" + receiverPrefix + "-0000" + std::to_string(number) + "-00000.dat";
   std::ifstream in(fileName);
@@ -31,12 +31,14 @@ void Reader::ReceiverReader::getReceiver(size_t number, SeisSol::Receiver& recei
     std::stringstream ss(line);
     std::string item;
     size_t i = 0;
+
     while (std::getline(ss, item, ' ')) {
       try {
-      elems[i] = std::stod(item);
-      i++;
+        elems[i] = std::stod(item);
+        i++;
       } catch (std::exception e) {}
     }
+
     return elems;
   };
 
@@ -47,9 +49,3 @@ void Reader::ReceiverReader::getReceiver(size_t number, SeisSol::Receiver& recei
     receiver.receiverData.emplace_back(parsedLine);
   }
 }
-
-
-
-
-
-
