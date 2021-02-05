@@ -40,11 +40,11 @@ void Reader::ReceiverReader::getReceiver(size_t number, SeisSol::Receiver& recei
     return elems;
   };
 
-  receiver.receiverData.clear(); 
+  receiver.clear(); 
 
   while (std::getline(in, line)) {
     const auto parsedLine = parseLine(line);
-    receiver.receiverData.emplace_back(parsedLine);
+    receiver.appendData(parsedLine);
   }
 }
 
