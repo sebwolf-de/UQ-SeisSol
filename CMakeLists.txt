@@ -8,10 +8,12 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 add_library(reader
   src/Reader/ParameterReader.cpp
   src/Reader/ReceiverReader.cpp)
+  
 add_library(seissol
   src/SeisSol/Receiver.cpp
   src/SeisSol/ReceiverDB.cpp
   src/SeisSol/Runner.cpp)
+
 add_library(uq 
   src/UQ/MIComponentFactory.cpp
   src/UQ/MIInterpolation.cpp

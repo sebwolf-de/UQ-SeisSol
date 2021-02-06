@@ -20,10 +20,10 @@ int main(int argc, char** argv) {
 
   auto parameterReader = Reader::ParameterReader(argv[1]);
 
-  size_t numReceivers = parameterReader.getReceiverNumber();
+  size_t numReceivers = parameterReader.getNumberOfReceivers();
   std::cout << "Reading " << numReceivers << " receivers" << std::endl;
   
-  SeisSol::ReceiverDB receiverDB(parameterReader.getObservationDir(), parameterReader.getPrefix());
+  SeisSol::ReceiverDB receiverDB(parameterReader.getObservationDir(), parameterReader.getReceiverPrefix());
   for (size_t i = 1; i < numReceivers+1; i++) {
     receiverDB.addReceiver(i);
   }

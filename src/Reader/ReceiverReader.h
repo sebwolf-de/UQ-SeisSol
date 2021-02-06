@@ -8,7 +8,7 @@ namespace Reader{
   class ReceiverReader {
     public:
       ReceiverReader(std::string dir, std::string prefix="receiver");
-      void getReceiver(size_t number, SeisSol::Receiver& receiver) const;
+      void parseReceiver(size_t number, SeisSol::Receiver& receiver) const;
 
     private:
       const std::string observationsDirectory;
