@@ -6,9 +6,9 @@
 #include "Reader/ReceiverReader.h"
 
 namespace SeisSol {
-  class ReceiverList {
+  class ReceiverDB {
     public:
-      ReceiverList(std::string directory, std::string prefix);
+      ReceiverDB(std::string directory, std::string prefix);
       void addReceiver(size_t i);
       const SeisSol::Receiver& getReceiver(size_t) const;
       double l1Difference(size_t i, const SeisSol::Receiver& otherReceiver) const;
