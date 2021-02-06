@@ -6,7 +6,7 @@ SeisSol::ReceiverDB::ReceiverDB(std::string directory, std::string prefix) :
 
 void SeisSol::ReceiverDB::addReceiver(size_t i) {
   SeisSol::Receiver receiver;
-  receiverReader.getReceiver(i, receiver);
+  receiverReader.parseReceiver(i, receiver);
   receivers.insert({i, receiver});
 };
 
