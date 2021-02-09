@@ -1,5 +1,10 @@
 # UQ-SeisSol
 
+### Prerequisites
+Install yaml-cpp and eigen3 e.g. through your favorite package manager
+
+Install the muq library: http://muq.mit.edu/
+
 ### Building
 
 ```bash
@@ -10,5 +15,7 @@ make
 ### Running
 
 ```bash
-./main "/path/to/SeiSol_binary"
+./main config.yaml
 ```
+
+Also see the example folder for more details.
