@@ -29,7 +29,7 @@ double UQ::MySamplingProblem::LogDensity(std::shared_ptr<SamplingState> const& s
     norm += simulationsReceiverDB->l1Difference(i, observationsReceiverDB->getReceiver(i));
   }
 
-  return norm;
+  return -norm;
 }
 
 std::shared_ptr<UQ::SamplingState> UQ::MySamplingProblem::QOI() {

@@ -34,12 +34,6 @@ int main(int argc, char** argv) {
 
   auto simulationsReceiverDB = std::make_shared<SeisSol::ReceiverDB>("output", parameterReader.getReceiverPrefix());
 
-
-  //Just for Debug purposes
-  // std::cout << "L1 difference between the 1st and the last read receivers: " << std::endl;
-  // const auto& someReceiver = observationsReceiverDB->getReceiver(numberOfReceivers);
-  // std::cout << observationsReceiverDB->l1Difference(1, someReceiver) << std::endl;
-
   auto runner = std::make_shared<SeisSol::Runner>(parameterReader.getSeisSolBinary(), parameterReader.getParametersFile());
 
   auto localFactory = std::make_shared<UQ::MyMIComponentFactory>(runner, observationsReceiverDB, simulationsReceiverDB);
