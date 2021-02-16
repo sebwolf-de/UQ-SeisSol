@@ -29,9 +29,10 @@ std::shared_ptr<UQ::MultiIndex> UQ::MyMIComponentFactory::FinestIndex() {
 }
 
 std::shared_ptr<UQ::MCMCProposal> UQ::MyMIComponentFactory::CoarseProposal(
-    std::shared_ptr<MultiIndex> const& index,
-    std::shared_ptr<AbstractSamplingProblem> const& coarseProblem,
-    std::shared_ptr<SingleChainMCMC> const& coarseChain) {
+  std::shared_ptr<MultiIndex> const& index,
+  std::shared_ptr<AbstractSamplingProblem> const& coarseProblem,
+  std::shared_ptr<SingleChainMCMC> const& coarseChain
+) {
   pt::ptree ptProposal;
   ptProposal.put("BlockIndex", 0);
   int subsampling = 5;
@@ -39,9 +40,10 @@ std::shared_ptr<UQ::MCMCProposal> UQ::MyMIComponentFactory::CoarseProposal(
   return std::make_shared<SubsamplingMIProposal>(ptProposal, coarseProblem, coarseChain);
 }
 
-std::shared_ptr<UQ::AbstractSamplingProblem>
-UQ::MyMIComponentFactory::SamplingProblem(std::shared_ptr<MultiIndex> const& index) {
-  return std::make_shared<MySamplingProblem>(index, runner);
+std::shared_ptr<UQ::AbstractSamplingProblem> UQ::MyMIComponentFactory::SamplingProblem(
+  std::shared_ptr<MultiIndex> const& index
+) {
+  return std::make_shared<MySamplingProblem>(index, runner, observationsReceiverDB, simulationsReceiverDB);
 }
 
 std::shared_ptr<UQ::MIInterpolation>
@@ -56,4 +58,11 @@ Eigen::VectorXd UQ::MyMIComponentFactory::StartingPoint(std::shared_ptr<MultiInd
   return start;
 }
 
-UQ::MyMIComponentFactory::MyMIComponentFactory(std::shared_ptr<SeisSol::Runner> runner) : runner(runner) {}
+UQ::MyMIComponentFactory::MyMIComponentFactory(
+  std::shared_ptr<SeisSol::Runner> runner,
+  std::shared_ptr<SeisSol::ReceiverDB> observationsReceiverDB,
+  std::shared_ptr<SeisSol::ReceiverDB> simulationsReceiverDB
+) :
+  runner(runner),
+  observationsReceiverDB(observationsReceiverDB),
+  simulationsReceiverDB(simulationsReceiverDB) {}

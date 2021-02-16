@@ -11,6 +11,7 @@
 #include "MUQ/Utilities/MultiIndices/MultiIndex.h"
 
 #include "SeisSol/Runner.h"
+#include "SeisSol/ReceiverDB.h"
 
 namespace UQ {
 
@@ -34,10 +35,17 @@ namespace UQ {
       Interpolation(std::shared_ptr<MultiIndex> const& index) override;
       virtual Eigen::VectorXd StartingPoint(std::shared_ptr<MultiIndex> const& index) override;
 
-      MyMIComponentFactory(std::shared_ptr<SeisSol::Runner> runner);
+      MyMIComponentFactory(
+        std::shared_ptr<SeisSol::Runner> runner,
+        std::shared_ptr<SeisSol::ReceiverDB> observationsReceiverDB,
+        std::shared_ptr<SeisSol::ReceiverDB> simulationsReceiverDB
+      );
 
       private:
         std::shared_ptr<SeisSol::Runner> runner;
+        std::shared_ptr<SeisSol::ReceiverDB> observationsReceiverDB;
+        std::shared_ptr<SeisSol::ReceiverDB> simulationsReceiverDB;
+
   };
 
 } // namespace UQ
