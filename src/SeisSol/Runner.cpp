@@ -11,7 +11,7 @@ SeisSol::Runner::Runner(
     binaryPath(seisSolBinaryPath),
     parametersPath(parametersFilePath) {};
 
-int SeisSol::Runner::run() const {
+void SeisSol::Runner::run() {
   int status;
   int seissolError;
   int pid = fork();
@@ -41,8 +41,6 @@ int SeisSol::Runner::run() const {
       exit(1);
     }
 
-    std::cout << "Executed SeisSol." << std::endl;
+    std::cout << "Executed SeisSol " << ++runCount << " times." << std::endl;
   }
-
-  return 0;
 }

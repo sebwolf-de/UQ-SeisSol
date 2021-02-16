@@ -18,3 +18,6 @@ const SeisSol::Receiver& SeisSol::ReceiverDB::getReceiver(size_t i) const {
   return receivers.at(i);
 }
 
+const size_t SeisSol::ReceiverDB::numberOfReceivers() const {
+  return receivers.size();
+}

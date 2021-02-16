@@ -11,6 +11,7 @@
 #include "MUQ/Utilities/MultiIndices/MultiIndex.h"
 
 #include "SeisSol/Runner.h"
+#include "SeisSol/ReceiverDB.h"
 
 static constexpr int NUM_PARAM = 2;
 
@@ -22,17 +23,24 @@ namespace UQ {
 
   class MySamplingProblem : public AbstractSamplingProblem {
     public:
-      MySamplingProblem(std::shared_ptr<MultiIndex> index, std::shared_ptr<SeisSol::Runner> runner);
+      MySamplingProblem(
+        std::shared_ptr<MultiIndex> index,
+        std::shared_ptr<SeisSol::Runner> runner,
+        std::shared_ptr<SeisSol::ReceiverDB> observationsReceiverDB,
+        std::shared_ptr<SeisSol::ReceiverDB> simulationsReceiverDB
+      );
 
-      virtual ~MySamplingProblem(){};
+      virtual ~MySamplingProblem() {};
 
       virtual double LogDensity(std::shared_ptr<SamplingState> const& state) override;
       virtual std::shared_ptr<SamplingState> QOI() override;
 
     private:
       std::shared_ptr<SeisSol::Runner> runner;
+      std::shared_ptr<SeisSol::ReceiverDB> observationsReceiverDB;
+      std::shared_ptr<SeisSol::ReceiverDB> simulationsReceiverDB;
       std::shared_ptr<SamplingState> lastState = nullptr;
       std::shared_ptr<MultiIndex> index;
   };
 
-} // namespace UQ
+}
