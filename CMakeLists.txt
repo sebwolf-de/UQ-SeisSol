@@ -6,6 +6,7 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 add_library(io
+  src/IO/MaterialParameterWriter.cpp
   src/IO/ParameterReader.cpp
   src/IO/ReceiverReader.cpp)
   

@@ -12,8 +12,7 @@
 
 #include "SeisSol/Runner.h"
 #include "SeisSol/ReceiverDB.h"
-
-static constexpr int NUM_PARAM = 2;
+#include "IO/MaterialParameterWriter.h"
 
 namespace UQ {
 
@@ -27,7 +26,8 @@ namespace UQ {
         std::shared_ptr<MultiIndex> index,
         std::shared_ptr<SeisSol::Runner> runner,
         std::shared_ptr<SeisSol::ReceiverDB> observationsReceiverDB,
-        std::shared_ptr<SeisSol::ReceiverDB> simulationsReceiverDB
+        std::shared_ptr<SeisSol::ReceiverDB> simulationsReceiverDB,
+        std::shared_ptr<IO::MaterialParameterWriter> materialParameterWriter
       );
 
       virtual ~MySamplingProblem() {};
@@ -39,6 +39,7 @@ namespace UQ {
       std::shared_ptr<SeisSol::Runner> runner;
       std::shared_ptr<SeisSol::ReceiverDB> observationsReceiverDB;
       std::shared_ptr<SeisSol::ReceiverDB> simulationsReceiverDB;
+      std::shared_ptr<IO::MaterialParameterWriter> materialParameterWriter;
       std::shared_ptr<SamplingState> lastState = nullptr;
       std::shared_ptr<MultiIndex> index;
   };

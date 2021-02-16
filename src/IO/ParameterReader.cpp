@@ -8,6 +8,7 @@ IO::ParameterReader::ParameterReader(std::string filename) :
   root(YAML::LoadFile(filename)) {
     assert(("Parameter file contains link to SeisSol binary", root["SeisSolBinary"]));
     assert(("Parameter file contains link to SeisSol parameters file", root["ParametersFile"]));
+    assert(("Parameter file contains link to SeisSol material file template", root["MaterialFileTemplate"]));
     assert(("Parameter file contains number of receivers", root["NumberOfReceivers"]));
     assert(("Parameter file contains link to observation directory", root["ObservationDirectory"]));
   };
@@ -18,6 +19,36 @@ std::string IO::ParameterReader::getSeisSolBinary() const {
 
 std::string IO::ParameterReader::getParametersFile() const {
   return root["ParametersFile"].as<std::string>();
+}
+
+std::string IO::ParameterReader::getMaterialFileTemplate() const {
+  return root["MaterialFileTemplate"].as<std::string>();
+}
+
+std::map<int, std::string> IO::ParameterReader::getMaterialFileTemplateKeys() const {
+  auto parametersNode = root["MaterialParameters"];
+  std::map<int, std::string> parameterKeys;
+
+  size_t i = 0;
+
+  for (YAML::const_iterator iter = parametersNode.begin(); iter != parametersNode.end(); ++iter) {
+    parameterKeys.insert({i++, iter->first.as<std::string>()});
+  }
+
+  return parameterKeys;
+}
+
+Eigen::VectorXd IO::ParameterReader::getInitialMaterialParameterValues() const {
+  auto parametersNode = root["MaterialParameters"];
+  Eigen::VectorXd parameterValues(parametersNode.size());
+
+  size_t i = 0;
+
+  for (YAML::const_iterator iter = parametersNode.begin(); iter != parametersNode.end(); ++iter) {
+    parameterValues(i++) = iter->second.as<double>();
+  }
+
+  return parameterValues;
 }
 
 std::string IO::ParameterReader::getObservationDir() const {

@@ -3,7 +3,7 @@
 #include "SeisSol/Receiver.h"
 #include <string>
 
-namespace IO{
+namespace IO {
 
   class ReceiverReader {
     public:

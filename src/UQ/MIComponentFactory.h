@@ -12,6 +12,7 @@
 
 #include "SeisSol/Runner.h"
 #include "SeisSol/ReceiverDB.h"
+#include "IO/MaterialParameterWriter.h"
 
 namespace UQ {
 
@@ -38,14 +39,18 @@ namespace UQ {
       MyMIComponentFactory(
         std::shared_ptr<SeisSol::Runner> runner,
         std::shared_ptr<SeisSol::ReceiverDB> observationsReceiverDB,
-        std::shared_ptr<SeisSol::ReceiverDB> simulationsReceiverDB
+        std::shared_ptr<SeisSol::ReceiverDB> simulationsReceiverDB,
+        std::shared_ptr<IO::MaterialParameterWriter> materialParameterWriter,
+        Eigen::VectorXd & startingParameters
       );
 
       private:
         std::shared_ptr<SeisSol::Runner> runner;
         std::shared_ptr<SeisSol::ReceiverDB> observationsReceiverDB;
         std::shared_ptr<SeisSol::ReceiverDB> simulationsReceiverDB;
+        std::shared_ptr<IO::MaterialParameterWriter> materialParameterWriter;
+        Eigen::VectorXd & startingParameters;
 
   };
 
-} // namespace UQ
+}
