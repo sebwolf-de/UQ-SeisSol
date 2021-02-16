@@ -7,12 +7,17 @@
 Reader::ParameterReader::ParameterReader(std::string filename) :
   root(YAML::LoadFile(filename)) {
     assert(("Parameter file contains link to SeisSol binary", root["SeisSolBinary"]));
+    assert(("Parameter file contains link to SeisSol parameters file", root["ParametersFile"]));
     assert(("Parameter file contains number of receivers", root["NumberOfReceivers"]));
     assert(("Parameter file contains link to observation directory", root["ObservationDirectory"]));
   };
 
 std::string Reader::ParameterReader::getSeisSolBinary() const {
   return root["SeisSolBinary"].as<std::string>();
+}
+
+std::string Reader::ParameterReader::getParametersFile() const {
+  return root["ParametersFile"].as<std::string>();
 }
 
 std::string Reader::ParameterReader::getObservationDir() const {

@@ -34,7 +34,7 @@ int main(int argc, char** argv) {
   std::cout << receiverDB.l1Difference(1, someReceiver) << std::endl;
 
 
-  auto runner = std::make_shared<SeisSol::Runner>(parameterReader.getSeisSolBinary());
+  auto runner = std::make_shared<SeisSol::Runner>(parameterReader.getSeisSolBinary(), parameterReader.getParametersFile());
 
   auto localFactory = std::make_shared<UQ::MyMIComponentFactory>(runner);
 

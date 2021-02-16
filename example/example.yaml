@@ -1,4 +1,5 @@
 SeisSolBinary:          "SeisSol_Release_dhsw_6_elastic"
+ParametersFile:         "parameters.par"
 ObservationDirectory:   "observations"
 ReceiverPrefix:         "tpv5-receiver"
-NumberOfReceivers:      5 
+NumberOfReceivers:      5

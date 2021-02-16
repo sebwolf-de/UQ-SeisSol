@@ -4,7 +4,12 @@
 #include <unistd.h>
 #include <sys/wait.h>
 
-SeisSol::Runner::Runner(std::string path) : binaryPath(path) {};
+SeisSol::Runner::Runner(
+    std::string seisSolBinaryPath,
+    std::string parametersFilePath
+  ) :
+    binaryPath(seisSolBinaryPath),
+    parametersPath(parametersFilePath) {};
 
 int SeisSol::Runner::run() const {
   int status;
@@ -19,12 +24,12 @@ int SeisSol::Runner::run() const {
     std::cout << "Child process creation to run SeisSol was unsuccessful, exiting UQ-SeisSol. " << std::endl;
     exit(1);
   } else if (pid == 0) {
-    freopen("SeisSol_stdout.txt", "w", stdout);
+    freopen("/dev/null", "a", stdout);
     freopen("SeisSol_stderr.txt", "w", stderr);
 
     // execl returns -1 if there was an error
     // execl does not return if the command was successful
-    seissolError = execl(binaryPath.c_str(), binaryPath.c_str(), NULL);
+    seissolError = execl(binaryPath.c_str(), binaryPath.c_str(), parametersPath.c_str(), NULL);
 
     if (seissolError == -1) exit(1);
   } else {
@@ -35,7 +40,6 @@ int SeisSol::Runner::run() const {
       std::cout << "You can check 'SeisSol_stderr.txt' for more information." << std::endl;
       exit(1);
     }
-
 
     std::cout << "Executed SeisSol." << std::endl;
   }

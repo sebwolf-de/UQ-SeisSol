@@ -9,6 +9,7 @@ namespace Reader{
     public:
       ParameterReader(std::string filename);
       std::string getSeisSolBinary() const;
+      std::string getParametersFile() const;
       std::string getObservationDir() const;
       size_t getNumberOfReceivers() const;
       std::string getReceiverPrefix() const;
