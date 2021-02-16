@@ -2,7 +2,7 @@
 #include "SeisSol/Receiver.h"
 
 SeisSol::ReceiverDB::ReceiverDB(std::string directory, std::string prefix) :
-  receiverReader(Reader::ReceiverReader(directory, prefix)) {};
+  receiverReader(IO::ReceiverReader(directory, prefix)) {};
 
 void SeisSol::ReceiverDB::addReceiver(size_t i) {
   SeisSol::Receiver receiver;

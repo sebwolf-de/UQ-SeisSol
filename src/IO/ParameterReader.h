@@ -4,7 +4,8 @@
 #include <cstring>
 #include <Eigen/Dense>
 
-namespace Reader{
+namespace IO{
+
   class ParameterReader {
     public:
       ParameterReader(std::string filename);
@@ -13,7 +14,9 @@ namespace Reader{
       std::string getObservationDir() const;
       size_t getNumberOfReceivers() const;
       std::string getReceiverPrefix() const;
+
     private:
       const YAML::Node root;
   };
+
 }

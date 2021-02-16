@@ -11,14 +11,14 @@
 #include "UQ/SamplingProblem.h"
 
 #include "SeisSol/Runner.h"
-#include "Reader/ParameterReader.h"
-#include "Reader/ReceiverReader.h"
+#include "IO/ParameterReader.h"
+#include "IO/ReceiverReader.h"
 #include "SeisSol/ReceiverDB.h"
 
 int main(int argc, char** argv) {
   assert(argc == 2);
 
-  auto parameterReader = Reader::ParameterReader(argv[1]);
+  auto parameterReader = IO::ParameterReader(argv[1]);
 
   size_t numberOfReceivers = parameterReader.getNumberOfReceivers();
   std::cout << "Reading " << numberOfReceivers << " receivers" << std::endl;

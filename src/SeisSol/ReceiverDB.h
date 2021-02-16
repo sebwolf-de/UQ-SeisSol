@@ -3,7 +3,7 @@
 #include <map>
 
 #include "Receiver.h"
-#include "Reader/ReceiverReader.h"
+#include "IO/ReceiverReader.h"
 
 namespace SeisSol {
 
@@ -17,7 +17,7 @@ namespace SeisSol {
 
     private:
       std::map<int, SeisSol::Receiver> receivers;
-      const Reader::ReceiverReader receiverReader;
+      const IO::ReceiverReader receiverReader;
 
   };
 

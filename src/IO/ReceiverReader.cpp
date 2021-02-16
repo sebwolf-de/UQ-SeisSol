@@ -6,11 +6,11 @@
 #include <sstream>
 #include <fstream>
 
-Reader::ReceiverReader::ReceiverReader(std::string dir, std::string prefix) : 
+IO::ReceiverReader::ReceiverReader(std::string dir, std::string prefix) : 
   observationsDirectory(dir), receiverPrefix(prefix) {};
 
 
-void Reader::ReceiverReader::parseReceiver(size_t number, SeisSol::Receiver& receiver) const {
+void IO::ReceiverReader::parseReceiver(size_t number, SeisSol::Receiver& receiver) const {
   //TODO don't make this hardcoded
   const std::string fileName = observationsDirectory + "/" + receiverPrefix + "-0000" + std::to_string(number) + "-00000.dat";
   std::ifstream in(fileName);
