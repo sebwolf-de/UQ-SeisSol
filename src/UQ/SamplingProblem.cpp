@@ -7,8 +7,8 @@ UQ::MySamplingProblem::MySamplingProblem(
   std::shared_ptr<SeisSol::ReceiverDB> simulationsReceiverDB,
   std::shared_ptr<IO::MaterialParameterWriter> materialParameterWriter
 ) :
-  AbstractSamplingProblem(Eigen::VectorXi::Constant(1, materialParameterWriter->numberOfParameters),
-  Eigen::VectorXi::Constant(1, materialParameterWriter->numberOfParameters)),
+  AbstractSamplingProblem(Eigen::VectorXi::Constant(1, materialParameterWriter->numberOfParameters()),
+  Eigen::VectorXi::Constant(1, materialParameterWriter->numberOfParameters())),
   runner(runner),
   observationsReceiverDB(observationsReceiverDB),
   simulationsReceiverDB(simulationsReceiverDB),
@@ -21,7 +21,6 @@ double UQ::MySamplingProblem::LogDensity(std::shared_ptr<SamplingState> const & 
   lastState = state;
 
   materialParameterWriter->updateParameters(state->state[0]);
-  materialParameterWriter->save();
 
   runner->run();
 

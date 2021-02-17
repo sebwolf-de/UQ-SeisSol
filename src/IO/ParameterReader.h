@@ -12,7 +12,7 @@ namespace IO {
       std::string getSeisSolBinary() const;
       std::string getParametersFile() const;
       std::string getMaterialFileTemplate() const;
-      std::map<int, std::string> getMaterialFileTemplateKeys() const;
+      std::vector<std::string> getMaterialFileTemplateKeys() const;
       Eigen::VectorXd getInitialMaterialParameterValues() const;
       std::string getObservationDir() const;
       size_t getNumberOfReceivers() const;

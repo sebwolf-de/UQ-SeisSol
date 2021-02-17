@@ -13,7 +13,7 @@ std::shared_ptr<UQ::MCMCProposal> UQ::MyMIComponentFactory::Proposal(
   pt::ptree pt;
   pt.put("BlockIndex", 0);
 
-  size_t numberOfParameters = materialParameterWriter->numberOfParameters;
+  size_t numberOfParameters = materialParameterWriter->numberOfParameters();
 
   auto mu = Eigen::VectorXd::Zero(numberOfParameters);
   Eigen::MatrixXd cov = Eigen::MatrixXd::Identity(numberOfParameters, numberOfParameters);
@@ -68,7 +68,7 @@ UQ::MyMIComponentFactory::MyMIComponentFactory(
   std::shared_ptr<SeisSol::ReceiverDB> observationsReceiverDB,
   std::shared_ptr<SeisSol::ReceiverDB> simulationsReceiverDB,
   std::shared_ptr<IO::MaterialParameterWriter> materialParameterWriter,
-  Eigen::VectorXd & startingParameters
+  const Eigen::VectorXd & startingParameters
 ) :
   runner(runner),
   observationsReceiverDB(observationsReceiverDB),

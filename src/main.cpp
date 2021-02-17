@@ -43,7 +43,6 @@ int main(int argc, char** argv) {
 
   auto materialParameterWriter = std::make_shared<IO::MaterialParameterWriter>(
     materialFileTemplateBuffer.str(),
-    parameterKeys.size(),
     parameterKeys
   );
 

@@ -41,15 +41,15 @@ namespace UQ {
         std::shared_ptr<SeisSol::ReceiverDB> observationsReceiverDB,
         std::shared_ptr<SeisSol::ReceiverDB> simulationsReceiverDB,
         std::shared_ptr<IO::MaterialParameterWriter> materialParameterWriter,
-        Eigen::VectorXd & startingParameters
+        const Eigen::VectorXd & startingParameters
       );
 
       private:
-        std::shared_ptr<SeisSol::Runner> runner;
-        std::shared_ptr<SeisSol::ReceiverDB> observationsReceiverDB;
-        std::shared_ptr<SeisSol::ReceiverDB> simulationsReceiverDB;
-        std::shared_ptr<IO::MaterialParameterWriter> materialParameterWriter;
-        Eigen::VectorXd & startingParameters;
+        const std::shared_ptr<SeisSol::Runner> runner;
+        const std::shared_ptr<SeisSol::ReceiverDB> observationsReceiverDB;
+        const std::shared_ptr<SeisSol::ReceiverDB> simulationsReceiverDB;
+        const std::shared_ptr<IO::MaterialParameterWriter> materialParameterWriter;
+        const Eigen::VectorXd & startingParameters;
 
   };
 

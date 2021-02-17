@@ -2,34 +2,33 @@
 #include "MaterialParameterWriter.h"
 
 IO::MaterialParameterWriter::MaterialParameterWriter(
-  std::string templateFileContent,
-  size_t numberOfParameters,
-  std::map<int, std::string> parameterKeys
+  const std::string & templateFileContent,
+  const std::vector<std::string> & parameterKeys
 ) :
   templateFileContent(templateFileContent),
-  unsavedContent(templateFileContent),
-  numberOfParameters(numberOfParameters),
   parameterKeys(parameterKeys) {}
 
-void IO::MaterialParameterWriter::updateParameters(Eigen::VectorXd parameters) {
-  for (size_t i = 0; i < numberOfParameters; i++) {
-    std::string key = parameterKeys.at(i);
+void IO::MaterialParameterWriter::updateParameters(Eigen::VectorXd parameters) const {
+  std::string unsavedFileContent = templateFileContent;
 
-    size_t locationOfKey = unsavedContent.find("@" + key + "@");
+  for (size_t i = 0; i < parameterKeys.size(); i++) {
+    std::string key = parameterKeys[i];
 
-    unsavedContent.replace(
+    size_t locationOfKey = unsavedFileContent.find("@" + key + "@");
+
+    unsavedFileContent.replace(
       locationOfKey,
       key.length() + 2,
       std::to_string(parameters(i))
     );
   }
-}
 
-void IO::MaterialParameterWriter::save() {
   std::ofstream materialParametersFile("material_chain.yaml");
   
-  materialParametersFile << unsavedContent;
+  materialParametersFile << unsavedFileContent;
   materialParametersFile.close();
+}
 
-  unsavedContent = templateFileContent;
+const size_t IO::MaterialParameterWriter::numberOfParameters() const {
+  return parameterKeys.size();
 }
