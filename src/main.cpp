@@ -11,14 +11,15 @@
 #include "UQ/SamplingProblem.h"
 
 #include "SeisSol/Runner.h"
-#include "Reader/ParameterReader.h"
-#include "Reader/ReceiverReader.h"
+#include "IO/ParameterReader.h"
+#include "IO/ReceiverReader.h"
+#include "IO/MaterialParameterWriter.h"
 #include "SeisSol/ReceiverDB.h"
 
 int main(int argc, char** argv) {
   assert(argc == 2);
 
-  auto parameterReader = Reader::ParameterReader(argv[1]);
+  auto parameterReader = IO::ParameterReader(argv[1]);
 
   size_t numberOfReceivers = parameterReader.getNumberOfReceivers();
   std::cout << "Reading " << numberOfReceivers << " receivers" << std::endl;
@@ -34,9 +35,28 @@ int main(int argc, char** argv) {
 
   auto simulationsReceiverDB = std::make_shared<SeisSol::ReceiverDB>("output", parameterReader.getReceiverPrefix());
 
+  std::ifstream materialFileTemplate(parameterReader.getMaterialFileTemplate());
+  std::stringstream materialFileTemplateBuffer;
+  materialFileTemplateBuffer << materialFileTemplate.rdbuf();
+
+  auto parameterKeys = parameterReader.getMaterialFileTemplateKeys();
+
+  auto materialParameterWriter = std::make_shared<IO::MaterialParameterWriter>(
+    materialFileTemplateBuffer.str(),
+    parameterKeys
+  );
+
   auto runner = std::make_shared<SeisSol::Runner>(parameterReader.getSeisSolBinary(), parameterReader.getParametersFile());
 
-  auto localFactory = std::make_shared<UQ::MyMIComponentFactory>(runner, observationsReceiverDB, simulationsReceiverDB);
+  auto initialParameterValues = parameterReader.getInitialMaterialParameterValues();
+
+  auto localFactory = std::make_shared<UQ::MyMIComponentFactory>(
+    runner,
+    observationsReceiverDB,
+    simulationsReceiverDB,
+    materialParameterWriter,
+    initialParameterValues
+  );
 
   boost::property_tree::ptree pt;
   const size_t N = 1e4;

@@ -13,8 +13,10 @@ std::shared_ptr<UQ::MCMCProposal> UQ::MyMIComponentFactory::Proposal(
   pt::ptree pt;
   pt.put("BlockIndex", 0);
 
-  auto mu = Eigen::VectorXd::Zero(NUM_PARAM);
-  Eigen::MatrixXd cov = Eigen::MatrixXd::Identity(NUM_PARAM, NUM_PARAM);
+  size_t numberOfParameters = materialParameterWriter->numberOfParameters();
+
+  auto mu = Eigen::VectorXd::Zero(numberOfParameters);
+  Eigen::MatrixXd cov = Eigen::MatrixXd::Identity(numberOfParameters, numberOfParameters);
   cov *= 0.005;
 
   auto prior = std::make_shared<Gaussian>(mu, cov);
@@ -43,7 +45,13 @@ std::shared_ptr<UQ::MCMCProposal> UQ::MyMIComponentFactory::CoarseProposal(
 std::shared_ptr<UQ::AbstractSamplingProblem> UQ::MyMIComponentFactory::SamplingProblem(
   std::shared_ptr<MultiIndex> const& index
 ) {
-  return std::make_shared<MySamplingProblem>(index, runner, observationsReceiverDB, simulationsReceiverDB);
+  return std::make_shared<MySamplingProblem>(
+    index,
+    runner,
+    observationsReceiverDB,
+    simulationsReceiverDB,
+    materialParameterWriter
+  );
 }
 
 std::shared_ptr<UQ::MIInterpolation>
@@ -52,17 +60,18 @@ UQ::MyMIComponentFactory::Interpolation(std::shared_ptr<MultiIndex> const& index
 }
 
 Eigen::VectorXd UQ::MyMIComponentFactory::StartingPoint(std::shared_ptr<MultiIndex> const& index) {
-  Eigen::VectorXd start = Eigen::VectorXd::Ones(NUM_PARAM);
-  start(0) = .5;
-  start(1) = .5;
-  return start;
+  return startingParameters;
 }
 
 UQ::MyMIComponentFactory::MyMIComponentFactory(
   std::shared_ptr<SeisSol::Runner> runner,
   std::shared_ptr<SeisSol::ReceiverDB> observationsReceiverDB,
-  std::shared_ptr<SeisSol::ReceiverDB> simulationsReceiverDB
+  std::shared_ptr<SeisSol::ReceiverDB> simulationsReceiverDB,
+  std::shared_ptr<IO::MaterialParameterWriter> materialParameterWriter,
+  const Eigen::VectorXd & startingParameters
 ) :
   runner(runner),
   observationsReceiverDB(observationsReceiverDB),
-  simulationsReceiverDB(simulationsReceiverDB) {}
+  simulationsReceiverDB(simulationsReceiverDB),
+  materialParameterWriter(materialParameterWriter),
+  startingParameters(startingParameters) {}

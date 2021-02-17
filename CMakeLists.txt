@@ -5,9 +5,10 @@ project(UQ-SeisSol)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
-add_library(reader
-  src/Reader/ParameterReader.cpp
-  src/Reader/ReceiverReader.cpp)
+add_library(io
+  src/IO/MaterialParameterWriter.cpp
+  src/IO/ParameterReader.cpp
+  src/IO/ReceiverReader.cpp)
   
 add_library(seissol
   src/SeisSol/Receiver.cpp
@@ -20,8 +21,8 @@ add_library(uq
   src/UQ/SamplingProblem.cpp)
 
 add_executable(main src/main.cpp)
-target_link_libraries(seissol reader)
-target_link_libraries(main reader)
+target_link_libraries(seissol io)
+target_link_libraries(main io)
 target_link_libraries(main seissol)
 target_link_libraries(main uq)
 

@@ -3,7 +3,7 @@
 #include "SeisSol/Receiver.h"
 #include <string>
 
-namespace Reader{
+namespace IO {
 
   class ReceiverReader {
     public:
@@ -14,6 +14,5 @@ namespace Reader{
       const std::string observationsDirectory;
       const std::string receiverPrefix;
   };
+
 }
-
-
