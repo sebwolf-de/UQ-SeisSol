@@ -1,7 +1,6 @@
 #include "ParameterReader.h"
 #include "Eigen/src/Core/Matrix.h"
 #include <cassert>
-#include <iostream>
 #include <yaml-cpp/emittermanip.h>
 
 IO::ParameterReader::ParameterReader(std::string filename) : root(YAML::LoadFile(filename)) {
