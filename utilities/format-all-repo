@@ -1,0 +1,7 @@
+for FILE in $(find /Users/raduraicea/Ubuntu/UQ-SeisSol/src -name "*.cpp" -o -name "*.h")
+do
+	if [[ "$FILE" =~ \.(c|h|cpp|cc)$ ]]; then
+		clang-format -i $FILE
+		git add $FILE
+	fi
+done

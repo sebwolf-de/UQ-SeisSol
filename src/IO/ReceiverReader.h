@@ -5,14 +5,14 @@
 
 namespace IO {
 
-  class ReceiverReader {
-    public:
-      ReceiverReader(std::string dir, std::string prefix="receiver");
-      void parseReceiver(size_t number, SeisSol::Receiver& receiver) const;
+class ReceiverReader {
+  public:
+  ReceiverReader(std::string dir, std::string prefix = "receiver");
+  void parseReceiver(size_t number, SeisSol::Receiver& receiver) const;
 
-    private:
-      const std::string observationsDirectory;
-      const std::string receiverPrefix;
-  };
+  private:
+  const std::string observationsDirectory;
+  const std::string receiverPrefix;
+};
 
-}
+} // namespace IO

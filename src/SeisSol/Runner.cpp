@@ -1,15 +1,11 @@
 #include "Runner.h"
 
 #include <iostream>
-#include <unistd.h>
 #include <sys/wait.h>
+#include <unistd.h>
 
-SeisSol::Runner::Runner(
-    std::string seisSolBinaryPath,
-    std::string parametersFilePath
-  ) :
-    binaryPath(seisSolBinaryPath),
-    parametersPath(parametersFilePath) {};
+SeisSol::Runner::Runner(std::string seisSolBinaryPath, std::string parametersFilePath)
+    : binaryPath(seisSolBinaryPath), parametersPath(parametersFilePath){};
 
 void SeisSol::Runner::run() {
   int status;
@@ -21,7 +17,8 @@ void SeisSol::Runner::run() {
   // pid > 0 means we are in the parent process
   if (pid < 0) {
     std::cout << "pid value: " << pid << std::endl;
-    std::cout << "Child process creation to run SeisSol was unsuccessful, exiting UQ-SeisSol. " << std::endl;
+    std::cout << "Child process creation to run SeisSol was unsuccessful, exiting UQ-SeisSol. "
+              << std::endl;
     exit(1);
   } else if (pid == 0) {
     freopen("/dev/null", "a", stdout);
@@ -31,7 +28,8 @@ void SeisSol::Runner::run() {
     // execl does not return if the command was successful
     seissolError = execl(binaryPath.c_str(), binaryPath.c_str(), parametersPath.c_str(), NULL);
 
-    if (seissolError == -1) exit(1);
+    if (seissolError == -1)
+      exit(1);
   } else {
     waitpid(pid, &status, 0);
 
