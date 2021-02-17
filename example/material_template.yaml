@@ -1,5 +1,5 @@
 !ConstantMap
 map:
-  rho:    @param_1@
-  mu:     @param_2@
-  lambda: @param_3@
+  rho:    @param_rho@
+  mu:     @param_mu@
+  lambda: @param_lambda@

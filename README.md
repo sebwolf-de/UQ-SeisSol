@@ -14,8 +14,8 @@ make
 
 ### Running
 
-```bash
-./main config.yaml
-```
+In the example folder there is a working setup.
 
-Also see the example folder for more details.
+1. Create the meshes using `gmsh` and `pumgen`.
+2. Convert the source using `rconv`.
+3. `./main uq.yaml`

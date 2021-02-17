@@ -1,0 +1,6 @@
+!ConstantMap
+  map:
+    #wavespeeds are 2000 and 4000 m/s
+    rho:    2600.0
+    mu:     1.04e10
+    lambda: 2.08e10
