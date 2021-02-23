@@ -1,8 +1,8 @@
 #include "ReceiverDB.h"
 #include "SeisSol/Receiver.h"
 
-SeisSol::ReceiverDB::ReceiverDB(std::string directory, std::string prefix) :
-  receiverReader(IO::ReceiverReader(directory, prefix)) {};
+SeisSol::ReceiverDB::ReceiverDB(std::string directory, std::string prefix)
+    : receiverReader(IO::ReceiverReader(directory, prefix)){};
 
 void SeisSol::ReceiverDB::addReceiver(size_t i) {
   SeisSol::Receiver receiver;
@@ -18,6 +18,4 @@ const SeisSol::Receiver& SeisSol::ReceiverDB::getReceiver(size_t i) const {
   return receivers.at(i);
 }
 
-const size_t SeisSol::ReceiverDB::numberOfReceivers() const {
-  return receivers.size();
-}
+const size_t SeisSol::ReceiverDB::numberOfReceivers() const { return receivers.size(); }

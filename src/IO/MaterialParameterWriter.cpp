@@ -1,12 +1,9 @@
 
 #include "MaterialParameterWriter.h"
 
-IO::MaterialParameterWriter::MaterialParameterWriter(
-  const std::string & templateFileContent,
-  const std::vector<std::string> & parameterKeys
-) :
-  templateFileContent(templateFileContent),
-  parameterKeys(parameterKeys) {}
+IO::MaterialParameterWriter::MaterialParameterWriter(const std::string& templateFileContent,
+                                                     const std::vector<std::string>& parameterKeys)
+    : templateFileContent(templateFileContent), parameterKeys(parameterKeys) {}
 
 void IO::MaterialParameterWriter::updateParameters(Eigen::VectorXd parameters) const {
   std::string unsavedFileContent = templateFileContent;
@@ -16,15 +13,11 @@ void IO::MaterialParameterWriter::updateParameters(Eigen::VectorXd parameters) c
 
     size_t locationOfKey = unsavedFileContent.find("@" + key + "@");
 
-    unsavedFileContent.replace(
-      locationOfKey,
-      key.length() + 2,
-      std::to_string(parameters(i))
-    );
+    unsavedFileContent.replace(locationOfKey, key.length() + 2, std::to_string(parameters(i)));
   }
 
   std::ofstream materialParametersFile("material_chain.yaml");
-  
+
   materialParametersFile << unsavedFileContent;
   materialParametersFile.close();
 }

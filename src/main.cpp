@@ -10,53 +10,25 @@
 #include "UQ/MIInterpolation.h"
 #include "UQ/SamplingProblem.h"
 
-#include "SeisSol/Runner.h"
 #include "IO/ParameterReader.h"
-#include "IO/ReceiverReader.h"
-#include "IO/MaterialParameterWriter.h"
-#include "SeisSol/ReceiverDB.h"
+#include "SeisSol/UQSeisSolFactory.h"
 
 int main(int argc, char** argv) {
   assert(argc == 2);
 
   auto parameterReader = IO::ParameterReader(argv[1]);
+  auto uqSeisSolFactory = SeisSol::UQSeisSolFactory(parameterReader);
 
-  size_t numberOfReceivers = parameterReader.getNumberOfReceivers();
-  std::cout << "Reading " << numberOfReceivers << " receivers" << std::endl;
-  
-  auto observationsReceiverDB = std::make_shared<SeisSol::ReceiverDB>(
-    parameterReader.getObservationDir(),
-    parameterReader.getReceiverPrefix()
-  );
-
-  for (size_t i = 1; i < numberOfReceivers+1; i++) {
-    observationsReceiverDB->addReceiver(i);
-  }
-
-  auto simulationsReceiverDB = std::make_shared<SeisSol::ReceiverDB>("output", parameterReader.getReceiverPrefix());
-
-  std::ifstream materialFileTemplate(parameterReader.getMaterialFileTemplate());
-  std::stringstream materialFileTemplateBuffer;
-  materialFileTemplateBuffer << materialFileTemplate.rdbuf();
-
-  auto parameterKeys = parameterReader.getMaterialFileTemplateKeys();
-
-  auto materialParameterWriter = std::make_shared<IO::MaterialParameterWriter>(
-    materialFileTemplateBuffer.str(),
-    parameterKeys
-  );
-
-  auto runner = std::make_shared<SeisSol::Runner>(parameterReader.getSeisSolBinary(), parameterReader.getParametersFile());
+  auto observationsReceiverDB = uqSeisSolFactory.createObservationsReceiverDB();
+  auto simulationsReceiverDB = uqSeisSolFactory.createSimulationsReceiverDB();
+  auto materialParameterWriter = uqSeisSolFactory.createMaterialParameterWriter();
+  auto runner = uqSeisSolFactory.createSeisSolRunner();
 
   auto initialParameterValues = parameterReader.getInitialMaterialParameterValues();
 
-  auto localFactory = std::make_shared<UQ::MyMIComponentFactory>(
-    runner,
-    observationsReceiverDB,
-    simulationsReceiverDB,
-    materialParameterWriter,
-    initialParameterValues
-  );
+  auto miComponentFactory = std::make_shared<UQ::MyMIComponentFactory>(
+      runner, observationsReceiverDB, simulationsReceiverDB, materialParameterWriter,
+      initialParameterValues);
 
   boost::property_tree::ptree pt;
   const size_t N = 1e4;
@@ -67,7 +39,7 @@ int main(int argc, char** argv) {
   pt.put("NumSamples_1", 100);
   pt.put("NumSamples_2", 10);
 
-  muq::SamplingAlgorithms::MIMCMC mimcmc(pt, localFactory);
+  muq::SamplingAlgorithms::MIMCMC mimcmc(pt, miComponentFactory);
   std::shared_ptr<muq::SamplingAlgorithms::SampleCollection> samples = mimcmc.Run();
 
   std::cout << "ML mean Param: " << mimcmc.MeanParam().transpose() << std::endl;
