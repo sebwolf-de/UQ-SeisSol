@@ -11,6 +11,7 @@ add_library(io
   src/IO/ReceiverReader.cpp)
   
 add_library(seissol
+  src/SeisSol/UQSeisSolFactory.cpp
   src/SeisSol/Receiver.cpp
   src/SeisSol/ReceiverDB.cpp
   src/SeisSol/Runner.cpp)
