@@ -11,7 +11,7 @@ IO::ParameterReader::ParameterReader(std::string filename) : root(YAML::LoadFile
   assert(("Parameter file contains initial material parameter values", root["InitialParameters"]));
   assert(("Parameter file contains number of receivers", root["NumberOfReceivers"]));
   assert(("Parameter file contains link to observation directory", root["ObservationDirectory"]));
-};
+}
 
 std::string IO::ParameterReader::getSeisSolBinary() const {
   return root["SeisSolBinary"].as<std::string>();

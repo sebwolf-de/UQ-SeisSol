@@ -18,4 +18,4 @@ class Receiver {
   // receiverData[i][j] contains the (j-1)th quantity at the ith timestep
   std::vector<std::array<double, 10>> receiverData;
 };
-}; // namespace SeisSol
+} // namespace SeisSol

@@ -5,7 +5,7 @@
 #include <unistd.h>
 
 SeisSol::Runner::Runner(std::string seisSolBinaryPath, std::string parametersFilePath)
-    : binaryPath(seisSolBinaryPath), parametersPath(parametersFilePath){};
+    : binaryPath(seisSolBinaryPath), parametersPath(parametersFilePath){}
 
 void SeisSol::Runner::run() {
   int status;
