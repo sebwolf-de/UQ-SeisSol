@@ -28,7 +28,6 @@ include_directories(${CMAKE_CURRENT_LIST_DIR}/src/)
 find_package(Eigen3 REQUIRED)
 
 find_package(MUQ REQUIRED)
-message(${MUQ_INCLUDE_DIRS})
 target_link_libraries(main ${MUQ_LIBRARIES} ${MUQ_LINK_LIBRARIES})
 include_directories(${MUQ_INCLUDE_DIRS})
 
