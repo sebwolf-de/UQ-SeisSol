@@ -2,7 +2,7 @@
 #include "UQSeisSolFactory.h"
 
 SeisSol::UQSeisSolFactory::UQSeisSolFactory(const IO::ParameterReader& parameterReader)
-    : parameterReader(parameterReader){}
+    : parameterReader(parameterReader) {}
 
 std::shared_ptr<SeisSol::ReceiverDB>
 SeisSol::UQSeisSolFactory::createObservationsReceiverDB() const {

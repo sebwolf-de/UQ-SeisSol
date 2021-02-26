@@ -6,7 +6,7 @@
 #include <string>
 
 IO::ReceiverReader::ReceiverReader(std::string dir, std::string prefix)
-    : observationsDirectory(dir), receiverPrefix(prefix){}
+    : observationsDirectory(dir), receiverPrefix(prefix) {}
 
 void IO::ReceiverReader::parseReceiver(size_t number, SeisSol::Receiver& receiver) const {
   // TODO don't make this hardcoded

@@ -6,8 +6,10 @@
 IO::ParameterReader::ParameterReader(std::string filename) : root(YAML::LoadFile(filename)) {
   assert((root["SeisSolBinary"] && "Parameter file contains link to SeisSol binary"));
   assert((root["ParametersFile"] && "Parameter file contains link to SeisSol parameters file"));
-  assert((root["MaterialFileTemplate"] && "Parameter file contains link to SeisSol material file template"));
-  assert((root["InitialParameters"] && "Parameter file contains initial material parameter values"));
+  assert((root["MaterialFileTemplate"] &&
+          "Parameter file contains link to SeisSol material file template"));
+  assert(
+      (root["InitialParameters"] && "Parameter file contains initial material parameter values"));
   assert((root["NumberOfReceivers"] && "Parameter file contains number of receivers"));
   assert((root["ObservationDirectory"] && "Parameter file contains link to observation directory"));
 }
