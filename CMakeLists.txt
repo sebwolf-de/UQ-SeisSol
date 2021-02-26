@@ -39,3 +39,4 @@ find_package(yaml-cpp REQUIRED)
 target_link_libraries(main ${YAML_CPP_LIBRARIES})
 include_directories(SYSTEM ${YAML_CPP_INCLUDE_DIR})
 
+find_package(Boost COMPONENTS system filesystem graph)
