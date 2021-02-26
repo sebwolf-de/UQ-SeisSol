@@ -11,7 +11,7 @@ class MaterialParameterWriter {
   MaterialParameterWriter(const std::string& templateFileContent,
                           const std::vector<std::string>& parameterKeys);
   void updateParameters(Eigen::VectorXd parameters) const;
-  const size_t numberOfParameters() const;
+  size_t numberOfParameters() const;
 
   private:
   const std::string templateFileContent;

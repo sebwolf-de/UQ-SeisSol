@@ -22,6 +22,6 @@ void IO::MaterialParameterWriter::updateParameters(Eigen::VectorXd parameters) c
   materialParametersFile.close();
 }
 
-const size_t IO::MaterialParameterWriter::numberOfParameters() const {
+size_t IO::MaterialParameterWriter::numberOfParameters() const {
   return parameterKeys.size();
 }
