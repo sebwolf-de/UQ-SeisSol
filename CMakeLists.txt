@@ -33,9 +33,10 @@ find_package(Eigen3 REQUIRED)
 
 find_package(MUQ REQUIRED)
 target_link_libraries(main ${MUQ_LIBRARIES} ${MUQ_LINK_LIBRARIES})
-include_directories(${MUQ_INCLUDE_DIRS})
+include_directories(SYSTEM ${MUQ_INCLUDE_DIRS})
 
 find_package(yaml-cpp REQUIRED)
 target_link_libraries(main ${YAML_CPP_LIBRARIES})
-include_directories(${YAML_CPP_INCLUDE_DIR})
+include_directories(SYSTEM ${YAML_CPP_INCLUDE_DIR})
 
+find_package(Boost COMPONENTS system filesystem graph)

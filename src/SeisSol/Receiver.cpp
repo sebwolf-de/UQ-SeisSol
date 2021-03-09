@@ -16,7 +16,7 @@ double SeisSol::Receiver::l1Difference(const Receiver& otherReceiver) const {
   }
 
   return l;
-};
+}
 
 void SeisSol::Receiver::clear() { receiverData.clear(); }
 

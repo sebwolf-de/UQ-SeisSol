@@ -4,14 +4,15 @@
 #include <yaml-cpp/emittermanip.h>
 
 IO::ParameterReader::ParameterReader(std::string filename) : root(YAML::LoadFile(filename)) {
-  assert(("Parameter file contains link to SeisSol binary", root["SeisSolBinary"]));
-  assert(("Parameter file contains link to SeisSol parameters file", root["ParametersFile"]));
-  assert(("Parameter file contains link to SeisSol material file template",
-          root["MaterialFileTemplate"]));
-  assert(("Parameter file contains initial material parameter values", root["InitialParameters"]));
-  assert(("Parameter file contains number of receivers", root["NumberOfReceivers"]));
-  assert(("Parameter file contains link to observation directory", root["ObservationDirectory"]));
-};
+  assert((root["SeisSolBinary"] && "Parameter file contains link to SeisSol binary"));
+  assert((root["ParametersFile"] && "Parameter file contains link to SeisSol parameters file"));
+  assert((root["MaterialFileTemplate"] &&
+          "Parameter file contains link to SeisSol material file template"));
+  assert(
+      (root["InitialParameters"] && "Parameter file contains initial material parameter values"));
+  assert((root["NumberOfReceivers"] && "Parameter file contains number of receivers"));
+  assert((root["ObservationDirectory"] && "Parameter file contains link to observation directory"));
+}
 
 std::string IO::ParameterReader::getSeisSolBinary() const {
   return root["SeisSolBinary"].as<std::string>();

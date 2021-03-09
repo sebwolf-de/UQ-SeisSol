@@ -8,7 +8,7 @@
 #include "SeisSol/Runner.h"
 
 std::shared_ptr<UQ::MCMCProposal> UQ::MyMIComponentFactory::Proposal(
-    std::shared_ptr<MultiIndex> const& index,
+    [[maybe_unused]] std::shared_ptr<MultiIndex> const& index,
     std::shared_ptr<AbstractSamplingProblem> const& samplingProblem) {
   pt::ptree pt;
   pt.put("BlockIndex", 0);
@@ -31,7 +31,7 @@ std::shared_ptr<UQ::MultiIndex> UQ::MyMIComponentFactory::FinestIndex() {
 }
 
 std::shared_ptr<UQ::MCMCProposal> UQ::MyMIComponentFactory::CoarseProposal(
-    std::shared_ptr<MultiIndex> const& index,
+    [[maybe_unused]] std::shared_ptr<MultiIndex> const& index,
     std::shared_ptr<AbstractSamplingProblem> const& coarseProblem,
     std::shared_ptr<SingleChainMCMC> const& coarseChain) {
   pt::ptree ptProposal;
@@ -47,12 +47,13 @@ UQ::MyMIComponentFactory::SamplingProblem(std::shared_ptr<MultiIndex> const& ind
                                              simulationsReceiverDB, materialParameterWriter);
 }
 
-std::shared_ptr<UQ::MIInterpolation>
-UQ::MyMIComponentFactory::Interpolation(std::shared_ptr<MultiIndex> const& index) {
+std::shared_ptr<UQ::MIInterpolation> UQ::MyMIComponentFactory::Interpolation([
+    [maybe_unused]] std::shared_ptr<MultiIndex> const& index) {
   return std::make_shared<MyInterpolation>();
 }
 
-Eigen::VectorXd UQ::MyMIComponentFactory::StartingPoint(std::shared_ptr<MultiIndex> const& index) {
+Eigen::VectorXd UQ::MyMIComponentFactory::StartingPoint([
+    [maybe_unused]] std::shared_ptr<MultiIndex> const& index) {
   return startingParameters;
 }
 
