@@ -14,7 +14,7 @@ void IO::ReceiverReader::parseReceiver(size_t number, SeisSol::Receiver& receive
   assert(boost::filesystem::exists(observationsDirectory));
 
   std::string fileName;
-  std::regex matcher(receiverPrefix + "-.*" + std::to_string(number) + "-.*\\.dat");
+  std::regex matcher(receiverPrefix + "-0*" + std::to_string(number) + "-.*\\.dat");
 
   for (boost::filesystem::directory_entry& e :
        boost::filesystem::directory_iterator(observationsDirectory)) {
