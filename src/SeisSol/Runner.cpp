@@ -1,5 +1,6 @@
 #include "Runner.h"
 
+#include <boost/filesystem.hpp>
 #include <iostream>
 #include <sys/wait.h>
 #include <unistd.h>
@@ -24,9 +25,14 @@ void SeisSol::Runner::run() {
     freopen("/dev/null", "a", stdout);
     freopen("SeisSol_stderr.txt", "w", stderr);
 
+    // Cleans the output directory of past receiver outputs
+    boost::filesystem::remove_all("output");
+    boost::filesystem::create_directory("output");
+
     // execl returns -1 if there was an error
     // execl does not return if the command was successful
-    seissolError = execl(binaryPath.c_str(), binaryPath.c_str(), parametersPath.c_str(), NULL);
+    seissolError =
+        execlp("mpiexec", "mpiexec", "-n", "28", binaryPath.c_str(), parametersPath.c_str(), NULL);
 
     if (seissolError == -1)
       exit(1);
