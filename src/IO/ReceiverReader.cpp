@@ -1,7 +1,9 @@
 #include "ReceiverReader.h"
+#include <boost/filesystem.hpp>
 #include <cassert>
 #include <cmath>
 #include <fstream>
+#include <regex>
 #include <sstream>
 #include <string>
 
@@ -9,9 +11,21 @@ IO::ReceiverReader::ReceiverReader(std::string dir, std::string prefix)
     : observationsDirectory(dir), receiverPrefix(prefix) {}
 
 void IO::ReceiverReader::parseReceiver(size_t number, SeisSol::Receiver& receiver) const {
-  // TODO don't make this hardcoded
-  const std::string fileName = observationsDirectory + "/" + receiverPrefix + "-0000" +
-                               std::to_string(number) + "-00000.dat";
+  assert(boost::filesystem::exists(observationsDirectory));
+
+  std::string fileName;
+  std::regex matcher(receiverPrefix + "-0*" + std::to_string(number) + "-.*\\.dat");
+
+  for (boost::filesystem::directory_entry& e :
+       boost::filesystem::directory_iterator(observationsDirectory)) {
+    if (!boost::filesystem::is_directory(e.path())) {
+      if (std::regex_match(e.path().filename().string(), matcher)) {
+        fileName = e.path().string();
+        break;
+      }
+    }
+  }
+
   std::ifstream in(fileName);
   std::string line;
 
