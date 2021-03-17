@@ -6,14 +6,13 @@ namespace SeisSol {
 
 class Runner {
   public:
-  Runner(std::string seisSolBinaryPath, std::string parametersFilePath,
-         std::string numberOfProcesses);
+  Runner(std::string seisSolBinaryPath, std::string parametersFilePath, size_t numberOfProcesses);
   void run();
 
   private:
   const std::string binaryPath;
   const std::string parametersPath;
-  const std::string numberOfProcesses;
+  const size_t numberOfProcesses;
   size_t runCount = 0;
 };
 

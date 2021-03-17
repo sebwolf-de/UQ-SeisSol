@@ -11,7 +11,7 @@ class ParameterReader {
   ParameterReader(std::string filename);
   std::string getSeisSolBinary() const;
   std::string getParametersFile() const;
-  std::string getNumberOfProcesses() const;
+  size_t getNumberOfProcesses() const;
   std::string getMaterialFileTemplate() const;
   std::vector<std::string> getMaterialFileTemplateKeys() const;
   Eigen::VectorXd getInitialMaterialParameterValues() const;

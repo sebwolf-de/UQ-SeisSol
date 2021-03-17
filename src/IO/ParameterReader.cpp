@@ -24,8 +24,8 @@ std::string IO::ParameterReader::getParametersFile() const {
   return root["ParametersFile"].as<std::string>();
 }
 
-std::string IO::ParameterReader::getNumberOfProcesses() const {
-  return root["NumberOfProcesses"].as<std::string>();
+size_t IO::ParameterReader::getNumberOfProcesses() const {
+  return root["NumberOfProcesses"].as<size_t>();
 }
 
 std::string IO::ParameterReader::getMaterialFileTemplate() const {
