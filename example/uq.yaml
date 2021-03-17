@@ -1,5 +1,6 @@
 SeisSolBinary:          "SeisSol_Release_dhsw_6_elastic"
 ParametersFile:         "parameters.par"
+NumberOfProcesses:      28
 
 MaterialFileTemplate:   "material_template.yaml"
 InitialParameters:

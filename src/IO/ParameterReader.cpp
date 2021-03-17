@@ -6,6 +6,8 @@
 IO::ParameterReader::ParameterReader(std::string filename) : root(YAML::LoadFile(filename)) {
   assert((root["SeisSolBinary"] && "Parameter file contains link to SeisSol binary"));
   assert((root["ParametersFile"] && "Parameter file contains link to SeisSol parameters file"));
+  assert((root["NumberOfProcesses"] &&
+          "Parameter file contains the number of processes to run SeisSol with"));
   assert((root["MaterialFileTemplate"] &&
           "Parameter file contains link to SeisSol material file template"));
   assert(
@@ -20,6 +22,10 @@ std::string IO::ParameterReader::getSeisSolBinary() const {
 
 std::string IO::ParameterReader::getParametersFile() const {
   return root["ParametersFile"].as<std::string>();
+}
+
+size_t IO::ParameterReader::getNumberOfProcesses() const {
+  return root["NumberOfProcesses"].as<size_t>();
 }
 
 std::string IO::ParameterReader::getMaterialFileTemplate() const {

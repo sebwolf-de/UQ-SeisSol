@@ -5,8 +5,10 @@
 #include <sys/wait.h>
 #include <unistd.h>
 
-SeisSol::Runner::Runner(std::string seisSolBinaryPath, std::string parametersFilePath)
-    : binaryPath(seisSolBinaryPath), parametersPath(parametersFilePath) {}
+SeisSol::Runner::Runner(std::string seisSolBinaryPath, std::string parametersFilePath,
+                        size_t numberOfProcesses)
+    : binaryPath(seisSolBinaryPath), parametersPath(parametersFilePath),
+      numberOfProcesses(numberOfProcesses) {}
 
 void SeisSol::Runner::run() {
   int status;
@@ -29,10 +31,12 @@ void SeisSol::Runner::run() {
     boost::filesystem::remove_all("output");
     boost::filesystem::create_directory("output");
 
+    std::string processes = std::to_string(numberOfProcesses);
+
     // execl returns -1 if there was an error
     // execl does not return if the command was successful
-    seissolError =
-        execlp("mpiexec", "mpiexec", "-n", "28", binaryPath.c_str(), parametersPath.c_str(), NULL);
+    seissolError = execlp("mpiexec", "mpiexec", "-n", processes.c_str(), binaryPath.c_str(),
+                          parametersPath.c_str(), NULL);
 
     if (seissolError == -1)
       exit(1);
