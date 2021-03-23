@@ -24,7 +24,7 @@ void SeisSol::Runner::run() {
               << std::endl;
     exit(1);
   } else if (pid == 0) {
-    freopen("/dev/null", "a", stdout);
+    freopen("SeisSol_stdout.txt", "a", stdout);
     freopen("SeisSol_stderr.txt", "w", stderr);
 
     // Cleans the output directory of past receiver outputs
@@ -35,12 +35,13 @@ void SeisSol::Runner::run() {
 
     // execl returns -1 if there was an error
     // execl does not return if the command was successful
-    seissolError = execlp("mpiexec", "mpiexec", "-n", processes.c_str(), binaryPath.c_str(),
+    seissolError = execlp("srun", "srun", "-n", processes.c_str(), binaryPath.c_str(),
                           parametersPath.c_str(), NULL);
 
     if (seissolError == -1)
       exit(1);
   } else {
+    std::cout << "Running SeisSol on " << numberOfProcesses << " nodes." << std::endl;
     waitpid(pid, &status, 0);
 
     if (WEXITSTATUS(status) != 0) {
