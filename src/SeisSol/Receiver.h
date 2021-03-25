@@ -7,7 +7,9 @@
 namespace SeisSol {
 class Receiver {
   public:
+  Receiver();
   double l1Difference(const Receiver& otherData) const;
+  double l1Norm() const;
   Eigen::Vector3d position;
   void clear();
   void appendData(std::array<double, 10>);
@@ -16,6 +18,7 @@ class Receiver {
   private:
   // receiverData[i][0] contains the ith timestep
   // receiverData[i][j] contains the (j-1)th quantity at the ith timestep
+  std::vector<double> relevantQuantities;
   std::vector<std::array<double, 10>> receiverData;
 };
 } // namespace SeisSol
