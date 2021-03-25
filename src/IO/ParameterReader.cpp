@@ -22,10 +22,6 @@ std::string IO::ParameterReader::getParametersFile() const {
   return root["ParametersFile"].as<std::string>();
 }
 
-size_t IO::ParameterReader::getNumberOfProcesses() const {
-  return std::atoi(std::getenv("SLURM_NTASKS"));
-}
-
 std::string IO::ParameterReader::getMaterialFileTemplate() const {
   return root["MaterialFileTemplate"].as<std::string>();
 }

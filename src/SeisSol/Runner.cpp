@@ -35,13 +35,11 @@ void SeisSol::Runner::run() {
 
     // execl returns -1 if there was an error
     // execl does not return if the command was successful
-    seissolError = execlp("srun", "srun", "-n", processes.c_str(), binaryPath.c_str(),
-                          parametersPath.c_str(), NULL);
+    seissolError = execlp("srun", "srun", binaryPath.c_str(), parametersPath.c_str(), NULL);
 
     if (seissolError == -1)
       exit(1);
   } else {
-    std::cout << "Running SeisSol on " << numberOfProcesses << " nodes." << std::endl;
     waitpid(pid, &status, 0);
 
     if (WEXITSTATUS(status) != 0) {
