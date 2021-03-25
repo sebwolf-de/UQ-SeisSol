@@ -2,6 +2,7 @@
 
 #include "SeisSol/Receiver.h"
 #include <string>
+#include <map>
 
 namespace IO {
 
@@ -13,6 +14,9 @@ class ReceiverReader {
   private:
   const std::string observationsDirectory;
   const std::string receiverPrefix;
+  const std::map<size_t, std::string> receiverList;
 };
+
+std::map<size_t, std::string> getReceiversInDirectory(std::string directory, std::string prefix);
 
 } // namespace IO

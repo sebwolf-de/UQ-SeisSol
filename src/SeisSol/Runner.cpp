@@ -1,14 +1,15 @@
 #include "Runner.h"
 
-#include <boost/filesystem.hpp>
 #include <iostream>
+#include <string>
 #include <sys/wait.h>
 #include <unistd.h>
+#include <map>
 
-SeisSol::Runner::Runner(std::string seisSolBinaryPath, std::string parametersFilePath,
-                        size_t numberOfProcesses)
-    : binaryPath(seisSolBinaryPath), parametersPath(parametersFilePath),
-      numberOfProcesses(numberOfProcesses) {}
+#include "IO/ReceiverReader.h"
+
+SeisSol::Runner::Runner(std::string seisSolBinaryPath, std::string parametersFilePath)
+    : binaryPath(seisSolBinaryPath), parametersPath(parametersFilePath) {}
 
 void SeisSol::Runner::run() {
   int status;
@@ -27,12 +28,6 @@ void SeisSol::Runner::run() {
     freopen("SeisSol_stdout.txt", "a", stdout);
     freopen("SeisSol_stderr.txt", "w", stderr);
 
-    // Cleans the output directory of past receiver outputs
-    boost::filesystem::remove_all("output");
-    boost::filesystem::create_directory("output");
-
-    std::string processes = std::to_string(numberOfProcesses);
-
     // execl returns -1 if there was an error
     // execl does not return if the command was successful
     seissolError = execlp("srun", "srun", binaryPath.c_str(), parametersPath.c_str(), NULL);
@@ -47,7 +42,5 @@ void SeisSol::Runner::run() {
       std::cout << "You can check 'SeisSol_stderr.txt' for more information." << std::endl;
       exit(1);
     }
-
-    std::cout << "Executed SeisSol " << ++runCount << " times." << std::endl;
   }
 }
