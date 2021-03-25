@@ -1,6 +1,6 @@
 #include "Receiver.h"
 
-SeisSol::Receiver::Receiver() : relevantQuantities({1,2,3}) {};
+SeisSol::Receiver::Receiver() : relevantQuantities({1,2,3}) {}
 
 double SeisSol::Receiver::l1Difference(const Receiver& otherReceiver) const {
   assert(receiverData.size() == otherReceiver.receiverData.size());
