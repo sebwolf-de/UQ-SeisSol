@@ -1,13 +1,13 @@
 #include "UQ/SamplingProblem.h"
 
 UQ::MySamplingProblem::MySamplingProblem(
-    std::shared_ptr<MultiIndex> index, std::shared_ptr<SeisSol::Runner> runner,
-    std::shared_ptr<SeisSol::ReceiverDB> observationsReceiverDB,
-    std::shared_ptr<SeisSol::ReceiverDB> simulationsReceiverDB,
-    std::shared_ptr<IO::MaterialParameterWriter> materialParameterWriter)
+    const std::shared_ptr<MultiIndex>& index, SeisSol::Runner& runner,
+    SeisSol::ReceiverDB& observationsReceiverDB,
+    SeisSol::ReceiverDB& simulationsReceiverDB,
+    const IO::MaterialParameterWriter& materialParameterWriter)
     : AbstractSamplingProblem(
-          Eigen::VectorXi::Constant(1, materialParameterWriter->numberOfParameters()),
-          Eigen::VectorXi::Constant(1, materialParameterWriter->numberOfParameters())),
+          Eigen::VectorXi::Constant(1, materialParameterWriter.numberOfParameters()),
+          Eigen::VectorXi::Constant(1, materialParameterWriter.numberOfParameters())),
       runner(runner), observationsReceiverDB(observationsReceiverDB),
       simulationsReceiverDB(simulationsReceiverDB),
       materialParameterWriter(materialParameterWriter), index(index) {
@@ -17,15 +17,15 @@ UQ::MySamplingProblem::MySamplingProblem(
 double UQ::MySamplingProblem::LogDensity(std::shared_ptr<SamplingState> const& state) {
   lastState = state;
 
-  materialParameterWriter->updateParameters(state->state[0]);
+  materialParameterWriter.updateParameters(state->state[0]);
 
-  runner->run();
+  runner.run();
 
   double norm = 0.0;
 
-  for (size_t i = 1; i < observationsReceiverDB->numberOfReceivers() + 1; i++) {
-    simulationsReceiverDB->addReceiver(i);
-    norm += simulationsReceiverDB->l1Difference(i, observationsReceiverDB->getReceiver(i));
+  for (size_t i = 1; i < observationsReceiverDB.numberOfReceivers() + 1; i++) {
+    simulationsReceiverDB.addReceiver(i);
+    norm += simulationsReceiverDB.l1Difference(i, observationsReceiverDB.getReceiver(i));
   }
 
   return -norm;

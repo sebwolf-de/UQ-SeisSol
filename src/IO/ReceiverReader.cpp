@@ -8,7 +8,7 @@
 #include <string>
 
 IO::ReceiverReader::ReceiverReader(std::string dir, std::string prefix)
-    : observationsDirectory(dir), receiverPrefix(prefix) {}
+    : observationsDirectory(std::move(dir)), receiverPrefix(std::move(prefix)) {}
 
 void IO::ReceiverReader::parseReceiver(size_t number, SeisSol::Receiver& receiver) const {
   assert(boost::filesystem::exists(observationsDirectory));
@@ -43,7 +43,7 @@ void IO::ReceiverReader::parseReceiver(size_t number, SeisSol::Receiver& receive
   }
 
   auto parseLine = [](std::string line) {
-    std::array<double, 10> elems;
+    std::array<double, 10> elems {};
     std::stringstream ss(line);
     std::string item;
     size_t i = 0;
@@ -57,7 +57,7 @@ void IO::ReceiverReader::parseReceiver(size_t number, SeisSol::Receiver& receive
         if (!std::isfinite(candidate)) {
           throw std::invalid_argument("Found non-finite value in receiver input.");
         }
-        elems[i] = candidate;
+        elems.at(i) = candidate;
         i++;
       }
     }

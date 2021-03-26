@@ -7,7 +7,7 @@
 namespace SeisSol {
 class Receiver {
   public:
-  double l1Difference(const Receiver& otherData) const;
+  double l1Difference(const Receiver& otherReceiver) const;
   Eigen::Vector3d position;
   void clear();
   void appendData(std::array<double, 10>);

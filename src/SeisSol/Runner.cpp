@@ -7,7 +7,7 @@
 
 SeisSol::Runner::Runner(std::string seisSolBinaryPath, std::string parametersFilePath,
                         size_t numberOfProcesses)
-    : binaryPath(seisSolBinaryPath), parametersPath(parametersFilePath),
+    : binaryPath(std::move(seisSolBinaryPath)), parametersPath(std::move(parametersFilePath)),
       numberOfProcesses(numberOfProcesses) {}
 
 void SeisSol::Runner::run() {
@@ -38,8 +38,9 @@ void SeisSol::Runner::run() {
     seissolError = execlp("mpiexec", "mpiexec", "-n", processes.c_str(), binaryPath.c_str(),
                           parametersPath.c_str(), NULL);
 
-    if (seissolError == -1)
+    if (seissolError == -1) {
       exit(1);
+    }
   } else {
     waitpid(pid, &status, 0);
 

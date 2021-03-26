@@ -22,10 +22,10 @@ using namespace muq::Utilities;
 
 class MySamplingProblem : public AbstractSamplingProblem {
   public:
-  MySamplingProblem(std::shared_ptr<MultiIndex> index, std::shared_ptr<SeisSol::Runner> runner,
-                    std::shared_ptr<SeisSol::ReceiverDB> observationsReceiverDB,
-                    std::shared_ptr<SeisSol::ReceiverDB> simulationsReceiverDB,
-                    std::shared_ptr<IO::MaterialParameterWriter> materialParameterWriter);
+  MySamplingProblem(const std::shared_ptr<MultiIndex>& index, SeisSol::Runner& runner,
+                    SeisSol::ReceiverDB& observationsReceiverDB,
+                    SeisSol::ReceiverDB& simulationsReceiverDB,
+                    const IO::MaterialParameterWriter& materialParameterWriter);
 
   virtual ~MySamplingProblem(){};
 
@@ -33,12 +33,12 @@ class MySamplingProblem : public AbstractSamplingProblem {
   virtual std::shared_ptr<SamplingState> QOI() override;
 
   private:
-  std::shared_ptr<SeisSol::Runner> runner;
-  std::shared_ptr<SeisSol::ReceiverDB> observationsReceiverDB;
-  std::shared_ptr<SeisSol::ReceiverDB> simulationsReceiverDB;
-  std::shared_ptr<IO::MaterialParameterWriter> materialParameterWriter;
+  SeisSol::Runner& runner;
+  SeisSol::ReceiverDB& observationsReceiverDB;
+  SeisSol::ReceiverDB& simulationsReceiverDB;
+  const IO::MaterialParameterWriter& materialParameterWriter;
   std::shared_ptr<SamplingState> lastState = nullptr;
-  std::shared_ptr<MultiIndex> index;
+  const std::shared_ptr<MultiIndex>& index;
 };
 
 } // namespace UQ

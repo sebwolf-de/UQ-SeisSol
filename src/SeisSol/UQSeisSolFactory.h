@@ -11,10 +11,10 @@ class UQSeisSolFactory {
   public:
   UQSeisSolFactory(const IO::ParameterReader& parameterReader);
 
-  std::shared_ptr<SeisSol::ReceiverDB> createObservationsReceiverDB() const;
-  std::shared_ptr<SeisSol::ReceiverDB> createSimulationsReceiverDB() const;
-  std::shared_ptr<IO::MaterialParameterWriter> createMaterialParameterWriter() const;
-  std::shared_ptr<SeisSol::Runner> createSeisSolRunner() const;
+  SeisSol::ReceiverDB createObservationsReceiverDB() const;
+  SeisSol::ReceiverDB createSimulationsReceiverDB() const;
+  IO::MaterialParameterWriter createMaterialParameterWriter() const;
+  SeisSol::Runner createSeisSolRunner() const;
 
   private:
   const IO::ParameterReader& parameterReader;

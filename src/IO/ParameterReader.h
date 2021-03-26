@@ -8,7 +8,7 @@ namespace IO {
 
 class ParameterReader {
   public:
-  ParameterReader(std::string filename);
+  ParameterReader(const std::string&& filename);
   std::string getSeisSolBinary() const;
   std::string getParametersFile() const;
   size_t getNumberOfProcesses() const;

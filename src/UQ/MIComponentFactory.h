@@ -36,17 +36,17 @@ class MyMIComponentFactory : public MIComponentFactory {
   Interpolation(std::shared_ptr<MultiIndex> const& index) override;
   virtual Eigen::VectorXd StartingPoint(std::shared_ptr<MultiIndex> const& index) override;
 
-  MyMIComponentFactory(std::shared_ptr<SeisSol::Runner> runner,
-                       std::shared_ptr<SeisSol::ReceiverDB> observationsReceiverDB,
-                       std::shared_ptr<SeisSol::ReceiverDB> simulationsReceiverDB,
-                       std::shared_ptr<IO::MaterialParameterWriter> materialParameterWriter,
+  MyMIComponentFactory(SeisSol::Runner& runner,
+                       SeisSol::ReceiverDB& observationsReceiverDB,
+                       SeisSol::ReceiverDB& simulationsReceiverDB,
+                       const IO::MaterialParameterWriter& materialParameterWriter,
                        const Eigen::VectorXd& startingParameters);
 
   private:
-  const std::shared_ptr<SeisSol::Runner> runner;
-  const std::shared_ptr<SeisSol::ReceiverDB> observationsReceiverDB;
-  const std::shared_ptr<SeisSol::ReceiverDB> simulationsReceiverDB;
-  const std::shared_ptr<IO::MaterialParameterWriter> materialParameterWriter;
+  SeisSol::Runner& runner;
+  SeisSol::ReceiverDB& observationsReceiverDB;
+  SeisSol::ReceiverDB& simulationsReceiverDB;
+  const IO::MaterialParameterWriter& materialParameterWriter;
   const Eigen::VectorXd& startingParameters;
 };
 

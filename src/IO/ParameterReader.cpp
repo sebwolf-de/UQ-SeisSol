@@ -3,7 +3,7 @@
 #include <cassert>
 #include <yaml-cpp/emittermanip.h>
 
-IO::ParameterReader::ParameterReader(std::string filename) : root(YAML::LoadFile(filename)) {
+IO::ParameterReader::ParameterReader(const std::string&& filename) : root(YAML::LoadFile(filename)) {
   assert((root["SeisSolBinary"] && "Parameter file contains link to SeisSol binary"));
   assert((root["ParametersFile"] && "Parameter file contains link to SeisSol parameters file"));
   assert((root["NumberOfProcesses"] &&
@@ -65,7 +65,7 @@ size_t IO::ParameterReader::getNumberOfReceivers() const {
 }
 
 std::string IO::ParameterReader::getReceiverPrefix() const {
-  if (root["ReceiverPrefix"]) {
+  if (root["ReceiverPrefix"] != nullptr) {
     return root["ReceiverPrefix"].as<std::string>();
   } else {
     return "observation";

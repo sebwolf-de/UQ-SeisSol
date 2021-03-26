@@ -1,9 +1,9 @@
 
 #include "MaterialParameterWriter.h"
 
-IO::MaterialParameterWriter::MaterialParameterWriter(const std::string& templateFileContent,
-                                                     const std::vector<std::string>& parameterKeys)
-    : templateFileContent(templateFileContent), parameterKeys(parameterKeys) {}
+IO::MaterialParameterWriter::MaterialParameterWriter(std::string templateFileContent,
+                                                     std::vector<std::string> parameterKeys)
+    : templateFileContent(std::move(templateFileContent)), parameterKeys(std::move(parameterKeys)) {}
 
 void IO::MaterialParameterWriter::updateParameters(Eigen::VectorXd parameters) const {
   std::string unsavedFileContent = templateFileContent;

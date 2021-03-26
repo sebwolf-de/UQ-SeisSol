@@ -2,8 +2,12 @@ cmake_minimum_required(VERSION 3.10)
 
 project(UQ-SeisSol)
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
+
+#Use clang tidy for static code analysis
+#The use of assert causes a array decay to pointer, so we omit these warnings for now
+set(CMAKE_CXX_CLANG_TIDY "clang-tidy;-checks=*,readability-*,-fuchsia-*,-cppcoreguidelines-pro-bounds-array-to-pointer-decay,-hicpp-no-array-decay")
 
 add_library(io
   src/IO/MaterialParameterWriter.cpp
@@ -40,3 +44,4 @@ target_link_libraries(main ${YAML_CPP_LIBRARIES})
 include_directories(SYSTEM ${YAML_CPP_INCLUDE_DIR})
 
 find_package(Boost COMPONENTS system filesystem graph)
+
