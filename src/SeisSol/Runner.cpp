@@ -6,12 +6,13 @@
 #include <unistd.h>
 #include <map>
 
+#include <boost/filesystem.hpp>
 #include "IO/ReceiverReader.h"
 
 SeisSol::Runner::Runner(std::string seisSolBinaryPath, std::string parametersFilePath)
     : binaryPath(seisSolBinaryPath), parametersPath(parametersFilePath) {}
 
-void SeisSol::Runner::run() {
+void SeisSol::Runner::run() const {
   int status;
   int seissolError;
   int pid = fork();
@@ -43,4 +44,19 @@ void SeisSol::Runner::run() {
       exit(1);
     }
   }
+}
+
+void SeisSol::Runner::prepareFilesystem(size_t runCount) const {
+  // Copies the old receiver data to output/chain and removes them from output/current
+  std::string chain = "output/chain";
+  if (!boost::filesystem::exists(chain)) {
+    boost::filesystem::create_directory(chain);
+  }
+  std::string current = "output/current";
+  const auto receiverList = IO::getReceiversInDirectory(current, "output-receiver");
+  for (auto it = receiverList.begin(); it != receiverList.end(); it++) {
+    boost::filesystem::copy_file(it->second, chain + "/receiver-" + std::to_string(it->first) + "-chain-" + std::to_string(runCount) + ".dat");
+  }
+  boost::filesystem::remove_all(current);
+  boost::filesystem::create_directory(current);
 }

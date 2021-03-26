@@ -3,6 +3,7 @@
 #include <boost/filesystem/operations.hpp>
 #include <sched.h>
 #include <string>
+#include <unistd.h>
 
 UQ::MySamplingProblem::MySamplingProblem(
     std::shared_ptr<MultiIndex> index, std::shared_ptr<SeisSol::Runner> runner,
@@ -25,20 +26,9 @@ double UQ::MySamplingProblem::LogDensity(std::shared_ptr<SamplingState> const& s
 
   materialParameterWriter->updateParameters(state->state[0]);
 
-  // Copies the old receiver data to output/chain_xx and removes them from output/current
-  std::string chain = "output/chain";
-  if (!boost::filesystem::exists(chain)) {
-    boost::filesystem::create_directory(chain);
-  }
-  std::string current = "output/current";
-  const auto receiverList = IO::getReceiversInDirectory(current, "output-receiver");
-  for (auto it = receiverList.begin(); it != receiverList.end(); it++) {
-    boost::filesystem::copy_file(it->second, chain + "/receiver-" + std::to_string(it->first) + "-chain-" + std::to_string(runCount) + ".dat");
-  }
-  boost::filesystem::remove_all(current);
-  boost::filesystem::create_directory(current);
-
+  runner->prepareFilesystem(runCount);
   runner->run();
+
   std::cout << "Executed SeisSol successfully " << ++runCount << " times." << std::endl;
 
   double norm_diff = 0.0;
