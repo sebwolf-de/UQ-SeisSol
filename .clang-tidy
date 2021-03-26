@@ -1,0 +1,8 @@
+Checks: "*,
+  -cppcoreguidelines-pro-bounds-array-to-pointer-decay,
+  -fuchsia-default-arguments-calls,
+  -fuchsia-overloaded-operator,
+  -hicpp-no-array-decay,
+  readability-*,
+  -modernize-use-trailing-return-type,
+  -readability-else-after-return"

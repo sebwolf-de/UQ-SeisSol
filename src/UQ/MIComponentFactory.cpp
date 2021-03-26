@@ -16,10 +16,11 @@ std::shared_ptr<UQ::MCMCProposal> UQ::MyMIComponentFactory::Proposal(
   size_t numberOfParameters = materialParameterWriter.numberOfParameters();
 
   auto mu = Eigen::VectorXd::Zero(numberOfParameters);
-  Eigen::MatrixXd cov = Eigen::MatrixXd::Identity(numberOfParameters, numberOfParameters);
-  cov *= 0.005;
+  Eigen::MatrixXd covMatrix = Eigen::MatrixXd::Identity(numberOfParameters, numberOfParameters);
+  constexpr double covariance = 0.005;
+  covMatrix *= covariance;
 
-  auto prior = std::make_shared<Gaussian>(mu, cov);
+  auto prior = std::make_shared<Gaussian>(mu, covMatrix);
 
   return std::make_shared<MHProposal>(pt, samplingProblem, prior);
 }

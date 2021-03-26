@@ -5,6 +5,7 @@
 #include <vector>
 
 namespace SeisSol {
+constexpr unsigned int numberOfColumns = 10;
 class Receiver {
   public:
   double l1Difference(const Receiver& otherReceiver) const;

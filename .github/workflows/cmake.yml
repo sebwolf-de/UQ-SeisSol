@@ -14,7 +14,7 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: install dependencies
-        run: sudo apt-get install libeigen3-dev libhdf5-dev libboost-filesystem-dev libboost-dev libboost-graph-dev libyaml-cpp-dev clang-tidy
+        run: sudo apt-get install libeigen3-dev libhdf5-dev libboost-filesystem-dev libboost-dev libboost-graph-dev libyaml-cpp-dev clang-tidy-9
 
       - name: Get prebuild MUQ
         run: |

@@ -6,8 +6,7 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 #Use clang tidy for static code analysis
-#The use of assert causes a array decay to pointer, so we omit these warnings for now
-set(CMAKE_CXX_CLANG_TIDY "clang-tidy;-checks=*,readability-*,-fuchsia-*,-cppcoreguidelines-pro-bounds-array-to-pointer-decay,-hicpp-no-array-decay")
+set(CMAKE_CXX_CLANG_TIDY "clang-tidy-9")
 
 add_library(io
   src/IO/MaterialParameterWriter.cpp

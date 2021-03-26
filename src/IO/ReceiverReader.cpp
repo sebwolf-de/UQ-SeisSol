@@ -7,6 +7,7 @@
 #include <sstream>
 #include <string>
 
+
 IO::ReceiverReader::ReceiverReader(std::string dir, std::string prefix)
     : observationsDirectory(std::move(dir)), receiverPrefix(std::move(prefix)) {}
 
@@ -42,8 +43,8 @@ void IO::ReceiverReader::parseReceiver(size_t number, SeisSol::Receiver& receive
     std::getline(in, line);
   }
 
-  auto parseLine = [](std::string line) {
-    std::array<double, 10> elems {};
+  auto parseLine = [](const std::string& line) {
+    std::array<double, SeisSol::numberOfColumns> elems {};
     std::stringstream ss(line);
     std::string item;
     size_t i = 0;
