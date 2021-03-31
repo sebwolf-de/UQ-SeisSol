@@ -10,7 +10,7 @@
 #include <iostream>
 
 IO::ReceiverReader::ReceiverReader(std::string dir, std::string prefix)
-    : observationsDirectory(dir), receiverPrefix(prefix), receiverList(getReceiversInDirectory(dir, prefix)) {}
+    : observationsDirectory(dir), receiverPrefix(prefix) {}
 
 std::map<size_t, std::string> IO::getReceiversInDirectory(std::string directory, std::string prefix) {
   std::map<size_t, std::string> fileList;
@@ -35,6 +35,7 @@ std::map<size_t, std::string> IO::getReceiversInDirectory(std::string directory,
 }
 
 void IO::ReceiverReader::parseReceiver(size_t number, SeisSol::Receiver& receiver) const {
+  const auto receiverList = getReceiversInDirectory(observationsDirectory, receiverPrefix);
   const auto fileName = receiverList.at(number);
 
   std::ifstream in(fileName);

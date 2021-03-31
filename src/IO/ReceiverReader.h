@@ -14,7 +14,6 @@ class ReceiverReader {
   private:
   const std::string observationsDirectory;
   const std::string receiverPrefix;
-  const std::map<size_t, std::string> receiverList;
 };
 
 std::map<size_t, std::string> getReceiversInDirectory(std::string directory, std::string prefix);
