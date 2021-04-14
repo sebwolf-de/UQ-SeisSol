@@ -1,16 +1,18 @@
 #include "Runner.h"
 
-#include <boost/filesystem.hpp>
 #include <iostream>
+#include <string>
 #include <sys/wait.h>
 #include <unistd.h>
+#include <map>
 
-SeisSol::Runner::Runner(std::string seisSolBinaryPath, std::string parametersFilePath,
-                        size_t numberOfProcesses)
-    : binaryPath(seisSolBinaryPath), parametersPath(parametersFilePath),
-      numberOfProcesses(numberOfProcesses) {}
+#include <boost/filesystem.hpp>
+#include "IO/ReceiverReader.h"
 
-void SeisSol::Runner::run() {
+SeisSol::Runner::Runner(std::string seisSolBinaryPath, std::string parametersFilePath)
+    : binaryPath(seisSolBinaryPath), parametersPath(parametersFilePath) {}
+
+void SeisSol::Runner::run() const {
   int status;
   int seissolError;
   int pid = fork();
@@ -24,19 +26,12 @@ void SeisSol::Runner::run() {
               << std::endl;
     exit(1);
   } else if (pid == 0) {
-    freopen("/dev/null", "a", stdout);
+    freopen("SeisSol_stdout.txt", "a", stdout);
     freopen("SeisSol_stderr.txt", "w", stderr);
-
-    // Cleans the output directory of past receiver outputs
-    boost::filesystem::remove_all("output");
-    boost::filesystem::create_directory("output");
-
-    std::string processes = std::to_string(numberOfProcesses);
 
     // execl returns -1 if there was an error
     // execl does not return if the command was successful
-    seissolError = execlp("mpiexec", "mpiexec", "-n", processes.c_str(), binaryPath.c_str(),
-                          parametersPath.c_str(), NULL);
+    seissolError = execlp("srun", "srun", binaryPath.c_str(), parametersPath.c_str(), NULL);
 
     if (seissolError == -1)
       exit(1);
@@ -48,7 +43,20 @@ void SeisSol::Runner::run() {
       std::cout << "You can check 'SeisSol_stderr.txt' for more information." << std::endl;
       exit(1);
     }
-
-    std::cout << "Executed SeisSol " << ++runCount << " times." << std::endl;
   }
+}
+
+void SeisSol::Runner::prepareFilesystem(size_t runCount) const {
+  // Copies the old receiver data to output/chain and removes them from output/current
+  std::string chain = "output/chain";
+  if (!boost::filesystem::exists(chain)) {
+    boost::filesystem::create_directory(chain);
+  }
+  std::string current = "output/current";
+  const auto receiverList = IO::getReceiversInDirectory(current, "output-receiver");
+  for (auto it = receiverList.begin(); it != receiverList.end(); it++) {
+    boost::filesystem::copy_file(it->second, chain + "/receiver-" + std::to_string(it->first) + "-chain-" + std::to_string(runCount) + ".dat");
+  }
+  boost::filesystem::remove_all(current);
+  boost::filesystem::create_directory(current);
 }

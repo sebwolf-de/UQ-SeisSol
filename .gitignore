@@ -33,4 +33,7 @@
 
 build/*
 settings.json
-examples/*
+example/mesh/*.h5
+example/output/*
+example/source/source.nrf
+

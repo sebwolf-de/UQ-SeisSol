@@ -6,25 +6,37 @@
 #include <regex>
 #include <sstream>
 #include <string>
+#include <map>
+#include <iostream>
 
 IO::ReceiverReader::ReceiverReader(std::string dir, std::string prefix)
     : observationsDirectory(dir), receiverPrefix(prefix) {}
 
-void IO::ReceiverReader::parseReceiver(size_t number, SeisSol::Receiver& receiver) const {
-  assert(boost::filesystem::exists(observationsDirectory));
+std::map<size_t, std::string> IO::getReceiversInDirectory(std::string directory, std::string prefix) {
+  std::map<size_t, std::string> fileList;
+  if (!boost::filesystem::exists(directory)) {
+    return fileList;
+  }
 
   std::string fileName;
-  std::regex matcher(receiverPrefix + "-0*" + std::to_string(number) + "-.*\\.dat");
+  std::regex matcher(prefix + "-([0-9])*-.*\\.dat");
 
   for (boost::filesystem::directory_entry& e :
-       boost::filesystem::directory_iterator(observationsDirectory)) {
+       boost::filesystem::directory_iterator(directory)) {
     if (!boost::filesystem::is_directory(e.path())) {
-      if (std::regex_match(e.path().filename().string(), matcher)) {
+      std::smatch m;
+      if (std::regex_match(e.path().filename().string(), m,  matcher)) {
         fileName = e.path().string();
-        break;
+        fileList.insert({std::stoi(m[1]), fileName});
       }
     }
   }
+  return fileList;
+}
+
+void IO::ReceiverReader::parseReceiver(size_t number, SeisSol::Receiver& receiver) const {
+  const auto receiverList = getReceiversInDirectory(observationsDirectory, receiverPrefix);
+  const auto fileName = receiverList.at(number);
 
   std::ifstream in(fileName);
   std::string line;

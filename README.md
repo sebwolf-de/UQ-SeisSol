@@ -15,6 +15,7 @@ make
 ### Running
 
 In the example folder there is a working setup.
+UQ-SeisSol need `$SLURM_NTASKS` to be set.
 
 1. Create the meshes using `gmsh` and `pumgen`.
 2. Convert the source using `rconv`.

@@ -1,3 +1,4 @@
+#include <iostream>
 
 #include "MaterialParameterWriter.h"
 
@@ -14,6 +15,7 @@ void IO::MaterialParameterWriter::updateParameters(Eigen::VectorXd parameters) c
     size_t locationOfKey = unsavedFileContent.find("@" + key + "@");
 
     unsavedFileContent.replace(locationOfKey, key.length() + 2, std::to_string(parameters(i)));
+    std::cout << key << ": " << parameters(i) << std::endl;
   }
 
   std::ofstream materialParametersFile("material_chain.yaml");
