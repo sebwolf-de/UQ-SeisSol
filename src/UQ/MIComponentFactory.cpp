@@ -17,7 +17,10 @@ std::shared_ptr<UQ::MCMCProposal> UQ::MyMIComponentFactory::Proposal(
 
   auto mu = Eigen::VectorXd::Zero(numberOfParameters);
   Eigen::MatrixXd cov = Eigen::MatrixXd::Identity(numberOfParameters, numberOfParameters);
-  cov *= 0.005;
+  
+  for (size_t i=0; i < numberOfParameters; i++) {
+    cov(i, i) = cov(i, i) * startingParameters(i) / 10;
+  }
 
   auto prior = std::make_shared<Gaussian>(mu, cov);
 
