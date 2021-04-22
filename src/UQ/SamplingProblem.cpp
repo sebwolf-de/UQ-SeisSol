@@ -21,6 +21,12 @@ UQ::MySamplingProblem::MySamplingProblem(
 
 double UQ::MySamplingProblem::LogDensity(std::shared_ptr<SamplingState> const& state) {
   lastState = state;
+
+  //discard unphysical values
+  if (state->state[0].minCoeff() < 0) {
+    return -40;
+  }
+
   std::cout << "----------------------" << std::endl;
   std::cout << "Run SeisSol on index " << index->GetValue(0) << std::endl;
 
@@ -41,9 +47,10 @@ double UQ::MySamplingProblem::LogDensity(std::shared_ptr<SamplingState> const& s
   }
 
   const auto relative_norm = norm_diff/norm;
-  std::cout << "LogDensity = " << -relative_norm << std::endl;
+  const auto logDensity = -relative_norm * relative_norm;
+  std::cout << "LogDensity = " << logDensity << std::endl;
   std::cout << std::endl;
-  return -relative_norm;
+  return logDensity;
 }
 
 std::shared_ptr<UQ::SamplingState> UQ::MySamplingProblem::QOI() {
