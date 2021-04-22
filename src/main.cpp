@@ -40,7 +40,7 @@ int main(int argc, char** argv) {
 
   std::cout << "ML mean Param: " << mimcmc.MeanParam().transpose() << std::endl;
   std::cout << "ML mean QOI: " << mimcmc.MeanQOI().transpose() << std::endl;
-  mimcmc.WriteToFile("test.hdf5");
+  mimcmc.WriteToFile("test.h5");
 
   return 0;
 }
