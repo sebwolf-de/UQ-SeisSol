@@ -33,7 +33,7 @@ int main(int argc, char** argv) {
   boost::property_tree::ptree pt;
   pt.put("verbosity", 1); // show some output
   pt.put("BurnIn", 5);
-  pt.put("NumSamples_0", 50);
+  pt.put("NumSamples_0", parameterReader.getNumberOfSamples());
 
   muq::SamplingAlgorithms::MIMCMC mimcmc(pt, miComponentFactory);
   std::shared_ptr<muq::SamplingAlgorithms::SampleCollection> samples = mimcmc.Run();
