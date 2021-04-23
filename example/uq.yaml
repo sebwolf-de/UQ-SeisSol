@@ -10,4 +10,4 @@ InitialParameters:
 ObservationDirectory:   "observations"
 ReceiverPrefix:         "output-receiver"
 NumberOfReceivers:      5
-NumberOfSamples:        10
+NumberOfSamples:        500

@@ -11,7 +11,7 @@
 #SBATCH --mail-type=end
 #SBATCH --mail-user=wolf.sebastian@in.tum.de
 #SBATCH --export=NONE
-#SBATCH --time=00:30:00
+#SBATCH --time=02:30:00
   
 module load slurm_setup
 unset KMP_AFFINITY
