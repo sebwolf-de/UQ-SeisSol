@@ -47,7 +47,7 @@ double UQ::MySamplingProblem::LogDensity(std::shared_ptr<SamplingState> const& s
   }
 
   const auto relative_norm = norm_diff/norm;
-  const auto logDensity = -relative_norm * relative_norm;
+  const auto logDensity = -std::pow(relative_norm, 4);
   std::cout << "LogDensity = " << logDensity << std::endl;
   std::cout << std::endl;
   return logDensity;
