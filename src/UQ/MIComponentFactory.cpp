@@ -19,17 +19,17 @@ std::shared_ptr<UQ::MCMCProposal> UQ::MyMIComponentFactory::Proposal(
   Eigen::MatrixXd cov = Eigen::MatrixXd::Identity(numberOfParameters, numberOfParameters);
   
   for (size_t i=0; i < numberOfParameters; i++) {
-    cov(i, i) = cov(i, i) * startingParameters(i) / 10;
+    cov(i, i) = cov(i, i) * std::pow(startingParameters(i), 2) / 100;
   }
 
-  auto prior = std::make_shared<Gaussian>(mu, cov);
+  auto prior = std::make_shared<Gaussian>(mu, cov, Gaussian::Mode::Covariance);
 
   return std::make_shared<MHProposal>(pt, samplingProblem, prior);
 }
 
 std::shared_ptr<UQ::MultiIndex> UQ::MyMIComponentFactory::FinestIndex() {
   auto index = std::make_shared<MultiIndex>(1);
-  index->SetValue(0, 2);
+  index->SetValue(0, 0);
   return index;
 }
 

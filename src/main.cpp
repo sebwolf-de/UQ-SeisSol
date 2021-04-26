@@ -31,19 +31,16 @@ int main(int argc, char** argv) {
       initialParameterValues);
 
   boost::property_tree::ptree pt;
-  // pt.put("NumSamples", N); // number of samples for single level
   pt.put("verbosity", 1); // show some output
-  pt.put("BurnIn", 10);
-  pt.put("NumSamples_0", 1000);
-  pt.put("NumSamples_1", 100);
-  pt.put("NumSamples_2", 10);
+  pt.put("BurnIn", 5);
+  pt.put("NumSamples_0", parameterReader.getNumberOfSamples());
 
   muq::SamplingAlgorithms::MIMCMC mimcmc(pt, miComponentFactory);
   std::shared_ptr<muq::SamplingAlgorithms::SampleCollection> samples = mimcmc.Run();
 
   std::cout << "ML mean Param: " << mimcmc.MeanParam().transpose() << std::endl;
   std::cout << "ML mean QOI: " << mimcmc.MeanQOI().transpose() << std::endl;
-  mimcmc.WriteToFile("test.hdf5");
+  mimcmc.WriteToFile("test.h5");
 
   return 0;
 }

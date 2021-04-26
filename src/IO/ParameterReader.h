@@ -16,6 +16,7 @@ class ParameterReader {
   Eigen::VectorXd getInitialMaterialParameterValues() const;
   std::string getObservationDir() const;
   size_t getNumberOfReceivers() const;
+  size_t getNumberOfSamples() const;
   std::string getReceiverPrefix() const;
 
   private:

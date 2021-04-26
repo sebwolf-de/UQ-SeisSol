@@ -11,6 +11,7 @@ IO::ParameterReader::ParameterReader(std::string filename) : root(YAML::LoadFile
   assert(
       (root["InitialParameters"] && "Parameter file contains initial material parameter values"));
   assert((root["NumberOfReceivers"] && "Parameter file contains number of receivers"));
+  assert((root["NumberOfSamples"] && "Parameter file contains number of samples"));
   assert((root["ObservationDirectory"] && "Parameter file contains link to observation directory"));
 }
 
@@ -56,6 +57,10 @@ std::string IO::ParameterReader::getObservationDir() const {
 
 size_t IO::ParameterReader::getNumberOfReceivers() const {
   return root["NumberOfReceivers"].as<size_t>();
+}
+
+size_t IO::ParameterReader::getNumberOfSamples() const {
+  return root["NumberOfSamples"].as<size_t>();
 }
 
 std::string IO::ParameterReader::getReceiverPrefix() const {
