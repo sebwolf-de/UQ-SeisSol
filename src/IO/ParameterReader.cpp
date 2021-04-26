@@ -11,7 +11,7 @@ IO::ParameterReader::ParameterReader(std::string filename) : root(YAML::LoadFile
   assert(
       (root["InitialParameters"] && "Parameter file contains initial material parameter values"));
   assert((root["NumberOfReceivers"] && "Parameter file contains number of receivers"));
-  assert((root["NumberOfSamples"] && "Parameter file contains number of receivers"));
+  assert((root["NumberOfSamples"] && "Parameter file contains number of samples"));
   assert((root["ObservationDirectory"] && "Parameter file contains link to observation directory"));
 }
 
