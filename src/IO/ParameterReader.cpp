@@ -59,8 +59,14 @@ size_t IO::ParameterReader::getNumberOfReceivers() const {
   return root["NumberOfReceivers"].as<size_t>();
 }
 
-size_t IO::ParameterReader::getNumberOfSamples() const {
-  return root["NumberOfSamples"].as<size_t>();
+size_t IO::ParameterReader::getNumberOfSamples(size_t index) const {
+  const auto numberOfSamples = root["NumberOfSamples"].as<std::vector<int>>();
+  return numberOfSamples.at(index);
+}
+
+size_t IO::ParameterReader::getNumberOfIndices() const {
+  const auto numberOfSamples = root["NumberOfSamples"].as<std::vector<int>>();
+  return numberOfSamples.size();
 }
 
 std::string IO::ParameterReader::getReceiverPrefix() const {
