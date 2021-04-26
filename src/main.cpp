@@ -35,7 +35,7 @@ int main(int argc, char** argv) {
   pt.put("BurnIn", 1);
   for (size_t i = 0; i < parameterReader.getNumberOfIndices(); i++) {
     char buffer[12];
-    sprintf(buffer, "NumSamples_%i", i);
+    sprintf(buffer, "NumSamples_%lu", i);
     pt.put(buffer, parameterReader.getNumberOfSamples(i));
   }
 

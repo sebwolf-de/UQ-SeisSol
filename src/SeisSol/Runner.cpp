@@ -59,7 +59,7 @@ void SeisSol::Runner::prepareFilesystem(size_t runCount) const {
   for (auto it = receiverList.begin(); it != receiverList.end(); it++) {
     //TODO: use C++20 std::format
     char buffer [5];
-    sprintf (buffer, "%05i", runCount);
+    sprintf (buffer, "%05lu", runCount);
     const std::string output = chain + "/receiver-" + std::to_string(it->first) + "-chain-" + buffer + ".dat";
     boost::filesystem::copy_file(it->second, output);
   }
