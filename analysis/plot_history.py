@@ -3,15 +3,18 @@ import h5py
 import matplotlib.pyplot as plt
 from matplotlib.ticker import NullFormatter
 import numpy as np
+import re
 
 cmdLineParser = argparse.ArgumentParser()
 cmdLineParser.add_argument('filename')
-cmdLineArgs = cmdLineParser.parse_args()
+cmdLineParser.add_argument('--model', type=int)
+cmdLineParser.add_argument('--subchain', type=int)
+args = cmdLineParser.parse_args()
 
-hf = h5py.File(cmdLineArgs.filename, 'r')
-samples_raw = hf.get('model_0_subchain_0_samples/samples')
+hf = h5py.File(args.filename, 'r')
+samples_raw = hf.get(f'model_{args.model}_subchain_{args.subchain}_samples/samples')
 samples = np.array(samples_raw)
-log_target_raw = hf.get('model_0_subchain_0_samples/LogTarget')
+log_target_raw = hf.get(f'model_{args.model}_subchain_{args.subchain}_samples/LogTarget')
 log_target = np.array(log_target_raw)
 n_samples = samples.shape[1]
 
