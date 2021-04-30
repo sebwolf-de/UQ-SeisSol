@@ -24,6 +24,8 @@ int main(int argc, char** argv) {
   auto materialParameterWriter = uqSeisSolFactory.createMaterialParameterWriter();
   auto runner = uqSeisSolFactory.createSeisSolRunner();
 
+  runner->archivePreviousRun();
+
   auto initialParameterValues = parameterReader.getInitialMaterialParameterValues();
 
   auto miComponentFactory = std::make_shared<UQ::MyMIComponentFactory>(
