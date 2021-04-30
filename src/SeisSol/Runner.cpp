@@ -75,7 +75,7 @@ void SeisSol::Runner::archivePreviousRun() const {
 
     size_t numOfArchivedRuns = 0;
 
-    for (boost::filesystem::directory_entry& e : boost::filesystem::directory_iterator(archiveDirectory)) {
+    for ([[maybe_unused]] boost::filesystem::directory_entry& e : boost::filesystem::directory_iterator(archiveDirectory)) {
       numOfArchivedRuns += 1;
     }
 
