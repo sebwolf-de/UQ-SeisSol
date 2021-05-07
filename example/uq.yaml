@@ -11,3 +11,4 @@ ObservationDirectory:   "observations"
 ReceiverPrefix:         "output-receiver"
 NumberOfReceivers:      5
 NumberOfSamples:        500
+NumberOfSubintervals:   5
