@@ -1,5 +1,6 @@
 #include "ReceiverDB.h"
 #include "SeisSol/Receiver.h"
+#include <vector>
 
 SeisSol::ReceiverDB::ReceiverDB(std::string directory, std::string prefix)
     : receiverReader(IO::ReceiverReader(directory, prefix)) {}
@@ -10,8 +11,8 @@ void SeisSol::ReceiverDB::addReceiver(size_t i) {
   receivers[i] = receiver;
 }
 
-double SeisSol::ReceiverDB::l1Difference(size_t i, const SeisSol::Receiver& otherReceiver) const {
-  return receivers.at(i).l1Difference(otherReceiver);
+std::vector<double> SeisSol::ReceiverDB::l1Difference(size_t i, const SeisSol::Receiver& otherReceiver, size_t numberOfSubintervals) const {
+  return receivers.at(i).l1Difference(otherReceiver, numberOfSubintervals);
 }
 
 const SeisSol::Receiver& SeisSol::ReceiverDB::getReceiver(size_t i) const {

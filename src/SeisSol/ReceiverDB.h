@@ -4,6 +4,7 @@
 
 #include "IO/ReceiverReader.h"
 #include "Receiver.h"
+#include <vector>
 
 namespace SeisSol {
 
@@ -12,7 +13,7 @@ class ReceiverDB {
   ReceiverDB(std::string directory, std::string prefix);
   void addReceiver(size_t i);
   const SeisSol::Receiver& getReceiver(size_t) const;
-  double l1Difference(size_t i, const SeisSol::Receiver& otherReceiver) const;
+  std::vector<double> l1Difference(size_t i, const SeisSol::Receiver& otherReceiver, size_t numberOfSubintervals) const;
   size_t numberOfReceivers() const;
 
   private:

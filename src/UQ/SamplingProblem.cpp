@@ -4,6 +4,10 @@
 #include <sched.h>
 #include <string>
 #include <unistd.h>
+#include <algorithm>
+#include <numeric>
+#include <functional>
+#include <iterator>
 
 UQ::MySamplingProblem::MySamplingProblem(
     std::shared_ptr<MultiIndex> index, std::shared_ptr<SeisSol::Runner> runner,
@@ -30,7 +34,6 @@ double UQ::MySamplingProblem::LogDensity(std::shared_ptr<SamplingState> const& s
 
   std::cout << "----------------------" << std::endl;
   std::cout << "Run SeisSol on index " << index->GetValue(0) << std::endl;
-  std::cout << numberOfSubintervals << std::endl;
 
   materialParameterWriter->updateParameters(state->state[0]);
 
@@ -39,22 +42,27 @@ double UQ::MySamplingProblem::LogDensity(std::shared_ptr<SamplingState> const& s
 
   std::cout << "Executed SeisSol successfully " << ++runCount << " times." << std::endl;
 
-  double norm_diff = 0.0;
-  double norm = 0.0;
+  std::vector<std::vector<double>> norm_diffs;
+  std::vector<std::vector<double>> norms;
 
   for (size_t i = 1; i < observationsReceiverDB->numberOfReceivers() + 1; i++) {
     simulationsReceiverDB->addReceiver(i);
-    
-    // for (size_t j = 0; j < ) {
 
-    // }
-
-    norm_diff += simulationsReceiverDB->l1Difference(i, observationsReceiverDB->getReceiver(i));
-    norm += observationsReceiverDB->getReceiver(i).l1Norm();
+    norm_diffs.push_back(simulationsReceiverDB->l1Difference(i, observationsReceiverDB->getReceiver(i), numberOfSubintervals));
+    norms.push_back(observationsReceiverDB->getReceiver(i).l1Norm(numberOfSubintervals));
   }
 
-  const auto relative_norm = norm_diff/norm;
-  const auto logDensity = -std::pow(relative_norm, 4);
+  double relativeNorm = 0.0;
+
+  for (size_t i = 0; i < observationsReceiverDB->numberOfReceivers(); i++) {
+    std::vector<double> subRelativeNorms;
+    std::transform(norm_diffs[i].cbegin(), norm_diffs[i].cend(), norms[i].cbegin(), std::back_inserter(subRelativeNorms), std::divides<double>());
+    double receiverRelativeNorm = std::accumulate(subRelativeNorms.begin(), subRelativeNorms.end(), 0.0, std::plus<double>()) / (double) numberOfSubintervals;
+    relativeNorm += receiverRelativeNorm;
+    std::cout << "Relative norm of receiver " << i << ": " << receiverRelativeNorm << std::endl;
+  }
+
+  const auto logDensity = -std::pow(relativeNorm, 4);
   std::cout << "LogDensity = " << logDensity << std::endl;
   std::cout << std::endl;
   return logDensity;

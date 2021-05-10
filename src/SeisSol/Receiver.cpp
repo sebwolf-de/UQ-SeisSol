@@ -1,31 +1,55 @@
 #include "Receiver.h"
+#include <vector>
+#include <cmath>
 
 SeisSol::Receiver::Receiver() : relevantQuantities({7,8,9}) {}
 
-double SeisSol::Receiver::l1Difference(const Receiver& otherReceiver) const {
+std::vector<double> SeisSol::Receiver::l1Difference(const Receiver& otherReceiver, size_t numberOfSubintervals) const {
   assert(receiverData.size() == otherReceiver.receiverData.size());
 
-  double l = 0;
+  std::vector<double> diffs;
+  
+  size_t subintervalSize = std::floor(receiverData.size() / numberOfSubintervals);
 
-  for (size_t i = 0; i < receiverData.size(); i++) {
-    for (size_t j : relevantQuantities) {
-      l += std::abs(this->operator()(i, j) - otherReceiver(i, j));
+  for (size_t s = 0; s < numberOfSubintervals; s++) {
+    double l = 0.0;
+
+    size_t start = s * subintervalSize;
+    size_t end = (start + subintervalSize > receiverData.size()) ? receiverData.size() : start + subintervalSize;
+
+    for (size_t i = start; i < end; i++) {
+      for (size_t j : relevantQuantities) {
+        l += std::abs(this->operator()(i, j) - otherReceiver(i, j));
+      }
     }
+
+    diffs.push_back(l);
   }
 
-  return l;
+  return diffs;
 }
 
-double SeisSol::Receiver::l1Norm() const {
-  double l = 0;
+std::vector<double> SeisSol::Receiver::l1Norm(size_t numberOfSubintervals) const {
+  std::vector<double> norms;
+  
+  size_t subintervalSize = std::floor(receiverData.size() / numberOfSubintervals);
 
-  for (size_t i = 0; i < receiverData.size(); i++) {
-    for (size_t j : relevantQuantities) {
-      l += std::abs(this->operator()(i, j));
+  for (size_t s = 0; s < numberOfSubintervals; s++) {
+    double l = 0.0;
+
+    size_t start = s * subintervalSize;
+    size_t end = (start + subintervalSize > receiverData.size()) ? receiverData.size() : start + subintervalSize;
+
+    for (size_t i = start; i < end; i++) {
+      for (size_t j : relevantQuantities) {
+        l += std::abs(this->operator()(i, j));
+      }
     }
+
+    norms.push_back(l);
   }
 
-  return l;
+  return norms;
 }
 
 void SeisSol::Receiver::clear() { receiverData.clear(); }
