@@ -12,6 +12,7 @@ class ReceiverDB {
   public:
   ReceiverDB(std::string directory, std::string prefix);
   void addReceiver(size_t i);
+  void addAllReceivers();
   const SeisSol::Receiver& getReceiver(size_t) const;
   std::vector<double> l1Difference(size_t i, const SeisSol::Receiver& otherReceiver, size_t numberOfSubintervals) const;
   size_t numberOfReceivers() const;
@@ -19,6 +20,8 @@ class ReceiverDB {
   private:
   std::map<int, SeisSol::Receiver> receivers;
   const IO::ReceiverReader receiverReader;
+  std::string directory;
+  std::string prefix;
 };
 
 } // namespace SeisSol
