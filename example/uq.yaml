@@ -3,11 +3,14 @@ ParametersFile:         "parameters.par"
 
 MaterialFileTemplate:   "material_template.yaml"
 InitialParameters:
-  param_rho:    2.4e3
-  param_mu:     1.2e10
-  param_lambda: 1.8e10
+  param_rho_layer:    2.4e3
+  param_mu_layer:     1.2e10
+  param_lambda_layer: 1.8e10
+  param_rho_halfspace:    2.4e3
+  param_mu_halfspace:     1.2e10
+  param_lambda_halfspace: 1.8e10
 
 ObservationDirectory:   "observations"
 ReceiverPrefix:         "output-receiver"
-NumberOfReceivers:      5
+NumberOfReceivers:      9
 NumberOfSamples:        500

@@ -50,7 +50,7 @@ printIntervalCriterion = 2          ! Criterion for index of printed info: 1=tim
 
 pickdt = 0.0005                       ! Pickpoint Sampling
 pickDtType = 1                       ! Pickpoint Type
-nRecordPoints = 5                    ! number of Record points which are read from file
+nRecordPoints = 9                    ! number of Record points which are read from file
 RFileName = 'mesh/receivers.dat'     ! Record Points in extra file
 
 xdmfWriterBackend = 'posix' ! (optional) The backend used in fault, wavefield,
@@ -59,7 +59,7 @@ xdmfWriterBackend = 'posix' ! (optional) The backend used in fault, wavefield,
 /
 
 &AbortCriteria
-EndTime = 2.0
+EndTime = 9.0
 /
 
 &Analysis
