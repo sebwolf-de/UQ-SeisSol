@@ -10,6 +10,8 @@ std::vector<double> SeisSol::Receiver::l1Difference(const Receiver& otherReceive
   std::vector<double> diffs;
   
   size_t subintervalSize = std::floor(receiverData.size() / numberOfSubintervals);
+  //assume constant dt
+  const double dt = this->operator()(1,0) - this->operator()(0,0);
 
   for (size_t s = 0; s < numberOfSubintervals; s++) {
     double l = 0.0;
@@ -23,7 +25,7 @@ std::vector<double> SeisSol::Receiver::l1Difference(const Receiver& otherReceive
       }
     }
 
-    diffs.push_back(l);
+    diffs.push_back(dt * l);
   }
 
   return diffs;
@@ -32,7 +34,9 @@ std::vector<double> SeisSol::Receiver::l1Difference(const Receiver& otherReceive
 std::vector<double> SeisSol::Receiver::l1Norm(size_t numberOfSubintervals) const {
   std::vector<double> norms;
   
-  size_t subintervalSize = std::floor(receiverData.size() / numberOfSubintervals);
+  const size_t subintervalSize = std::floor(receiverData.size() / numberOfSubintervals);
+  //assume constant dt
+  const double dt = this->operator()(1,0) - this->operator()(0,0);
 
   for (size_t s = 0; s < numberOfSubintervals; s++) {
     double l = 0.0;
@@ -46,7 +50,7 @@ std::vector<double> SeisSol::Receiver::l1Norm(size_t numberOfSubintervals) const
       }
     }
 
-    norms.push_back(l);
+    norms.push_back(dt * l);
   }
 
   return norms;

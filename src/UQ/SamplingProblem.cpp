@@ -53,11 +53,19 @@ double UQ::MySamplingProblem::LogDensity(std::shared_ptr<SamplingState> const& s
   }
 
   double relativeNorm = 0.0;
+  const double epsilon = 1e-2;
 
   for (size_t i = 0; i < observationsReceiverDB->numberOfReceivers(); i++) {
-    std::vector<double> subRelativeNorms;
-    std::transform(norm_diffs[i].cbegin(), norm_diffs[i].cend(), norms[i].cbegin(), std::back_inserter(subRelativeNorms), std::divides<double>());
-    double receiverRelativeNorm = std::accumulate(subRelativeNorms.begin(), subRelativeNorms.end(), 0.0, std::plus<double>()) / (double) numberOfSubintervals;
+    double receiverRelativeNorm = 0.0;
+    for (size_t j = 0; j < norm_diffs[i].size(); j++) {
+      if (norms[i][j] > epsilon) {
+        receiverRelativeNorm += norm_diffs[i][j] / norms[i][j];
+      }
+      else {
+        receiverRelativeNorm += norm_diffs[i][j];
+      }
+    }
+    receiverRelativeNorm = receiverRelativeNorm / (double)numberOfSubintervals;
     relativeNorm += receiverRelativeNorm;
     std::cout << "Relative norm of receiver " << i << ": " << receiverRelativeNorm << std::endl;
   }
