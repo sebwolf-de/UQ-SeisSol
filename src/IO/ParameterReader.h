@@ -17,6 +17,7 @@ class ParameterReader {
   std::string getObservationDir() const;
   size_t getNumberOfReceivers() const;
   size_t getNumberOfSamples() const;
+  size_t getNumberOfSubintervals() const;
   std::string getReceiverPrefix() const;
 
   private:

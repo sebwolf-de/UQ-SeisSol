@@ -8,8 +8,8 @@ namespace SeisSol {
 class Receiver {
   public:
   Receiver();
-  double l1Difference(const Receiver& otherData) const;
-  double l1Norm() const;
+  std::vector<double> l1Difference(const Receiver& otherData, size_t numberOfSubintervals) const;
+  std::vector<double> l1Norm(size_t numberOfSubintervals) const;
   Eigen::Vector3d position;
   void clear();
   void appendData(std::array<double, 10>);
