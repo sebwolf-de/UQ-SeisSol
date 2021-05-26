@@ -21,7 +21,7 @@ FileName = 'source/source.nrf'                        ! input file.
 /
             
 &MeshNml
-MeshFile = 'mesh/coarse.puml.h5'
+MeshFile = 'mesh/coarse.h5'
 meshgenerator = 'PUML'                         ! Name of meshgenerator (Gambit3D-fast, Netcdf or PUML)
 /
 
@@ -48,9 +48,9 @@ SurfaceOutputInterval = 0.5
 
 printIntervalCriterion = 2          ! Criterion for index of printed info: 1=timesteps,2=time,3=timesteps+time
 
-pickdt = 0.0005                       ! Pickpoint Sampling
+pickdt = 0.0200                       ! Pickpoint Sampling
 pickDtType = 1                       ! Pickpoint Type
-nRecordPoints = 5                    ! number of Record points which are read from file
+nRecordPoints = 9                    ! number of Record points which are read from file
 RFileName = 'mesh/receivers.dat'     ! Record Points in extra file
 
 xdmfWriterBackend = 'posix' ! (optional) The backend used in fault, wavefield,
@@ -59,7 +59,7 @@ xdmfWriterBackend = 'posix' ! (optional) The backend used in fault, wavefield,
 /
 
 &AbortCriteria
-EndTime = 2.0
+EndTime = 8.98 !reference actually ends at this time
 /
 
 &Analysis
