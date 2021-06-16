@@ -22,7 +22,7 @@ UQ::MySamplingProblem::MySamplingProblem(
           Eigen::VectorXi::Constant(1, materialParameterWriter->numberOfParameters())),
       runner(runner), observationsReceiverDB(observationsReceiverDB),
       simulationsReceiverDB(simulationsReceiverDB),
-      materialParameterWriter(materialParameterWriter), index(index), runCount(0), numberOfSubintervals(numberOfSubintervals) {
+      materialParameterWriter(materialParameterWriter), index(index), numberOfSubintervals(numberOfSubintervals) {
   std::cout << "Run Sampling Problem with index" << index->GetValue(0) << std::endl;
 }
 
