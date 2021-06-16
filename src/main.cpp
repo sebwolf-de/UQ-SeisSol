@@ -24,11 +24,14 @@ int main(int argc, char** argv) {
   auto materialParameterWriter = uqSeisSolFactory.createMaterialParameterWriter();
   auto runner = uqSeisSolFactory.createSeisSolRunner();
 
+  runner->archivePreviousRun();
+
   auto initialParameterValues = parameterReader.getInitialMaterialParameterValues();
+  size_t numberOfSubintervals = parameterReader.getNumberOfSubintervals();
 
   auto miComponentFactory = std::make_shared<UQ::MyMIComponentFactory>(
       runner, observationsReceiverDB, simulationsReceiverDB, materialParameterWriter,
-      initialParameterValues, parameterReader.getNumberOfIndices()-1);
+      initialParameterValues, parameterReader.getNumberOfIndices()-1, numberOfSubintervals);
 
   boost::property_tree::ptree pt;
   pt.put("verbosity", 1); // show some output

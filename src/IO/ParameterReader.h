@@ -18,6 +18,7 @@ class ParameterReader {
   size_t getNumberOfReceivers() const;
   size_t getNumberOfSamples(size_t index) const;
   size_t getNumberOfIndices() const;
+  size_t getNumberOfSubintervals() const;
   std::string getReceiverPrefix() const;
 
   private:

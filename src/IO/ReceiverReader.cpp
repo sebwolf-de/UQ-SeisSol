@@ -37,7 +37,10 @@ std::map<size_t, std::string> IO::getReceiversInDirectory(std::string directory,
 void IO::ReceiverReader::parseReceiver(size_t number, SeisSol::Receiver& receiver) const {
   const auto receiverList = getReceiversInDirectory(observationsDirectory, receiverPrefix);
   const auto fileName = receiverList.at(number);
+  parseReceiver(fileName, receiver);
+}
 
+void IO::ReceiverReader::parseReceiver(std::string fileName, SeisSol::Receiver& receiver) const {
   std::ifstream in(fileName);
   std::string line;
 

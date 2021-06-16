@@ -1,5 +1,17 @@
-!ConstantMap
-map:
-  rho:    @param_rho@
-  mu:     @param_mu@
-  lambda: @param_lambda@
+!Any
+components:
+  - !GroupFilter
+    groups: 1
+    components: !ConstantMap
+      map:
+        rho:    @param_rho_layer@
+        mu:     @param_mu_layer@
+        lambda: @param_lambda_layer@
+
+  - !GroupFilter
+    groups: 2
+    components: !ConstantMap
+      map:
+        rho:    @param_rho_halfspace@
+        mu:     @param_mu_halfspace@
+        lambda: @param_lambda_halfspace@

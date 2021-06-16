@@ -66,3 +66,34 @@ void SeisSol::Runner::prepareFilesystem(size_t runCount) const {
   boost::filesystem::remove_all(current);
   boost::filesystem::create_directory(current);
 }
+
+void SeisSol::Runner::archivePreviousRun() const {
+  // Archives receiver output from previous UQ-SeisSol runs
+  std::string chainDirectory = "output/chain";
+
+  if (boost::filesystem::exists(chainDirectory)) {
+    std::cout << "Archiving the previous run..." << std::endl;
+
+    std::string archiveDirectory = "output_archive";
+    if (!boost::filesystem::exists(archiveDirectory)) {
+      boost::filesystem::create_directory(archiveDirectory);
+    }
+
+    size_t numOfArchivedRuns = 0;
+
+    for ([[maybe_unused]] boost::filesystem::directory_entry& e : boost::filesystem::directory_iterator(archiveDirectory)) {
+      numOfArchivedRuns += 1;
+    }
+
+    boost::filesystem::create_directory(archiveDirectory + "/run-" + std::to_string(numOfArchivedRuns + 1));
+
+    for (boost::filesystem::directory_entry& e : boost::filesystem::directory_iterator(chainDirectory)) {
+      boost::filesystem::copy_file(e.path(), archiveDirectory + "/run-" + std::to_string(numOfArchivedRuns + 1) + "/" + e.path().filename().string());
+    }
+
+    boost::filesystem::remove_all(chainDirectory);
+    boost::filesystem::create_directory(chainDirectory);
+
+    std::cout << "Archiving done." << std::endl;
+  }
+}

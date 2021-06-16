@@ -47,7 +47,7 @@ std::shared_ptr<UQ::MCMCProposal> UQ::MyMIComponentFactory::CoarseProposal(
 std::shared_ptr<UQ::AbstractSamplingProblem>
 UQ::MyMIComponentFactory::SamplingProblem(std::shared_ptr<MultiIndex> const& index) {
   return std::make_shared<MySamplingProblem>(index, runner, observationsReceiverDB,
-                                             simulationsReceiverDB, materialParameterWriter);
+                                             simulationsReceiverDB, materialParameterWriter, numberOfSubintervals);
 }
 
 std::shared_ptr<UQ::MIInterpolation> UQ::MyMIComponentFactory::Interpolation([
@@ -66,8 +66,9 @@ UQ::MyMIComponentFactory::MyMIComponentFactory(
     std::shared_ptr<SeisSol::ReceiverDB> simulationsReceiverDB,
     std::shared_ptr<IO::MaterialParameterWriter> materialParameterWriter,
     const Eigen::VectorXd& startingParameters,
-    size_t finestIndex)
+    size_t finestIndex,
+    size_t numberOfSubintervals)
     : runner(runner), observationsReceiverDB(observationsReceiverDB),
       simulationsReceiverDB(simulationsReceiverDB),
       materialParameterWriter(materialParameterWriter), startingParameters(startingParameters),
-      finestIndex(finestIndex) {}
+      finestIndex(finestIndex), numberOfSubintervals(numberOfSubintervals) {}

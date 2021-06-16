@@ -25,7 +25,8 @@ class MySamplingProblem : public AbstractSamplingProblem {
   MySamplingProblem(std::shared_ptr<MultiIndex> index, std::shared_ptr<SeisSol::Runner> runner,
                     std::shared_ptr<SeisSol::ReceiverDB> observationsReceiverDB,
                     std::shared_ptr<SeisSol::ReceiverDB> simulationsReceiverDB,
-                    std::shared_ptr<IO::MaterialParameterWriter> materialParameterWriter);
+                    std::shared_ptr<IO::MaterialParameterWriter> materialParameterWriter,
+                    size_t numberOfSubintervals);
 
   virtual ~MySamplingProblem(){};
 
@@ -39,7 +40,8 @@ class MySamplingProblem : public AbstractSamplingProblem {
   std::shared_ptr<IO::MaterialParameterWriter> materialParameterWriter;
   std::shared_ptr<SamplingState> lastState = nullptr;
   std::shared_ptr<MultiIndex> index;
-  static size_t runCount;
+  size_t runCount;
+  size_t numberOfSubintervals;
 };
 
 } // namespace UQ
