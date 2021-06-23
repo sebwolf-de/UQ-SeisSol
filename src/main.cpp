@@ -15,7 +15,8 @@
 
 int main(int argc, char** argv) {
   assert(argc == 2);
-
+  int i;
+  i = 1;
   auto parameterReader = IO::ParameterReader(argv[1]);
   auto uqSeisSolFactory = SeisSol::UQSeisSolFactory(parameterReader);
 
