@@ -22,21 +22,31 @@ add_library(uq
   src/UQ/SamplingProblem.cpp)
 
 add_executable(main src/main.cpp)
-target_link_libraries(seissol io)
-target_link_libraries(main io)
-target_link_libraries(main seissol)
-target_link_libraries(main uq)
+target_link_libraries(seissol PUBLIC io)
+target_link_libraries(main PUBLIC seissol)
+target_link_libraries(main PUBLIC uq)
 
 include_directories(${CMAKE_CURRENT_LIST_DIR}/src/)
 
 find_package(Eigen3 REQUIRED)
 
+find_package(MPI REQUIRED)
+target_include_directories(io SYSTEM PUBLIC ${MPI_CXX_INCLUDE_PATH})
+target_include_directories(main SYSTEM PUBLIC ${MPI_CXX_INCLUDE_PATH})
+target_include_directories(seissol SYSTEM PUBLIC ${MPI_CXX_INCLUDE_PATH})
+target_include_directories(uq SYSTEM PUBLIC ${MPI_CXX_INCLUDE_PATH})
+target_link_libraries(main PUBLIC MPI::MPI_C)
+
+find_package(HDF5 REQUIRED)
+target_link_libraries(main PUBLIC ${HDF5_LIBRARIES} ${HDF5_LINK_LIBRARIES})
+include_directories(SYSTEM PUBLIC ${HDF5_INCLUDE_DIRS})
+
 find_package(MUQ REQUIRED)
-target_link_libraries(main ${MUQ_LIBRARIES} ${MUQ_LINK_LIBRARIES})
-include_directories(SYSTEM ${MUQ_INCLUDE_DIRS})
+target_link_libraries(main PUBLIC ${MUQ_LIBRARIES} ${MUQ_LINK_LIBRARIES})
+include_directories(SYSTEM PUBLIC ${MUQ_INCLUDE_DIRS})
 
 find_package(yaml-cpp REQUIRED)
-target_link_libraries(main ${YAML_CPP_LIBRARIES})
-include_directories(SYSTEM ${YAML_CPP_INCLUDE_DIR})
+target_link_libraries(main PUBLIC ${YAML_CPP_LIBRARIES})
+include_directories(SYSTEM PUBLIC ${YAML_CPP_INCLUDE_DIR})
 
 find_package(Boost COMPONENTS system filesystem graph)
