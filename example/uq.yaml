@@ -12,6 +12,6 @@ InitialParameters:
 
 ObservationDirectory:   "observations"
 ReceiverPrefix:         "output-receiver"
-NumberOfReceivers:      9
-NumberOfSamples:        500
+NumberOfReceivers:      5
+NumberOfSamples:        [200, 20]
 NumberOfSubintervals:   5

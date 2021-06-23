@@ -40,7 +40,7 @@ class MySamplingProblem : public AbstractSamplingProblem {
   std::shared_ptr<IO::MaterialParameterWriter> materialParameterWriter;
   std::shared_ptr<SamplingState> lastState = nullptr;
   std::shared_ptr<MultiIndex> index;
-  size_t runCount;
+  static size_t runCount;
   size_t numberOfSubintervals;
 };
 

@@ -31,18 +31,22 @@ int main(int argc, char** argv) {
 
   auto miComponentFactory = std::make_shared<UQ::MyMIComponentFactory>(
       runner, observationsReceiverDB, simulationsReceiverDB, materialParameterWriter,
-      initialParameterValues, numberOfSubintervals);
+      initialParameterValues, parameterReader.getNumberOfIndices()-1, numberOfSubintervals);
 
   boost::property_tree::ptree pt;
   pt.put("verbosity", 1); // show some output
-  pt.put("BurnIn", 5);
-  pt.put("NumSamples_0", parameterReader.getNumberOfSamples());
+  pt.put("BurnIn", 1);
+  for (size_t i = 0; i < parameterReader.getNumberOfIndices(); i++) {
+    char buffer[13];
+    sprintf(buffer, "NumSamples_%lu", i);
+    pt.put(buffer, parameterReader.getNumberOfSamples(i));
+  }
 
   muq::SamplingAlgorithms::MIMCMC mimcmc(pt, miComponentFactory);
   std::shared_ptr<muq::SamplingAlgorithms::SampleCollection> samples = mimcmc.Run();
 
   std::cout << "ML mean Param: " << mimcmc.MeanParam().transpose() << std::endl;
-  std::cout << "ML mean QOI: " << mimcmc.MeanQOI().transpose() << std::endl;
+  //std::cout << "ML mean QOI: " << mimcmc.MeanQOI().transpose() << std::endl;
   mimcmc.WriteToFile("test.h5");
 
   return 0;

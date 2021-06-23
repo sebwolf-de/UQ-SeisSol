@@ -9,6 +9,8 @@
 #include <functional>
 #include <iterator>
 
+size_t UQ::MySamplingProblem::MySamplingProblem::runCount = 0;
+
 UQ::MySamplingProblem::MySamplingProblem(
     std::shared_ptr<MultiIndex> index, std::shared_ptr<SeisSol::Runner> runner,
     std::shared_ptr<SeisSol::ReceiverDB> observationsReceiverDB,
@@ -20,7 +22,7 @@ UQ::MySamplingProblem::MySamplingProblem(
           Eigen::VectorXi::Constant(1, materialParameterWriter->numberOfParameters())),
       runner(runner), observationsReceiverDB(observationsReceiverDB),
       simulationsReceiverDB(simulationsReceiverDB),
-      materialParameterWriter(materialParameterWriter), index(index), runCount(0), numberOfSubintervals(numberOfSubintervals) {
+      materialParameterWriter(materialParameterWriter), index(index), numberOfSubintervals(numberOfSubintervals) {
   std::cout << "Run Sampling Problem with index" << index->GetValue(0) << std::endl;
 }
 
@@ -38,7 +40,7 @@ double UQ::MySamplingProblem::LogDensity(std::shared_ptr<SamplingState> const& s
   materialParameterWriter->updateParameters(state->state[0]);
 
   runner->prepareFilesystem(runCount);
-  runner->run();
+  runner->run(index->GetValue(0));
 
   std::cout << "Executed SeisSol successfully " << ++runCount << " times." << std::endl;
 

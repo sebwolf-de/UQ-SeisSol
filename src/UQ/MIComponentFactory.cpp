@@ -29,7 +29,7 @@ std::shared_ptr<UQ::MCMCProposal> UQ::MyMIComponentFactory::Proposal(
 
 std::shared_ptr<UQ::MultiIndex> UQ::MyMIComponentFactory::FinestIndex() {
   auto index = std::make_shared<MultiIndex>(1);
-  index->SetValue(0, 0);
+  index->SetValue(0, finestIndex);
   return index;
 }
 
@@ -66,7 +66,9 @@ UQ::MyMIComponentFactory::MyMIComponentFactory(
     std::shared_ptr<SeisSol::ReceiverDB> simulationsReceiverDB,
     std::shared_ptr<IO::MaterialParameterWriter> materialParameterWriter,
     const Eigen::VectorXd& startingParameters,
+    size_t finestIndex,
     size_t numberOfSubintervals)
     : runner(runner), observationsReceiverDB(observationsReceiverDB),
       simulationsReceiverDB(simulationsReceiverDB),
-      materialParameterWriter(materialParameterWriter), startingParameters(startingParameters), numberOfSubintervals(numberOfSubintervals) {}
+      materialParameterWriter(materialParameterWriter), startingParameters(startingParameters),
+      finestIndex(finestIndex), numberOfSubintervals(numberOfSubintervals) {}

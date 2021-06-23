@@ -41,6 +41,7 @@ class MyMIComponentFactory : public MIComponentFactory {
                        std::shared_ptr<SeisSol::ReceiverDB> simulationsReceiverDB,
                        std::shared_ptr<IO::MaterialParameterWriter> materialParameterWriter,
                        const Eigen::VectorXd& startingParameters,
+                       size_t finestIndex,
                        size_t numberOfSubintervals);
 
   private:
@@ -49,6 +50,7 @@ class MyMIComponentFactory : public MIComponentFactory {
   const std::shared_ptr<SeisSol::ReceiverDB> simulationsReceiverDB;
   const std::shared_ptr<IO::MaterialParameterWriter> materialParameterWriter;
   const Eigen::VectorXd& startingParameters;
+  const size_t finestIndex;
   size_t numberOfSubintervals;
 };
 

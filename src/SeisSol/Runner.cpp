@@ -12,7 +12,7 @@
 SeisSol::Runner::Runner(std::string seisSolBinaryPath, std::string parametersFilePath)
     : binaryPath(seisSolBinaryPath), parametersPath(parametersFilePath) {}
 
-void SeisSol::Runner::run() const {
+void SeisSol::Runner::run(size_t index) const {
   int status;
   int seissolError;
   int pid = fork();
@@ -31,7 +31,9 @@ void SeisSol::Runner::run() const {
 
     // execl returns -1 if there was an error
     // execl does not return if the command was successful
-    seissolError = execlp("srun", "srun", binaryPath.c_str(), parametersPath.c_str(), NULL);
+    
+    std::vector<std::string> parameterFiles = {"parameters_0.par", "parameters_1.par", "parameters_2.par"};
+    seissolError = execlp("srun", "srun", binaryPath.c_str(), parameterFiles[index].c_str(), NULL);
 
     if (seissolError == -1)
       exit(1);
@@ -55,7 +57,11 @@ void SeisSol::Runner::prepareFilesystem(size_t runCount) const {
   std::string current = "output/current";
   const auto receiverList = IO::getReceiversInDirectory(current, "output-receiver");
   for (auto it = receiverList.begin(); it != receiverList.end(); it++) {
-    boost::filesystem::copy_file(it->second, chain + "/receiver-" + std::to_string(it->first) + "-chain-" + std::to_string(runCount) + ".dat");
+    //TODO: use C++20 std::format
+    char buffer [6];
+    sprintf (buffer, "%05lu", runCount);
+    const std::string output = chain + "/receiver-" + std::to_string(it->first) + "-chain-" + buffer + ".dat";
+    boost::filesystem::copy_file(it->second, output);
   }
   boost::filesystem::remove_all(current);
   boost::filesystem::create_directory(current);
