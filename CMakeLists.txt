@@ -46,7 +46,7 @@ target_link_libraries(main PUBLIC ${MUQ_LIBRARIES} ${MUQ_LINK_LIBRARIES})
 include_directories(SYSTEM PUBLIC ${MUQ_INCLUDE_DIRS})
 
 find_package(yaml-cpp REQUIRED)
-target_link_libraries(main PUBLIC ${YAML_CPP_LIBRARIES})
+target_link_libraries(io PUBLIC ${YAML_CPP_LIBRARIES})
 include_directories(SYSTEM PUBLIC ${YAML_CPP_INCLUDE_DIR})
 
 find_package(Boost COMPONENTS system filesystem graph)
