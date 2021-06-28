@@ -46,7 +46,6 @@
 #### Notes about the parameter files
 1. [YAML configuration file](https://github.com/sebwolf-de/UQ-SeisSol/blob/main/example/uq.yaml)
     - `SeisSolBinary` specifies the name of the SeisSol binary.
-    - `ParametersFile` specifies the root of the parameters file name that SeisSol is run with (this is currently hardcoded to `parameters_0.par`, `parameters_1.par`, `parameters_2.par`). The root has `_(Index Number).par` added to it. This means that you should have multiple parameters file (one for each index). This is to specify parameter files that have a finer mesh for the higher index numbers.
     - `MaterialFileTemplate` specifies the name of the [template file](https://github.com/sebwolf-de/UQ-SeisSol/blob/main/example/material_template.yaml) for your material parameters. What `UQ-SeisSol` does is to replace all the parameter values in the template file that have the format `@parameter_name@` with the candidate sample. The number of `@parameter_name@` tags inside this file must match the number (and names) of the initial values given in `InitialParameters`.
     - `InitialParameters` specifies the initial values for each of the material parameters.
     - `ObservationDirectory` specifies the directory where the observation receivers can be parsed from.
@@ -55,6 +54,7 @@
     - `NumberOfSamples` is an array specifying the number of samples to draw per index (each element index in this array corresponds to the index of the `MUQ` index).
     - `NumberOfSubintervals` specifies the number of subintervals (on the time axis) to use when calculating the L1 difference.
 2. [SeisSol parameter files](https://github.com/sebwolf-de/UQ-SeisSol/blob/main/example/parameters.par)
-    - You should have one parameter file per `MUQ` index. The naming explained above.
+    - You should have one parameter file per `MUQ` index.
+    - The name of the parameter files must follow the format `parameters_<Index Number>.par`. There should be one for each index specified by `NumberOfSamples` parameter in the YAML configuration file. Higher index numbers normally have a finer mesh used for the simulation.
 3. [SeisSol mesh and source files](https://github.com/sebwolf-de/UQ-SeisSol/tree/main/example)
     - All required SeisSol files to run a simulations must be present.
