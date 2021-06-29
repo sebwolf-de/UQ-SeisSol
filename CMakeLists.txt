@@ -29,6 +29,9 @@ target_link_libraries(main PUBLIC uq)
 include_directories(${CMAKE_CURRENT_LIST_DIR}/src/)
 
 find_package(Eigen3 REQUIRED)
+target_include_directories(io SYSTEM PUBLIC ${EIGEN3_INCLUDE_DIR})
+target_include_directories(uq SYSTEM PUBLIC ${EIGEN3_INCLUDE_DIR})
+target_include_directories(seissol SYSTEM PUBLIC ${EIGEN3_INCLUDE_DIR})
 
 find_package(MPI REQUIRED)
 target_include_directories(io SYSTEM PUBLIC ${MPI_CXX_INCLUDE_PATH})
@@ -43,10 +46,12 @@ include_directories(SYSTEM PUBLIC ${HDF5_INCLUDE_DIRS})
 
 find_package(MUQ REQUIRED)
 target_link_libraries(main PUBLIC ${MUQ_LIBRARIES} ${MUQ_LINK_LIBRARIES})
-include_directories(SYSTEM PUBLIC ${MUQ_INCLUDE_DIRS})
+message(${MUQ_INCLUDE_DIRS})
+include_directories(uq SYSTEM PUBLIC ${MUQ_INCLUDE_DIRS})
 
 find_package(yaml-cpp REQUIRED)
 target_link_libraries(io PUBLIC ${YAML_CPP_LIBRARIES})
 include_directories(SYSTEM PUBLIC ${YAML_CPP_INCLUDE_DIR})
 
 find_package(Boost COMPONENTS system filesystem graph)
+find_package(spdlog CONFIG REQUIRED)
