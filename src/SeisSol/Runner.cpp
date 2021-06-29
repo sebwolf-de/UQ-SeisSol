@@ -9,8 +9,8 @@
 #include <boost/filesystem.hpp>
 #include "IO/ReceiverReader.h"
 
-SeisSol::Runner::Runner(std::string seisSolBinaryPath, std::string parametersFilePath)
-    : binaryPath(seisSolBinaryPath), parametersPath(parametersFilePath) {}
+SeisSol::Runner::Runner(std::string seisSolBinaryPath)
+    : binaryPath(seisSolBinaryPath) {}
 
 void SeisSol::Runner::run(size_t index) const {
   int status;
@@ -32,8 +32,8 @@ void SeisSol::Runner::run(size_t index) const {
     // execl returns -1 if there was an error
     // execl does not return if the command was successful
     
-    std::vector<std::string> parameterFiles = {"parameters_0.par", "parameters_1.par", "parameters_2.par"};
-    seissolError = execlp("srun", "srun", binaryPath.c_str(), parameterFiles[index].c_str(), NULL);
+      std::string parameterFile = "parameters_" + std::to_string(index) + ".par";
+    seissolError = execlp("srun", "srun", binaryPath.c_str(), parameterFile.c_str(), NULL);
 
     if (seissolError == -1)
       exit(1);
