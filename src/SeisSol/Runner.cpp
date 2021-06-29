@@ -1,12 +1,12 @@
 #include "Runner.h"
 
-#include <iostream>
 #include <string>
 #include <sys/wait.h>
 #include <unistd.h>
 #include <map>
 
 #include <boost/filesystem.hpp>
+#include "spdlog/spdlog.h"
 #include "IO/ReceiverReader.h"
 
 SeisSol::Runner::Runner(std::string seisSolBinaryPath)
@@ -21,9 +21,8 @@ void SeisSol::Runner::run(size_t index) const {
   // pid == 0 means we are in the child process
   // pid > 0 means we are in the parent process
   if (pid < 0) {
-    std::cout << "pid value: " << pid << std::endl;
-    std::cout << "Child process creation to run SeisSol was unsuccessful, exiting UQ-SeisSol. "
-              << std::endl;
+    spdlog::error("pid value: {}", pid);
+    spdlog::error("Child process creation to run SeisSol was unsuccessful, exiting UQ-SeisSol.");
     exit(1);
   } else if (pid == 0) {
     freopen("SeisSol_stdout.txt", "a", stdout);
@@ -41,8 +40,8 @@ void SeisSol::Runner::run(size_t index) const {
     waitpid(pid, &status, 0);
 
     if (WEXITSTATUS(status) != 0) {
-      std::cout << "SeisSol exited with an error exit code, exiting UQ-SeisSol." << std::endl;
-      std::cout << "You can check 'SeisSol_stderr.txt' for more information." << std::endl;
+      spdlog::error("SeisSol exited with an error exit code, exiting UQ-SeisSol.");
+      spdlog::error("You can check 'SeisSol_stderr.txt' for more information.");
       exit(1);
     }
   }
@@ -72,7 +71,7 @@ void SeisSol::Runner::archivePreviousRun() const {
   std::string chainDirectory = "output/chain";
 
   if (boost::filesystem::exists(chainDirectory)) {
-    std::cout << "Archiving the previous run..." << std::endl;
+    spdlog::debug("Archiving the previous run...");
 
     std::string archiveDirectory = "output_archive";
     if (!boost::filesystem::exists(archiveDirectory)) {
@@ -94,6 +93,6 @@ void SeisSol::Runner::archivePreviousRun() const {
     boost::filesystem::remove_all(chainDirectory);
     boost::filesystem::create_directory(chainDirectory);
 
-    std::cout << "Archiving done." << std::endl;
+    spdlog::debug("Archiving done.");
   }
 }

@@ -7,7 +7,6 @@
 #include <sstream>
 #include <string>
 #include <map>
-#include <iostream>
 
 IO::ReceiverReader::ReceiverReader(std::string dir, std::string prefix)
     : observationsDirectory(dir), receiverPrefix(prefix) {}

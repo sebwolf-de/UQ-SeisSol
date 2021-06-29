@@ -13,6 +13,8 @@
 #include "IO/ParameterReader.h"
 #include "SeisSol/UQSeisSolFactory.h"
 
+#include "spdlog/spdlog.h"
+
 int main(int argc, char** argv) {
   assert(argc == 2);
 
@@ -45,8 +47,13 @@ int main(int argc, char** argv) {
   muq::SamplingAlgorithms::MIMCMC mimcmc(pt, miComponentFactory);
   std::shared_ptr<muq::SamplingAlgorithms::SampleCollection> samples = mimcmc.Run();
 
-  std::cout << "ML mean Param: " << mimcmc.MeanParam().transpose() << std::endl;
-  //std::cout << "ML mean QOI: " << mimcmc.MeanQOI().transpose() << std::endl;
+  std::stringstream output_mean;
+  output_mean << "ML mean Param: " << mimcmc.MeanParam().transpose();
+  spdlog::info(output_mean.str());
+  //std::stringstream output_qoi;
+  //output_qoi << "ML qoi Param: " << mimcmc.MeanQOI().transpose();
+  //spdlog::info(output_qoi.str());
+
   mimcmc.WriteToFile("test.h5");
 
   return 0;
