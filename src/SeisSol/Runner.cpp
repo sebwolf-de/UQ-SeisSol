@@ -71,7 +71,7 @@ void SeisSol::Runner::archivePreviousRun() const {
   std::string chainDirectory = "output/chain";
 
   if (boost::filesystem::exists(chainDirectory)) {
-    spdlog::debug("Archiving the previous run...");
+    spdlog::info("Archiving the previous run...");
 
     std::string archiveDirectory = "output_archive";
     if (!boost::filesystem::exists(archiveDirectory)) {
@@ -93,6 +93,6 @@ void SeisSol::Runner::archivePreviousRun() const {
     boost::filesystem::remove_all(chainDirectory);
     boost::filesystem::create_directory(chainDirectory);
 
-    spdlog::debug("Archiving done.");
+    spdlog::info("Archiving done.");
   }
 }

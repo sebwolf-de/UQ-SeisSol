@@ -37,7 +37,7 @@ double UQ::MySamplingProblem::LogDensity(std::shared_ptr<SamplingState> const& s
   }
 
   spdlog::info("----------------------");
-  spdlog::info("Run SeisSol on index {}", index->GetValue(0));
+  spdlog::info("Running SeisSol on index {}", index->GetValue(0));
 
   materialParameterWriter->updateParameters(state->state[0]);
 
