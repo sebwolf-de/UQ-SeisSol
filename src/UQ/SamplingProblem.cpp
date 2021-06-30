@@ -9,6 +9,8 @@
 #include <functional>
 #include <iterator>
 
+#include "spdlog/spdlog.h"
+
 size_t UQ::MySamplingProblem::MySamplingProblem::runCount = 0;
 
 UQ::MySamplingProblem::MySamplingProblem(
@@ -23,7 +25,7 @@ UQ::MySamplingProblem::MySamplingProblem(
       runner(runner), observationsReceiverDB(observationsReceiverDB),
       simulationsReceiverDB(simulationsReceiverDB),
       materialParameterWriter(materialParameterWriter), index(index), numberOfSubintervals(numberOfSubintervals) {
-  std::cout << "Run Sampling Problem with index" << index->GetValue(0) << std::endl;
+      spdlog::info("Run Sampling Problem with index {}", index->GetValue(0));
 }
 
 double UQ::MySamplingProblem::LogDensity(std::shared_ptr<SamplingState> const& state) {
@@ -34,15 +36,16 @@ double UQ::MySamplingProblem::LogDensity(std::shared_ptr<SamplingState> const& s
     return -40;
   }
 
-  std::cout << "----------------------" << std::endl;
-  std::cout << "Run SeisSol on index " << index->GetValue(0) << std::endl;
+  spdlog::info("----------------------");
+  spdlog::info("Running SeisSol on index {}", index->GetValue(0));
 
   materialParameterWriter->updateParameters(state->state[0]);
 
   runner->prepareFilesystem(runCount);
   runner->run(index->GetValue(0));
 
-  std::cout << "Executed SeisSol successfully " << ++runCount << " times." << std::endl;
+  runCount++;
+  spdlog::info("Executed SeisSol successfully {} times", runCount);
 
   std::vector<std::vector<double>> norm_diffs;
   std::vector<std::vector<double>> norms;
@@ -69,12 +72,11 @@ double UQ::MySamplingProblem::LogDensity(std::shared_ptr<SamplingState> const& s
     }
     receiverRelativeNorm = receiverRelativeNorm / (double)numberOfSubintervals;
     relativeNorm += receiverRelativeNorm;
-    std::cout << "Relative norm of receiver " << i << ": " << receiverRelativeNorm << std::endl;
+    spdlog::debug("Relative norm of receiver {}: {}", i, receiverRelativeNorm);
   }
 
   const auto logDensity = -std::pow(relativeNorm, 4);
-  std::cout << "LogDensity = " << logDensity << std::endl;
-  std::cout << std::endl;
+  spdlog::info("LogDensity = {}", logDensity);
   return logDensity;
 }
 
