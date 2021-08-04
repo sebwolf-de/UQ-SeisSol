@@ -32,9 +32,9 @@ double UQ::MySamplingProblem::LogDensity(std::shared_ptr<SamplingState> const& s
   lastState = state;
 
   //discard unphysical values
-  if (state->state[0].minCoeff() < 0) {
-    return -40;
-  }
+  //if (state->state[0].minCoeff() < 0) {
+  //  return -40;
+  //}
 
   spdlog::info("----------------------");
   spdlog::info("Running SeisSol on index {}", index->GetValue(0));
@@ -75,7 +75,7 @@ double UQ::MySamplingProblem::LogDensity(std::shared_ptr<SamplingState> const& s
     spdlog::debug("Relative norm of receiver {}: {}", i, receiverRelativeNorm);
   }
 
-  const auto logDensity = -std::pow(relativeNorm, 4);
+  const auto logDensity = -std::pow(relativeNorm, 2);
   spdlog::info("LogDensity = {}", logDensity);
   return logDensity;
 }

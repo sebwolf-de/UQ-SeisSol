@@ -23,13 +23,19 @@ SeisSol::UQSeisSolFactory::createSimulationsReceiverDB() const {
 
 std::shared_ptr<IO::MaterialParameterWriter>
 SeisSol::UQSeisSolFactory::createMaterialParameterWriter() const {
-  std::ifstream materialFileTemplate(parameterReader.getMaterialFileTemplate());
+  std::string templateFilename = parameterReader.getMaterialFileTemplate();
+  std::ifstream materialFileTemplate(templateFilename);
   std::stringstream materialFileTemplateBuffer;
   materialFileTemplateBuffer << materialFileTemplate.rdbuf();
+
+  std::string outputFilename = templateFilename;
+  size_t locationOfKey = outputFilename.find("template");
+  outputFilename.replace(locationOfKey, 8, "chain");
 
   auto parameterKeys = parameterReader.getMaterialFileTemplateKeys();
 
   return std::make_shared<IO::MaterialParameterWriter>(materialFileTemplateBuffer.str(),
+                                                       outputFilename,
                                                        parameterKeys);
 }
 

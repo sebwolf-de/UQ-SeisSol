@@ -1,17 +1,14 @@
 SeisSolBinary:          "SeisSol_Release_dhsw_6_elastic"
 ParametersFile:         "parameters.par"
 
-MaterialFileTemplate:   "material_template.yaml"
+MaterialFileTemplate:   "source/source_template.dat"
 InitialParameters:
-  param_rho_layer:    2.4e3
-  param_mu_layer:     1.2e10
-  param_lambda_layer: 1.8e10
-  param_rho_halfspace:    2.4e3
-  param_mu_halfspace:     1.2e10
-  param_lambda_halfspace: 1.8e10
+  param_source_x:   200
+  param_source_y:  -400
+  param_source_z:  1200
 
 ObservationDirectory:   "observations"
 ReceiverPrefix:         "output-receiver"
 NumberOfReceivers:      5
-NumberOfSamples:        [200, 20]
+NumberOfSamples:        [200]
 NumberOfSubintervals:   5

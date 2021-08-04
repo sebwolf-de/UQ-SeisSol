@@ -39,10 +39,12 @@ int main(int argc, char** argv) {
   pt.put("verbosity", 1); // show some output
   pt.put("BurnIn", 1);
   for (size_t i = 0; i < parameterReader.getNumberOfIndices(); i++) {
-    char buffer[13];
-    sprintf(buffer, "NumSamples_%lu", i);
-    pt.put(buffer, parameterReader.getNumberOfSamples(i));
+    char buffer_num[13];
+    sprintf(buffer_num, "NumSamples_%lu", i);
+    pt.put(buffer_num, parameterReader.getNumberOfSamples(i));
+    spdlog::info("Use {} samples on level {}", parameterReader.getNumberOfSamples(i), i);
   }
+
 
   muq::SamplingAlgorithms::MIMCMC mimcmc(pt, miComponentFactory);
   std::shared_ptr<muq::SamplingAlgorithms::SampleCollection> samples = mimcmc.Run();
