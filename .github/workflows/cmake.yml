@@ -16,10 +16,9 @@ jobs:
       - name: install dependencies
         run: |
           sudo apt-get install libeigen3-dev libhdf5-dev libboost-filesystem-dev libboost-dev libboost-graph-dev libyaml-cpp-dev libopenmpi-dev
-
-      - name: Get prebuild MUQ
-        run: |
-          tar -xf .github/workflows/prebuilt_muq.tar.gz -C ..
+          conda install -c conda-forge muq cmake spdlog
+          ls $CONDA/lib/cmake
+          ls $CONDA/lib/cmake/MUQ
 
       - name: Create Build Environment
         run: |
@@ -29,7 +28,8 @@ jobs:
         shell: bash
         working-directory: ${{github.workspace}}/build
         run: |
-          cmake $GITHUB_WORKSPACE -DCMAKE_CXX_FLAGS_ALL_WARNINGS:STRING="-Wall -Wextra -Wpedantic -Werror" -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} -DCMAKE_PREFIX_PATH="../lib/cmake/MUQ;../muq_external/lib/cmake/spdlog"
+          cmake $GITHUB_WORKSPACE -DCMAKE_CXX_FLAGS_ALL_WARNINGS:STRING="-Wall -Wextra -Wpedantic -Werror" -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} -DCMAKE_PREFIX_PATH=$CONDA/lib/cmake
+          echo "done"
 
       - name: Build
         working-directory: ${{github.workspace}}/build
