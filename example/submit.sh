@@ -6,12 +6,12 @@
 #SBATCH --clusters=cm2
 #SBATCH --partition=cm2_std
 #SBATCH --qos=cm2_std
-#SBATCH --nodes=4
+#SBATCH --nodes=8
 #SBATCH --ntasks-per-node=1
 #SBATCH --mail-type=end
 #SBATCH --mail-user=wolf.sebastian@in.tum.de
 #SBATCH --export=NONE
-#SBATCH --time=02:30:00
+#SBATCH --time=12:00:00
   
 module load slurm_setup
 unset KMP_AFFINITY

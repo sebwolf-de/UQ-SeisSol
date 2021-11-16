@@ -3,12 +3,10 @@ ParametersFile:         "parameters.par"
 
 MaterialFileTemplate:   "source/source_template.dat"
 InitialParameters:
-  param_source_x:   200
-  param_source_y:  -400
-  param_source_z:  1200
+  param_source_z:  2000
 
 ObservationDirectory:   "observations"
 ReceiverPrefix:         "output-receiver"
-NumberOfReceivers:      5
-NumberOfSamples:        [200]
-NumberOfSubintervals:   5
+NumberOfReceivers:      6
+NumberOfSamples:        [100]
+NumberOfSubintervals:   1

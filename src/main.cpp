@@ -17,6 +17,7 @@
 
 int main(int argc, char** argv) {
   assert(argc == 2);
+  spdlog::set_level(spdlog::level::debug); // Set global log level to debug
 
   auto parameterReader = IO::ParameterReader(argv[1]);
   auto uqSeisSolFactory = SeisSol::UQSeisSolFactory(parameterReader);
