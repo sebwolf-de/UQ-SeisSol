@@ -1,0 +1,12 @@
+SeisSolBinary:          "SeisSol_Release_dhsw_6_elastic"
+ParametersFile:         "parameters.par"
+
+MaterialFileTemplate:   "source/source_template.dat"
+InitialParameters:
+  param_source_z:  2000
+
+ObservationDirectory:   "observations"
+ReceiverPrefix:         "output-receiver"
+NumberOfReceivers:      6
+NumberOfSamples:        [50]
+NumberOfSubintervals:   1
