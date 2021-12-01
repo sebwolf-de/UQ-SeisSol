@@ -13,6 +13,7 @@ IO::ParameterReader::ParameterReader(std::string filename) : root(YAML::LoadFile
   assert((root["NumberOfSamples"] && "Parameter file contains number of samples"));
   assert((root["NumberOfSubintervals"] && "Parameter file contains number of subintervals"));
   assert((root["ObservationDirectory"] && "Parameter file contains link to observation directory"));
+  assert((root["NumberOfFusedSims"] && "Parameter file contains number of fused sims"));
 }
 
 std::string IO::ParameterReader::getSeisSolBinary() const {

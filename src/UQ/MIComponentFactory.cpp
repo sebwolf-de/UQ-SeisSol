@@ -48,7 +48,7 @@ std::shared_ptr<UQ::MCMCProposal> UQ::MyMIComponentFactory::CoarseProposal(
 std::shared_ptr<UQ::AbstractSamplingProblem>
 UQ::MyMIComponentFactory::SamplingProblem(std::shared_ptr<MultiIndex> const& index) {
   return std::make_shared<MySamplingProblem>(index, runner, observationsReceiverDB,
-                                             simulationsReceiverDB, materialParameterWriter, numberOfSubintervals);
+                                             simulationsReceiverDB, materialParameterWriter, numberOfSubintervals, numberOfFusedSims);
 }
 
 std::shared_ptr<UQ::MIInterpolation> UQ::MyMIComponentFactory::Interpolation([
