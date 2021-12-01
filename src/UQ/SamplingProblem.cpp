@@ -50,36 +50,40 @@ double UQ::MySamplingProblem::LogDensity(std::shared_ptr<SamplingState> const& s
   runCount++;
   spdlog::info("Executed SeisSol successfully {} times", runCount);
 
-  std::vector<std::vector<double>> norm_diffs;
-  std::vector<std::vector<double>> norms;
-
   // TODO check for number of fusedSimulations and loop over them, displaying logDensity for each one
-
-  for (size_t i = 1; i < observationsReceiverDB->numberOfReceivers() + 1; i++) {
-    simulationsReceiverDB->addReceiver(i);
-
-    norm_diffs.push_back(simulationsReceiverDB->l1Difference(i, observationsReceiverDB->getReceiver(i), numberOfSubintervals));
-    norms.push_back(observationsReceiverDB->getReceiver(i).l1Norm(numberOfSubintervals));
-  }
 
   double relativeNorm = 0.0;
   const double epsilon = 1e-2;
 
-  for (size_t i = 0; i < observationsReceiverDB->numberOfReceivers(); i++) {
-    double receiverRelativeNorm = 0.0;
-    for (size_t j = 0; j < norm_diffs[i].size(); j++) {
-      if (norms[i][j] > epsilon) {
-        receiverRelativeNorm += norm_diffs[i][j] / norms[i][j];
-      }
-      else {
-        receiverRelativeNorm += norm_diffs[i][j];
-      }
+  for (size_t nfs = 0; nfs < numberOfFusedSims; nfs++) {
+    std::vector<std::vector<double>> norm_diffs;
+    std::vector<std::vector<double>> norms;
+
+    for (size_t i = 1; i < observationsReceiverDB->numberOfReceivers() + 1; i++) {
+      simulationsReceiverDB->addReceiver(i);
+
+      norm_diffs.push_back(simulationsReceiverDB->l1Difference(i, observationsReceiverDB->getReceiver(i), numberOfSubintervals));
+      norms.push_back(observationsReceiverDB->getReceiver(i).l1Norm(numberOfSubintervals));
     }
-    receiverRelativeNorm = receiverRelativeNorm / (double)numberOfSubintervals;
-    relativeNorm += receiverRelativeNorm;
-    spdlog::debug("Relative norm of receiver {}: {}", i, receiverRelativeNorm);
+
+    relativeNorm = 0.0;
+
+    for (size_t i = 0; i < observationsReceiverDB->numberOfReceivers(); i++) {
+      double receiverRelativeNorm = 0.0;
+      for (size_t j = 0; j < norm_diffs[i].size(); j++) {
+        if (norms[i][j] > epsilon) {
+          receiverRelativeNorm += norm_diffs[i][j] / norms[i][j];
+        }
+        else {
+          receiverRelativeNorm += norm_diffs[i][j];
+        }
+      }
+      receiverRelativeNorm = receiverRelativeNorm / (double)numberOfSubintervals;
+      relativeNorm += receiverRelativeNorm;
+      spdlog::debug("Relative norm of receiver {}: {}, fused sim: {}", i, receiverRelativeNorm, nfs);
+    }
+    relativeNorm /= observationsReceiverDB->numberOfReceivers();
   }
-  relativeNorm /= observationsReceiverDB->numberOfReceivers();
 
   const auto logDensity = -std::pow(relativeNorm-2, 4);
   spdlog::info("LogDensity = {}", logDensity);
