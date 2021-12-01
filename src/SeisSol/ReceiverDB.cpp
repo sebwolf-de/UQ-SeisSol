@@ -6,9 +6,7 @@
 
 
 SeisSol::ReceiverDB::ReceiverDB(std::string directory, std::string prefix, size_t fsn = 1)
-    : receiverReader(IO::ReceiverReader(directory, prefix)), directory(directory), prefix(prefix) {
-      receivers = std::array<std::map<int, SeisSol::Receiver>, fsn>();
-    }
+    : receiverReader(IO::ReceiverReader(directory, prefix)), directory(directory), prefix(prefix) {}
 
 void SeisSol::ReceiverDB::addReceiver(size_t i, size_t fsn = 1) {
   SeisSol::Receiver receiver;
