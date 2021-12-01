@@ -76,3 +76,7 @@ std::string IO::ParameterReader::getReceiverPrefix() const {
     return "observation";
   }
 }
+
+size_t IO::ParameterReader::getNumberOfFusedSims() const {
+  return root["NumberOfFusedSims"].as<size_t>();
+}

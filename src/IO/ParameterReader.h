@@ -19,6 +19,7 @@ class ParameterReader {
   size_t getNumberOfIndices() const;
   size_t getNumberOfSubintervals() const;
   std::string getReceiverPrefix() const;
+  size_t getNumberOfFusedSims() const;
 
   private:
   const YAML::Node root;

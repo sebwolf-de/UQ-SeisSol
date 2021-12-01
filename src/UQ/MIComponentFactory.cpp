@@ -68,8 +68,9 @@ UQ::MyMIComponentFactory::MyMIComponentFactory(
     std::shared_ptr<IO::MaterialParameterWriter> materialParameterWriter,
     const Eigen::VectorXd& startingParameters,
     size_t finestIndex,
-    size_t numberOfSubintervals)
+    size_t numberOfSubintervals,
+    size_t numberOfFusedSims)
     : runner(runner), observationsReceiverDB(observationsReceiverDB),
       simulationsReceiverDB(simulationsReceiverDB),
       materialParameterWriter(materialParameterWriter), startingParameters(startingParameters),
-      finestIndex(finestIndex), numberOfSubintervals(numberOfSubintervals) {}
+      finestIndex(finestIndex), numberOfSubintervals(numberOfSubintervals), numberOfFusedSims(numberOfFusedSims) {}

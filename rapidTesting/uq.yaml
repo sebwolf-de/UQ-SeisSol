@@ -10,3 +10,4 @@ ReceiverPrefix:         "output-receiver"
 NumberOfReceivers:      6
 NumberOfSamples:        [50]
 NumberOfSubintervals:   1
+NumberOfFusedSims:      4

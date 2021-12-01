@@ -48,8 +48,10 @@ void IO::ReceiverReader::parseReceiver(std::string fileName, SeisSol::Receiver& 
   // coincide
   std::getline(in, line);
   std::getline(in, line);
-  assert("VARIABLES = \"Time\",\"xx\",\"yy\",\"zz\",\"xy\",\"yz\",\"xz\",\"u\",\"v\",\"w\"" ==
-         line);
+  std::string headline = line;
+  // assert("VARIABLES = \"Time\",\"xx\",\"yy\",\"zz\",\"xy\",\"yz\",\"xz\",\"u\",\"v\",\"w\"" ==
+  //        line);
+  // VARIABLES = "Time","xx0","yy0","zz0","xy0","yz0","xz0","u0","v0","w0","xx1","yy1","zz1","xy1","yz1","xz1","u1","v1","w1","xx2","yy2","zz2","xy2","yz2","xz2","u2","v2","w2","xx3","yy3","zz3","xy3","yz3","xz3","u3","v3","w3"
 
   // TODO extract receiver location
   for (size_t i = 0; i < 3; i++) {
@@ -67,6 +69,10 @@ void IO::ReceiverReader::parseReceiver(std::string fileName, SeisSol::Receiver& 
       if (item == std::string("")) {
         continue;
       } else {
+        if (i > 9) {
+          break;
+        }
+        
         double candidate = std::stod(item);
         if (!std::isfinite(candidate)) {
           throw std::invalid_argument("Found non-finite value in receiver input.");

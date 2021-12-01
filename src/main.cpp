@@ -31,10 +31,11 @@ int main(int argc, char** argv) {
 
   auto initialParameterValues = parameterReader.getInitialMaterialParameterValues();
   size_t numberOfSubintervals = parameterReader.getNumberOfSubintervals();
+  size_t numberOfFusedSims    = parameterReader.getNumberOfFusedSims();
 
   auto miComponentFactory = std::make_shared<UQ::MyMIComponentFactory>(
       runner, observationsReceiverDB, simulationsReceiverDB, materialParameterWriter,
-      initialParameterValues, parameterReader.getNumberOfIndices()-1, numberOfSubintervals);
+      initialParameterValues, parameterReader.getNumberOfIndices()-1, numberOfSubintervals, numberOfFusedSims);
 
   boost::property_tree::ptree pt;
   pt.put("verbosity", 1); // show some output

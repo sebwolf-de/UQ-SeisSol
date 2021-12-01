@@ -43,7 +43,8 @@ std::shared_ptr<MultiIndex> const& coarseIndex,
                        std::shared_ptr<IO::MaterialParameterWriter> materialParameterWriter,
                        const Eigen::VectorXd& startingParameters,
                        size_t finestIndex,
-                       size_t numberOfSubintervals);
+                       size_t numberOfSubintervals,
+                       size_t numberOfFusedSims);
 
   private:
   const std::shared_ptr<SeisSol::Runner> runner;
@@ -53,6 +54,7 @@ std::shared_ptr<MultiIndex> const& coarseIndex,
   const Eigen::VectorXd& startingParameters;
   const size_t finestIndex;
   size_t numberOfSubintervals;
+  size_t numberOfFusedSims;
 };
 
 } // namespace UQ

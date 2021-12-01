@@ -19,13 +19,14 @@ UQ::MySamplingProblem::MySamplingProblem(
     std::shared_ptr<SeisSol::ReceiverDB> observationsReceiverDB,
     std::shared_ptr<SeisSol::ReceiverDB> simulationsReceiverDB,
     std::shared_ptr<IO::MaterialParameterWriter> materialParameterWriter,
-    size_t numberOfSubintervals)
+    size_t numberOfSubintervals,
+    size_t numberOfFusedSims)
     : AbstractSamplingProblem(
           Eigen::VectorXi::Constant(1, materialParameterWriter->numberOfParameters()),
           Eigen::VectorXi::Constant(1, materialParameterWriter->numberOfParameters())),
       runner(runner), observationsReceiverDB(observationsReceiverDB),
       simulationsReceiverDB(simulationsReceiverDB),
-      materialParameterWriter(materialParameterWriter), index(index), numberOfSubintervals(numberOfSubintervals) {
+      materialParameterWriter(materialParameterWriter), index(index), numberOfSubintervals(numberOfSubintervals), numberOfFusedSims(numberOfFusedSims) {
       spdlog::info("Run Sampling Problem with index {}", index->GetValue(0));
 }
 
@@ -39,6 +40,7 @@ double UQ::MySamplingProblem::LogDensity(std::shared_ptr<SamplingState> const& s
 
   spdlog::info("----------------------");
   spdlog::info("Running SeisSol on index {}", index->GetValue(0));
+  spdlog::debug("Running SeisSol with {} fused sims", numberOfFusedSims);
 
   materialParameterWriter->updateParameters(state->state[0]);
 
@@ -50,6 +52,8 @@ double UQ::MySamplingProblem::LogDensity(std::shared_ptr<SamplingState> const& s
 
   std::vector<std::vector<double>> norm_diffs;
   std::vector<std::vector<double>> norms;
+
+  // TODO check for number of fusedSimulations and loop over them, displaying logDensity for each one
 
   for (size_t i = 1; i < observationsReceiverDB->numberOfReceivers() + 1; i++) {
     simulationsReceiverDB->addReceiver(i);
