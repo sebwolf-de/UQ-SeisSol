@@ -18,7 +18,7 @@ class ReceiverDB {
   size_t numberOfReceivers(size_t fsn) const;
 
   private:
-  std::array<std::map<int, SeisSol::Receiver>, fsn> receivers;
+  auto receivers; // std::vector<std::map<int, SeisSol::Receiver>>
   const IO::ReceiverReader receiverReader;
   std::string directory;
   std::string prefix;
