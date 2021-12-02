@@ -10,12 +10,12 @@ namespace SeisSol {
 
 class ReceiverDB {
   public:
-  ReceiverDB(std::string directory, std::string prefix, size_t fsn = 0);
-  void addReceiver(size_t i, size_t fsn = 0);
-  void addAllReceivers(size_t fsn = 0);
-  const SeisSol::Receiver& getReceiver(size_t i, size_t fsn = 0) const;
-  std::vector<double> l1Difference(size_t i, const SeisSol::Receiver& otherReceiver, size_t numberOfSubintervals, size_t fsn = 0) const;
-  size_t numberOfReceivers(size_t fsn = 0) const;
+  ReceiverDB(std::string directory, std::string prefix, size_t fsn= 1);
+  void addReceiver(size_t i, size_t fsn= 1);
+  void addAllReceivers(size_t fsn= 1);
+  const SeisSol::Receiver& getReceiver(size_t i, size_t fsn= 1) const;
+  std::vector<double> l1Difference(size_t i, const SeisSol::Receiver& otherReceiver, size_t numberOfSubintervals, size_t fsn= 1) const;
+  size_t numberOfReceivers(size_t fsn= 1) const;
 
   private:
   std::map<int, std::map<int, SeisSol::Receiver>> receivers;

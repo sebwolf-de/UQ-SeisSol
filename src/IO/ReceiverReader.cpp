@@ -33,13 +33,13 @@ std::map<size_t, std::string> IO::getReceiversInDirectory(std::string directory,
   return fileList;
 }
 
-void IO::ReceiverReader::parseReceiver(size_t number, SeisSol::Receiver& receiver) const {
+void IO::ReceiverReader::parseReceiver(size_t number, SeisSol::Receiver& receiver, size_t fsn) const {
   const auto receiverList = getReceiversInDirectory(observationsDirectory, receiverPrefix);
   const auto fileName = receiverList.at(number);
-  parseReceiver(fileName, receiver);
+  parseReceiver(fileName, receiver, fsn);
 }
 
-void IO::ReceiverReader::parseReceiver(std::string fileName, SeisSol::Receiver& receiver) const {
+void IO::ReceiverReader::parseReceiver(std::string fileName, SeisSol::Receiver& receiver, size_t fsn) const {
   std::ifstream in(fileName);
   std::string line;
 
