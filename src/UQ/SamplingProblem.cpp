@@ -55,14 +55,14 @@ double UQ::MySamplingProblem::LogDensity(std::shared_ptr<SamplingState> const& s
   double relativeNorm = 0.0;
   const double epsilon = 1e-2;
 
-  for (size_t fsn = 0; fsn < numberOfFusedSims; fsn++) {
+  for (size_t fsn = 1; fsn <= numberOfFusedSims; fsn++) {
     std::vector<std::vector<double>> norm_diffs;
     std::vector<std::vector<double>> norms;
 
     for (size_t i = 1; i < observationsReceiverDB->numberOfReceivers(1) + 1; i++) {
-      simulationsReceiverDB->addReceiver(i);
+      simulationsReceiverDB->addReceiver(i, fsn);
 
-      norm_diffs.push_back(simulationsReceiverDB->l1Difference(i, observationsReceiverDB->getReceiver(i), numberOfSubintervals));
+      norm_diffs.push_back(simulationsReceiverDB->l1Difference(i, observationsReceiverDB->getReceiver(i), numberOfSubintervals, fsn));
       norms.push_back(observationsReceiverDB->getReceiver(i).l1Norm(numberOfSubintervals));
     }
 
