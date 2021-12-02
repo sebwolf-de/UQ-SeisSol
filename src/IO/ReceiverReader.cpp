@@ -64,33 +64,44 @@ void IO::ReceiverReader::parseReceiver(std::string fileName, SeisSol::Receiver& 
     std::string item;
     size_t i = 0;
 
-    while (std::getline(ss, item, ' ')) {
-      // if there are several whitespaces after one another as a delimiter, ignore these.
-      if (item == std::string("")) {
-        continue;
-      } else {
-        if (i > 9) {
+    while (ss >> item) {
+      if (i > 9) {
           break;
         }
-        
-        double candidate = std::stod(item);
-        if (!std::isfinite(candidate)) {
-          throw std::invalid_argument("Found non-finite value in receiver input.");
-        }
-        elems[i] = candidate;
-        i++;
+      double candidate = std::stod(item);
+      if (!std::isfinite(candidate)) {
+        throw std::invalid_argument("Found non-finite value in receiver input.");
       }
+      elems[i] = candidate;
+      i++;
     }
 
     return elems;
   };
 
-  auto parseLine2 = [](std::string line) {
+  auto parseLineFused = [](std::string line, size_t fsn) {
     std::array<double, 10> elems;
     std::stringstream ss(line);
     std::string item;
     size_t i = 0;
 
+    if (fsn > 0) {
+      // extract time information
+      ss >> item;
+      double candidate = std::stod(item);
+      if (!std::isfinite(candidate)) {
+        throw std::invalid_argument("Found non-finite value in receiver input.");
+      }
+      elems[i] = candidate;
+      i++;
+
+      // get to the part of interest
+      for (size_t j = 0; j < fsn*9; j++)
+      {
+        ss >> item;
+      }
+    }
+  
     while (ss >> item) {
       if (i > 9) {
           break;
@@ -109,7 +120,7 @@ void IO::ReceiverReader::parseReceiver(std::string fileName, SeisSol::Receiver& 
   receiver.clear();
 
   while (std::getline(in, line)) {
-    const auto parsedLine = parseLine2(line);
+    const auto parsedLine = parseLineFused(line, 0);
     receiver.appendData(parsedLine);
   }
 }
