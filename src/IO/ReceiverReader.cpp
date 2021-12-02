@@ -85,7 +85,7 @@ void IO::ReceiverReader::parseReceiver(std::string fileName, SeisSol::Receiver& 
     std::string item;
     size_t i = 0;
 
-    if (fsn > 0) {
+    if (fsn > 1) {
       // extract time information
       ss >> item;
       double candidate = std::stod(item);
@@ -96,7 +96,7 @@ void IO::ReceiverReader::parseReceiver(std::string fileName, SeisSol::Receiver& 
       i++;
 
       // get to the part of interest
-      for (size_t j = 0; j < fsn*9; j++)
+      for (size_t j = 0; j < (fsn-1)*9; j++)
       {
         ss >> item;
       }
@@ -120,7 +120,7 @@ void IO::ReceiverReader::parseReceiver(std::string fileName, SeisSol::Receiver& 
   receiver.clear();
 
   while (std::getline(in, line)) {
-    const auto parsedLine = parseLineFused(line, 0);
+    const auto parsedLine = parseLineFused(line, 1);
     receiver.appendData(parsedLine);
   }
 }
