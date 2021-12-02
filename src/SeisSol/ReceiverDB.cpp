@@ -24,11 +24,11 @@ void SeisSol::ReceiverDB::addAllReceivers(size_t fsn) {
 }
 
 std::vector<double> SeisSol::ReceiverDB::l1Difference(size_t i, const SeisSol::Receiver& otherReceiver, size_t numberOfSubintervals, size_t fsn) const {
-  return receivers[fsn].at(i).l1Difference(otherReceiver, numberOfSubintervals);
+  return receivers.at(fsn).at(i).l1Difference(otherReceiver, numberOfSubintervals);
 }
 
 const SeisSol::Receiver& SeisSol::ReceiverDB::getReceiver(size_t i, size_t fsn) const {
-  return receivers[fsn].at(i);
+  return receivers.at(fsn).at(i);
 }
 
-size_t SeisSol::ReceiverDB::numberOfReceivers(size_t fsn) const { return receivers[fsn].size(); }
+size_t SeisSol::ReceiverDB::numberOfReceivers(size_t fsn) const { return receivers.at(fsn).size(); }
