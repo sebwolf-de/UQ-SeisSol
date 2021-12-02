@@ -58,27 +58,6 @@ void IO::ReceiverReader::parseReceiver(std::string fileName, SeisSol::Receiver& 
     std::getline(in, line);
   }
 
-  auto parseLine = [](std::string line) {
-    std::array<double, 10> elems;
-    std::stringstream ss(line);
-    std::string item;
-    size_t i = 0;
-
-    while (ss >> item) {
-      if (i > 9) {
-          break;
-        }
-      double candidate = std::stod(item);
-      if (!std::isfinite(candidate)) {
-        throw std::invalid_argument("Found non-finite value in receiver input.");
-      }
-      elems[i] = candidate;
-      i++;
-    }
-
-    return elems;
-  };
-
   auto parseLineFused = [](std::string line, size_t fsn) {
     std::array<double, 10> elems;
     std::stringstream ss(line);
@@ -120,7 +99,7 @@ void IO::ReceiverReader::parseReceiver(std::string fileName, SeisSol::Receiver& 
   receiver.clear();
 
   while (std::getline(in, line)) {
-    const auto parsedLine = parseLineFused(line, 1);
+    const auto parsedLine = parseLineFused(line, fsn);
     receiver.appendData(parsedLine);
   }
 }
