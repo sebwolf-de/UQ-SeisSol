@@ -10,7 +10,7 @@ SeisSol::UQSeisSolFactory::createObservationsReceiverDB() const {
       parameterReader.getObservationDir(), parameterReader.getReceiverPrefix());
 
   for (size_t i = 1; i < parameterReader.getNumberOfReceivers() + 1; i++) {
-    observationsReceiverDB->addReceiver(i);
+    observationsReceiverDB->addReceiver(i, 1);
   }
 
   return observationsReceiverDB;

@@ -60,10 +60,10 @@ double UQ::MySamplingProblem::LogDensity(std::shared_ptr<SamplingState> const& s
     std::vector<std::vector<double>> norms;
 
     for (size_t i = 1; i < observationsReceiverDB->numberOfReceivers(1) + 1; i++) {
-      simulationsReceiverDB->addReceiver(i,1);
+      simulationsReceiverDB->addReceiver(i);
 
-      norm_diffs.push_back(simulationsReceiverDB->l1Difference(i, observationsReceiverDB->getReceiver(i,1), numberOfSubintervals,1));
-      norms.push_back(observationsReceiverDB->getReceiver(i,1).l1Norm(numberOfSubintervals));
+      norm_diffs.push_back(simulationsReceiverDB->l1Difference(i, observationsReceiverDB->getReceiver(i), numberOfSubintervals));
+      norms.push_back(observationsReceiverDB->getReceiver(i).l1Norm(numberOfSubintervals));
     }
 
     relativeNorm = 0.0;
