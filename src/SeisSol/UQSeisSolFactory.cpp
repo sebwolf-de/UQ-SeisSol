@@ -18,7 +18,7 @@ SeisSol::UQSeisSolFactory::createObservationsReceiverDB() const {
 
 std::shared_ptr<SeisSol::ReceiverDB>
 SeisSol::UQSeisSolFactory::createSimulationsReceiverDB() const {
-  return std::make_shared<SeisSol::ReceiverDB>("output/current", parameterReader.getReceiverPrefix(), parameterReader.getNumberOfFusedSims);
+  return std::make_shared<SeisSol::ReceiverDB>("output/current", parameterReader.getReceiverPrefix(), parameterReader.getNumberOfFusedSims());
 }
 
 std::shared_ptr<IO::MaterialParameterWriter>
