@@ -19,6 +19,7 @@ class ReceiverDB {
 
   private:
   std::map<int, std::map<int, SeisSol::Receiver>> receivers;
+  const IO::ReceiverReader receiverReader;
   std::string directory;
   std::string prefix;
 };

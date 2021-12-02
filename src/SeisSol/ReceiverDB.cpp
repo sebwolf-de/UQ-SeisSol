@@ -5,16 +5,16 @@
 #include <vector>
 
 
-SeisSol::ReceiverDB::ReceiverDB(std::string directory, std::string prefix, size_t fsn = 1)
+SeisSol::ReceiverDB::ReceiverDB(std::string directory, std::string prefix, size_t fsn)
     : receiverReader(IO::ReceiverReader(directory, prefix)), directory(directory), prefix(prefix) {}
 
-void SeisSol::ReceiverDB::addReceiver(size_t i, size_t fsn = 1) {
+void SeisSol::ReceiverDB::addReceiver(size_t i, size_t fsn) {
   SeisSol::Receiver receiver;
   receiverReader.parseReceiver(i, receiver);
   receivers[fsn][i] = receiver;
 }
 
-void SeisSol::ReceiverDB::addAllReceivers(size_t fsn = 1) {
+void SeisSol::ReceiverDB::addAllReceivers(size_t fsn) {
   const auto fileNames = IO::getReceiversInDirectory(directory, prefix);
   for (const auto& entry: fileNames) {
     SeisSol::Receiver receiver;
@@ -23,12 +23,12 @@ void SeisSol::ReceiverDB::addAllReceivers(size_t fsn = 1) {
   }
 }
 
-std::vector<double> SeisSol::ReceiverDB::l1Difference(size_t i, const SeisSol::Receiver& otherReceiver, size_t numberOfSubintervals, size_t fsn = 1) const {
+std::vector<double> SeisSol::ReceiverDB::l1Difference(size_t i, const SeisSol::Receiver& otherReceiver, size_t numberOfSubintervals, size_t fsn) const {
   return receivers[fsn].at(i).l1Difference(otherReceiver, numberOfSubintervals);
 }
 
-const SeisSol::Receiver& SeisSol::ReceiverDB::getReceiver(size_t i, size_t fsn = 1) const {
+const SeisSol::Receiver& SeisSol::ReceiverDB::getReceiver(size_t i, size_t fsn) const {
   return receivers[fsn].at(i);
 }
 
-size_t SeisSol::ReceiverDB::numberOfReceivers(size_t fsn = 1) const { return receivers[fsn].size(); }
+size_t SeisSol::ReceiverDB::numberOfReceivers(size_t fsn) const { return receivers[fsn].size(); }
