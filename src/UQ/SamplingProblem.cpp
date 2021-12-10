@@ -91,7 +91,7 @@ double UQ::MySamplingProblem::LogDensity(std::shared_ptr<SamplingState> const& s
     std::cout << "LogDensity for sim: " <<  fsn << " is: " << logDensityArray.at(fsn-1) << std::endl;
   }
 
-  const auto logDensity = logDensityArray.at(fsn);
+  const auto logDensity = logDensityArray.at(0);
   state->meta["LogTarget"] = logDensityArray;
   return logDensity;
 }
