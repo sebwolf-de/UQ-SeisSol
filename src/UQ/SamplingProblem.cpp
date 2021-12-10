@@ -56,7 +56,7 @@ double UQ::MySamplingProblem::LogDensity(std::shared_ptr<SamplingState> const& s
 
   double relativeNorm = 0.0;
   const double epsilon = 1e-2;
-  std::array<double, numberOfFusedSims> logDensityArray;
+  std::array<double, 4> logDensityArray;
 
   for (size_t fsn = 1; fsn <= numberOfFusedSims; fsn++) {
     std::vector<std::vector<double>> norm_diffs;
@@ -86,9 +86,9 @@ double UQ::MySamplingProblem::LogDensity(std::shared_ptr<SamplingState> const& s
       spdlog::debug("Relative norm of receiver {}: {}, fused sim: {}", i, receiverRelativeNorm, fsn);
     }
     relativeNorm /= observationsReceiverDB->numberOfReceivers(1);
-    logDensityArray.at(fsn) = -std::pow(relativeNorm-2, 4);
-    spdlog::info("LogDensity {} = {}", fsn, logDensityArray.at(fsn));
-    std::cout << "LogDensity for sim: " <<  fsn << " is: " << logDensityArray.at(fsn) << std::endl;
+    logDensityArray.at(fsn-1) = -std::pow(relativeNorm-2, 4);
+    spdlog::info("LogDensity {} = {}", fsn, logDensityArray.at(fsn-1));
+    std::cout << "LogDensity for sim: " <<  fsn << " is: " << logDensityArray.at(fsn-1) << std::endl;
   }
 
   const auto logDensity = logDensityArray.at(fsn);
