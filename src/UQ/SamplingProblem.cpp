@@ -10,6 +10,8 @@
 #include <iterator>
 #include <cmath>
 
+#include <iostream>
+
 #include "spdlog/spdlog.h"
 
 size_t UQ::MySamplingProblem::MySamplingProblem::runCount = 0;
@@ -86,6 +88,7 @@ double UQ::MySamplingProblem::LogDensity(std::shared_ptr<SamplingState> const& s
     relativeNorm /= observationsReceiverDB->numberOfReceivers(1);
     logDensityArray.at(fsn) = -std::pow(relativeNorm-2, 4);
     spdlog::info("LogDensity {} = {}", fsn, logDensityArray.at(fsn));
+    std::cout << "LogDensity for sim: " <<  fsn << " is: " << logDensityArray.at(fsn) << std::endl;
   }
 
   const auto logDensity = logDensityArray.at(fsn);
