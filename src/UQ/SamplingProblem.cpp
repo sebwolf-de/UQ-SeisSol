@@ -12,6 +12,7 @@
 
 #include <vector>
 #include "boost/any.hpp"
+#include <iostream>
 
 #include "spdlog/spdlog.h"
 
@@ -87,6 +88,7 @@ double UQ::MySamplingProblem::LogDensity(std::shared_ptr<SamplingState> const& s
       relativeNorm += receiverRelativeNorm;
       spdlog::debug("Relative norm of receiver {}: {}, fused sim: {}", i, receiverRelativeNorm, fsn);
     }
+    std::cout << "Num fused sim: " << fsn << std::endl;
     relativeNorm /= observationsReceiverDB->numberOfReceivers(fsn);
     logDensityArray[fsn-1] = -std::pow(relativeNorm-2, 4);
     // TODO why relativeNorm - 2 ?
