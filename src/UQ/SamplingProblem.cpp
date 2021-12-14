@@ -87,14 +87,15 @@ double UQ::MySamplingProblem::LogDensity(std::shared_ptr<SamplingState> const& s
       relativeNorm += receiverRelativeNorm;
       spdlog::debug("Relative norm of receiver {}: {}, fused sim: {}", i, receiverRelativeNorm, fsn);
     }
-    relativeNorm /= observationsReceiverDB->numberOfReceivers(1);
-    logDensityArray[fsn] = -std::pow(relativeNorm-2, 4);
+    relativeNorm /= observationsReceiverDB->numberOfReceivers(fsn);
+    logDensityArray[fsn-1] = -std::pow(relativeNorm-2, 4);
+    // TODO why relativeNorm - 2 ?
     // logDensityArray.push_back(-std::pow(relativeNorm-2, 4) );
-    spdlog::info("LogDensity {} = {}", fsn, logDensityArray[fsn]); // logDensityArray.back()
+    spdlog::info("LogDensity {} = {}", fsn, logDensityArray[fsn-1]);
   }
 
   state->meta["LogTarget"] = logDensityArray;
-  return logDensityArray[0]; // logDensityArray.front();
+  return logDensityArray[0];
 }
 
 std::shared_ptr<UQ::SamplingState> UQ::MySamplingProblem::QOI() {
