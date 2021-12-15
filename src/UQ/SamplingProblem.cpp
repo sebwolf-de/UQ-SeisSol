@@ -59,8 +59,8 @@ double UQ::MySamplingProblem::LogDensity(std::shared_ptr<SamplingState> const& s
   double relativeNorm = 0.0;
   const double epsilon = 1e-2;
   // std::vector<double> logDensityArray;
-  boost::any logDensityArray = std::vector<double>();
-  // double* logDensityArray = new double[numberOfFusedSims];
+  // boost::any logDensityArray = std::vector<double>();
+  double* logDensityArray = new double[numberOfFusedSims];
 
   for (size_t fsn = 1; fsn <= numberOfFusedSims; fsn++) {
     std::vector<std::vector<double>> norm_diffs;
@@ -91,15 +91,15 @@ double UQ::MySamplingProblem::LogDensity(std::shared_ptr<SamplingState> const& s
     }
     std::cout << "Num fused sim: " << fsn << std::endl;
     relativeNorm /= observationsReceiverDB->numberOfReceivers();
-    boost::any_cast<std::vector<double>&>(logDensityArray).push_back(-std::pow(relativeNorm-2, 4));
-    // logDensityArray[fsn-1] = -std::pow(relativeNorm-2, 4);
+    // boost::any_cast<std::vector<double>&>(logDensityArray).push_back(-std::pow(relativeNorm-2, 4));
+    logDensityArray[fsn-1] = -std::pow(relativeNorm-2, 4);
     // TODO why relativeNorm - 2 ?
     // logDensityArray.push_back(-std::pow(relativeNorm-2, 4) );
-    spdlog::info("LogDensity {} = {}", fsn, boost::any_cast<std::vector<double>>(logDensityArray)[fsn-1]);
+    spdlog::info("LogDensity {} = {}", fsn, logDensityArray[fsn-1]);
   }
 
   state->meta["LogTarget"] = logDensityArray;
-  return boost::any_cast<std::vector<double>>(logDensityArray)[0]; // logDensityArray[0];
+  return logDensityArray[0]; // boost::any_cast<std::vector<double>>(logDensityArray)[0]; // 
 }
 
 std::shared_ptr<UQ::SamplingState> UQ::MySamplingProblem::QOI() {
