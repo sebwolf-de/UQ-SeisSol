@@ -96,7 +96,7 @@ double UQ::MySamplingProblem::LogDensity(std::shared_ptr<SamplingState> const& s
     std::cout << "Num fused sim: " << fsn << std::endl;
     relativeNorm /= observationsReceiverDB->numberOfReceivers();
     // boost::any_cast<std::vector<double>&>(logDensityArray).push_back(-std::pow(relativeNorm-2, 4));
-    logDensityArray[fsn-1] = -std::pow(relativeNorm-2, 4);
+    logDensityArray[fsn-1] = -std::pow(relativeNorm, 4); // previously: -2
     // TODO why relativeNorm - 2 ?
     // logDensityArray.push_back(-std::pow(relativeNorm-2, 4) );
     spdlog::info("LogDensity {} = {}", fsn, logDensityArray[fsn-1]);
