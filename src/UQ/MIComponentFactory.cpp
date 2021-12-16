@@ -2,8 +2,6 @@
 
 #include "MUQ/SamplingAlgorithms/MIComponentFactory.h"
 
-#include "MUQ/SamplingAlgorithms/SamplingState.h"
-
 
 #include "UQ/MIInterpolation.h"
 #include "UQ/SamplingProblem.h"
@@ -59,15 +57,9 @@ std::shared_ptr<UQ::MIInterpolation> UQ::MyMIComponentFactory::Interpolation([
   return std::make_shared<MyInterpolation>();
 }
 
-SamplingState UQ::MyMIComponentFactory::StartingPoint([
+Eigen::VectorXd UQ::MyMIComponentFactory::StartingPoint([
     [maybe_unused]] std::shared_ptr<MultiIndex> const& index) {
-      std::vector<Eigen::VectorXd> initialState;
-      Eigen::VectorXd vector(1);
-      for (size_t i = 0; i < numberOfFusedSims; i++) {
-        vector[0] = startingParameters[i];
-        initialState.push_back(vector);
-      }
-  return SamplingState(initialState);
+  return startingParameters;
 }
 
 UQ::MyMIComponentFactory::MyMIComponentFactory(
