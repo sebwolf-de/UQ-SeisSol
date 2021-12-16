@@ -2,6 +2,9 @@
 
 #include "MUQ/SamplingAlgorithms/MIComponentFactory.h"
 
+#include "MUQ/SamplingAlgorithms/SamplingState.h"
+
+
 #include "UQ/MIInterpolation.h"
 #include "UQ/SamplingProblem.h"
 
@@ -62,7 +65,7 @@ SamplingState UQ::MyMIComponentFactory::StartingPoint([
       Eigen::VectorXd vector(1);
       for (size_t i = 0; i < numberOfFusedSims; i++) {
         vector[0] = startingParameters[i];
-        state.push_back(vector)
+        initialState.push_back(vector);
       }
   return SamplingState(initialState);
 }

@@ -37,7 +37,7 @@ std::shared_ptr<MultiIndex> const& coarseIndex,
   SamplingProblem(std::shared_ptr<MultiIndex> const& index) override;
   virtual std::shared_ptr<MIInterpolation>
   Interpolation(std::shared_ptr<MultiIndex> const& index) override;
-  virtual SamplingState StartingPoint(std::shared_ptr<MultiIndex> const& index) override; // Eigen::VectorXd 
+  virtual SamplingState StartingPoint(std::shared_ptr<MultiIndex> const& index); // Eigen::VectorXd 
 
   MyMIComponentFactory(std::shared_ptr<SeisSol::Runner> runner,
                        std::shared_ptr<SeisSol::ReceiverDB> observationsReceiverDB,
