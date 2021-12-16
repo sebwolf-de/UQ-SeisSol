@@ -10,6 +10,8 @@
 #include "MUQ/SamplingAlgorithms/SubsamplingMIProposal.h"
 #include "MUQ/Utilities/MultiIndices/MultiIndex.h"
 
+#include "MUQ/SamplingAlgorithms/SamplingState.h"
+
 #include "IO/MaterialParameterWriter.h"
 #include "SeisSol/ReceiverDB.h"
 #include "SeisSol/Runner.h"
@@ -35,7 +37,7 @@ std::shared_ptr<MultiIndex> const& coarseIndex,
   SamplingProblem(std::shared_ptr<MultiIndex> const& index) override;
   virtual std::shared_ptr<MIInterpolation>
   Interpolation(std::shared_ptr<MultiIndex> const& index) override;
-  virtual Eigen::VectorXd StartingPoint(std::shared_ptr<MultiIndex> const& index) override;
+  virtual SamplingState StartingPoint(std::shared_ptr<MultiIndex> const& index) override; // Eigen::VectorXd 
 
   MyMIComponentFactory(std::shared_ptr<SeisSol::Runner> runner,
                        std::shared_ptr<SeisSol::ReceiverDB> observationsReceiverDB,

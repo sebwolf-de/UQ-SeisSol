@@ -45,8 +45,12 @@ double UQ::MySamplingProblem::LogDensity(std::shared_ptr<SamplingState> const& s
   spdlog::info("----------------------");
   spdlog::info("Running SeisSol on index {}", index->GetValue(0));
   spdlog::debug("Running SeisSol with {} fused sims", numberOfFusedSims);
-
-  materialParameterWriter->updateParameters(state->state[0]);
+  Eigen::VectorXd stateVector(numberOfFusedSims);
+  for (size_t i = 0; i < numberOfFusedSims; i++) {
+    stateVector[i] = state->state[i][0];
+  }
+  
+  materialParameterWriter->updateParameters(stateVector); // state->state[0]
 
   runner->prepareFilesystem(runCount);
   runner->run(index->GetValue(0));

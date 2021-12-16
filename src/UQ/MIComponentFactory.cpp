@@ -13,7 +13,7 @@ std::shared_ptr<UQ::MCMCProposal> UQ::MyMIComponentFactory::Proposal(
   pt::ptree pt;
   pt.put("BlockIndex", 0);
 
-  size_t numberOfParameters = materialParameterWriter->numberOfParameters();
+  size_t numberOfParameters = 1; // materialParameterWriter->numberOfParameters();
 
   auto mu = Eigen::VectorXd::Zero(numberOfParameters);
   Eigen::MatrixXd cov = Eigen::MatrixXd::Identity(numberOfParameters, numberOfParameters);
@@ -56,9 +56,15 @@ std::shared_ptr<UQ::MIInterpolation> UQ::MyMIComponentFactory::Interpolation([
   return std::make_shared<MyInterpolation>();
 }
 
-Eigen::VectorXd UQ::MyMIComponentFactory::StartingPoint([
+SamplingState UQ::MyMIComponentFactory::StartingPoint([
     [maybe_unused]] std::shared_ptr<MultiIndex> const& index) {
-  return startingParameters;
+      std::vector<Eigen::VectorXd> initialState;
+      Eigen::VectorXd vector(1);
+      for (size_t i = 0; i < numberOfFusedSims; i++) {
+        vector[0] = startingParameters[i];
+        state.push_back(vector)
+      }
+  return SamplingState(initialState);
 }
 
 UQ::MyMIComponentFactory::MyMIComponentFactory(
