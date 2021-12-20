@@ -2,6 +2,8 @@
 #include <vector>
 #include <cmath>
 
+#include <iostream>
+
 SeisSol::Receiver::Receiver() : relevantQuantities({7,8,9}) {}
 
 std::vector<double> SeisSol::Receiver::l1Difference(const Receiver& otherReceiver, size_t numberOfSubintervals) const {
