@@ -16,6 +16,8 @@
 
 #include "spdlog/spdlog.h"
 
+#include <omp.h>
+
 size_t UQ::MySamplingProblem::MySamplingProblem::runCount = 0;
 
 UQ::MySamplingProblem::MySamplingProblem(
@@ -45,63 +47,65 @@ double UQ::MySamplingProblem::LogDensity(std::shared_ptr<SamplingState> const& s
   spdlog::info("----------------------");
   spdlog::info("Running SeisSol on index {}", index->GetValue(0));
   spdlog::debug("Running SeisSol with {} fused sims", numberOfFusedSims);
-  Eigen::VectorXd stateVector(numberOfFusedSims);
-  for (size_t i = 0; i < numberOfFusedSims; i++) {
-    stateVector[i] = state->state[i][0];
-  }
+  // Eigen::VectorXd stateVector(numberOfFusedSims);
+  // for (size_t i = 0; i < numberOfFusedSims; i++) {
+  //   stateVector[i] = state->state[i][0];
+  // }
   
-  materialParameterWriter->updateParameters(stateVector); // state->state[0]
+  materialParameterWriter->updateParameters(state->state[0]); //  stateVector
+  size_t fsn = omp_get_thread_num() + 1;
 
   runner->prepareFilesystem(runCount);
   runner->run(index->GetValue(0));
 
   runCount++;
-  spdlog::info("Executed SeisSol successfully {} times", runCount);
+  spdlog::info("Executed SeisSol successfully {} times on thread: {}", runCount, fsn);
 
   double relativeNorm = 0.0;
   const double epsilon = 1e-2;
-  // std::vector<double> logDensityArray;
-  // boost::any logDensityArray = std::vector<double>();
-  double* logDensityArray = new double[numberOfFusedSims];
+  double logDensity;
+  // double* logDensityArray = new double[numberOfFusedSims];
 
-  for (size_t fsn = 1; fsn <= numberOfFusedSims; fsn++) {
-    std::vector<std::vector<double>> norm_diffs;
-    std::vector<std::vector<double>> norms;
+  // for (size_t fsn = 1; fsn <= numberOfFusedSims; fsn++) {
+  std::vector<std::vector<double>> norm_diffs;
+  std::vector<std::vector<double>> norms;
+  size_t numberOfReceivers;
 
-    for (size_t i = 1; i < observationsReceiverDB->numberOfReceivers(1) + 1; i++) {
+  #pragma omp critical
+  {
+    numberOfReceivers = observationsReceiverDB->numberOfReceivers(1);
+    for (size_t i = 1; i < numberOfReceivers + 1; i++) {
       simulationsReceiverDB->addReceiver(i, fsn);
-      // std::cout << "i and fsn: " << i << " " << fsn << std::endl;
+      
       norm_diffs.push_back(simulationsReceiverDB->l1Difference(i, observationsReceiverDB->getReceiver(i), numberOfSubintervals, fsn));
       norms.push_back(observationsReceiverDB->getReceiver(i).l1Norm(numberOfSubintervals));
     }
-
-    relativeNorm = 0.0;
-
-    for (size_t i = 0; i < observationsReceiverDB->numberOfReceivers(1); i++) {
-      double receiverRelativeNorm = 0.0;
-      for (size_t j = 0; j < norm_diffs[i].size(); j++) {
-        if (norms[i][j] > epsilon) {
-          receiverRelativeNorm += norm_diffs[i][j] / norms[i][j];
-        }
-        else {
-          receiverRelativeNorm += norm_diffs[i][j];
-        }
-      }
-      receiverRelativeNorm = receiverRelativeNorm / (double)numberOfSubintervals;
-      relativeNorm += receiverRelativeNorm;
-      spdlog::debug("Relative norm of receiver {}: {}, fused sim: {}", i, receiverRelativeNorm, fsn);
-    }
-    std::cout << "Num fused sim: " << fsn << std::endl;
-    relativeNorm /= observationsReceiverDB->numberOfReceivers();
-    // boost::any_cast<std::vector<double>&>(logDensityArray).push_back(-std::pow(relativeNorm-2, 4));
-    logDensityArray[fsn-1] = -std::pow(relativeNorm, 4); // previously: -2
-    // TODO why relativeNorm - 2 ?
-    // logDensityArray.push_back(-std::pow(relativeNorm-2, 4) );
-    spdlog::info("LogDensity {} = {}", fsn, logDensityArray[fsn-1]);
   }
 
-  state->meta["LogTarget"] = logDensityArray;
-  return logDensityArray[0]; // boost::any_cast<std::vector<double>>(logDensityArray)[0]; // 
+  relativeNorm = 0.0;
+  
+  for (size_t i = 0; i < numberOfReceivers; i++) {
+    double receiverRelativeNorm = 0.0;
+    for (size_t j = 0; j < norm_diffs[i].size(); j++) {
+      if (norms[i][j] > epsilon) {
+        receiverRelativeNorm += norm_diffs[i][j] / norms[i][j];
+      }
+      else {
+        receiverRelativeNorm += norm_diffs[i][j];
+      }
+    }
+    receiverRelativeNorm = receiverRelativeNorm / (double)numberOfSubintervals;
+    relativeNorm += receiverRelativeNorm;
+    spdlog::debug("Relative norm of receiver {}: {}, fused sim: {}", i, receiverRelativeNorm, fsn);
+  }
+  std::cout << "Num fused sim: " << fsn << std::endl;
+  relativeNorm /= numberOfReceivers;
+  logDensity = -std::pow(relativeNorm, 4); // logDensityArray[fsn-1] 
+  spdlog::info("LogDensity {} = {}", fsn, logDensity); // logDensityArray[fsn-1]);
+  // }
+
+  state->meta["LogTarget"] = logDensity; //logDensityArray;
+  return logDensity; // logDensityArray[0];
 }
 
 std::shared_ptr<UQ::SamplingState> UQ::MySamplingProblem::QOI() {

@@ -15,6 +15,8 @@
 
 #include "spdlog/spdlog.h"
 
+#include <omp.h>
+
 int main(int argc, char** argv) {
   assert(argc == 2);
   spdlog::set_level(spdlog::level::debug); // Set global log level to debug
@@ -47,18 +49,25 @@ int main(int argc, char** argv) {
     spdlog::info("Use {} samples on level {}", parameterReader.getNumberOfSamples(i), i);
   }
 
+  omp_set_num_threads(4);
+  omp_set_nested(1);
 
-  muq::SamplingAlgorithms::MIMCMC mimcmc(pt, miComponentFactory);
-  std::shared_ptr<muq::SamplingAlgorithms::SampleCollection> samples = mimcmc.Run();
+  #pragma omp parallel firstprivate(pt, miComponentFactory)
+  {
+    muq::SamplingAlgorithms::MIMCMC mimcmc(pt, miComponentFactory);
+    std::shared_ptr<muq::SamplingAlgorithms::SampleCollection> samples = mimcmc.Run();
 
-  std::stringstream output_mean;
-  output_mean << "ML mean Param: " << mimcmc.MeanParam().transpose();
-  spdlog::info(output_mean.str());
-  //std::stringstream output_qoi;
-  //output_qoi << "ML qoi Param: " << mimcmc.MeanQOI().transpose();
-  //spdlog::info(output_qoi.str());
+    std::stringstream output_mean;
+    output_mean << "Thread: " << omp_get_thread_num() << "; ML mean Param: " << mimcmc.MeanParam().transpose();
+    spdlog::info(output_mean.str());
+    //std::stringstream output_qoi;
+    //output_qoi << "ML qoi Param: " << mimcmc.MeanQOI().transpose();
+    //spdlog::info(output_qoi.str());
 
-  mimcmc.WriteToFile("test.h5");
-
+    char buffer_file[9];
+    sprintf(buffer_file, "test_%lu.h5", omp_get_thread_num());
+    mimcmc.WriteToFile(buffer_file);
+  }
+  
   return 0;
 }
