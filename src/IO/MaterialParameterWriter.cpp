@@ -35,8 +35,8 @@ void IO::MaterialParameterWriter::updateParameters(std::vector<Eigen::VectorXd> 
 
     size_t locationOfKey = unsavedFileContent.find("@" + key + "@");
 
-    unsavedFileContent.replace(locationOfKey, key.length() + 2, std::to_string(parameters(i)));
-    spdlog::info("{:<25s}: {:e}: {}", key, parameters(i), j);
+    unsavedFileContent.replace(locationOfKey, key.length() + 2, std::to_string(parameters[j](i)));
+    spdlog::info("{:<25s}: {:e}: {}", key, parameters[j](i), j);
     }
   }
   
