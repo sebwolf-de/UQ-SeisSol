@@ -39,28 +39,27 @@ UQ::MySamplingProblem::MySamplingProblem(
 double UQ::MySamplingProblem::LogDensity(std::shared_ptr<SamplingState> const& state) {
   lastState = state;
 
-  //discard unphysical values
-  //if (state->state[0].minCoeff() < 0) {
-  //  return -40;
-  //}
-
   spdlog::info("----------------------");
-  spdlog::info("Running SeisSol on index {}", index->GetValue(0));
-  spdlog::debug("Running SeisSol with {} fused sims", numberOfFusedSims);
+  spdlog::info("Running SeisSol on thread {}", omp_get_thread_num());
+  // spdlog::info("Running SeisSol on index {}", index->GetValue(0));
+  // spdlog::debug("Running SeisSol with {} fused sims", numberOfFusedSims);
   // Eigen::VectorXd stateVector(numberOfFusedSims);
   // for (size_t i = 0; i < numberOfFusedSims; i++) {
   //   stateVector[i] = state->state[i][0];
   // }
   
   materialParameterWriter->updateParameters(state->state[0]); //  stateVector
-  size_t fsn = omp_get_thread_num() + 1;
+  size_t fsn = 1; // omp_get_thread_num() + 1;
 
-  runner->prepareFilesystem(runCount);
-  runner->run(index->GetValue(0));
+  #pragma omp single copyprivate(runCount)
+  {
+    runner->prepareFilesystem(runCount);
+    runner->run(index->GetValue(0));
 
-  runCount++;
-  spdlog::info("Executed SeisSol successfully {} times on thread: {}", runCount, fsn);
-
+    runCount++;
+    spdlog::info("Executed SeisSol successfully {} times on thread: {}", runCount, fsn);
+  }
+  
   double relativeNorm = 0.0;
   const double epsilon = 1e-2;
   double logDensity;
@@ -71,7 +70,7 @@ double UQ::MySamplingProblem::LogDensity(std::shared_ptr<SamplingState> const& s
   std::vector<std::vector<double>> norms;
   size_t numberOfReceivers;
 
-  #pragma omp critical
+  #pragma omp single copyprivate(norm_diffs, norms, numberOfReceivers) // critical
   {
     numberOfReceivers = observationsReceiverDB->numberOfReceivers(1);
     for (size_t i = 1; i < numberOfReceivers + 1; i++) {
