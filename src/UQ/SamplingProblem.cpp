@@ -50,7 +50,7 @@ double UQ::MySamplingProblem::LogDensity(std::shared_ptr<SamplingState> const& s
   // }
   
   
-  size_t fsn = 1; // omp_get_thread_num() + 1;
+  size_t fsn = omp_get_thread_num() + 1; // 1; // 
   
   #pragma omp single
   {
@@ -68,11 +68,11 @@ double UQ::MySamplingProblem::LogDensity(std::shared_ptr<SamplingState> const& s
 
   #pragma omp single
   {
-    materialParameterWriter->updateParameters(state->state[0]); //  parameters
+    materialParameterWriter->updateParameters(parameters); //   state->state[0]
     spdlog::info("----------------------");
     spdlog::info("Running SeisSol on thread {}", omp_get_thread_num());
     runner->prepareFilesystem(runCount);
-    runner->run(index->GetValue(0));
+    runner->run(0); // index->GetValue(0)
 
     runCount++;
     spdlog::info("Executed SeisSol successfully {} times on thread: {}", runCount, fsn);
