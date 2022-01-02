@@ -51,7 +51,7 @@ double UQ::MySamplingProblem::LogDensity(std::shared_ptr<SamplingState> const& s
   materialParameterWriter->updateParameters(state->state[0]); //  stateVector
   size_t fsn = 1; // omp_get_thread_num() + 1;
 
-  #pragma omp single copyprivate(runCount)
+  #pragma omp single
   {
     runner->prepareFilesystem(runCount);
     runner->run(index->GetValue(0));
