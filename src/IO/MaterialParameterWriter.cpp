@@ -28,10 +28,10 @@ void IO::MaterialParameterWriter::updateParameters(Eigen::VectorXd parameters) c
 void IO::MaterialParameterWriter::updateParameters(std::vector<Eigen::VectorXd> parameters) const {
   std::string unsavedFileContent = templateFileContent;
 
-  for (size_t j = 1; j < parameters.size()+1; j++)
+  for (size_t j = 0; j < parameters.size(); j++)
   {
     for (size_t i = 0; i < parameterKeys.size(); i++) {
-    std::string key = parameterKeys[i] + "_" + std::to_string(j);
+    std::string key = parameterKeys[i] + "_" + std::to_string(j+1);
 
     size_t locationOfKey = unsavedFileContent.find("@" + key + "@");
 
