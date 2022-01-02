@@ -4,6 +4,8 @@
 #include <fstream>
 #include <map>
 
+#include <vector>
+
 namespace IO {
 
 class MaterialParameterWriter {
@@ -12,6 +14,7 @@ class MaterialParameterWriter {
                           const std::string& outputFilename,
                           const std::vector<std::string>& parameterKeys);
   void updateParameters(Eigen::VectorXd parameters) const;
+  void updateParameters(std::vector<Eigen::VectorXd> parameters) const;
   size_t numberOfParameters() const;
 
   private:

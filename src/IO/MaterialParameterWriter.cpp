@@ -25,4 +25,27 @@ void IO::MaterialParameterWriter::updateParameters(Eigen::VectorXd parameters) c
   materialParametersFile.close();
 }
 
+void IO::MaterialParameterWriter::updateParameters(std::vector<Eigen::VectorXd> parameters) const {
+  std::string unsavedFileContent = templateFileContent;
+
+  for (size_t j = 1; j < parameters.size()+1; j++)
+  {
+    for (size_t i = 0; i < parameterKeys.size(); i++) {
+    std::string key = parameterKeys[i] + "_" + std::to_string(j);
+
+    size_t locationOfKey = unsavedFileContent.find("@" + key + "@");
+
+    unsavedFileContent.replace(locationOfKey, key.length() + 2, std::to_string(parameters(i)));
+    spdlog::info("{:<25s}: {:e}: {}", key, parameters(i), j);
+    }
+  }
+  
+  
+
+  std::ofstream materialParametersFile(outputFilename);
+
+  materialParametersFile << unsavedFileContent;
+  materialParametersFile.close();
+}
+
 size_t IO::MaterialParameterWriter::numberOfParameters() const { return parameterKeys.size(); }
