@@ -20,6 +20,7 @@
 
 size_t UQ::MySamplingProblem::MySamplingProblem::runCount = 0;
 // std::vector<Eigen::VectorXd> UQ::MySamplingProblem::MySamplingProblem::parameters;
+std::vector<Eigen::VectorXd> parameters;
 
 UQ::MySamplingProblem::MySamplingProblem(
     std::shared_ptr<MultiIndex> index, std::shared_ptr<SeisSol::Runner> runner,
@@ -56,6 +57,8 @@ double UQ::MySamplingProblem::LogDensity(std::shared_ptr<SamplingState> const& s
 
   #pragma omp critical
     parameters[omp_get_thread_num()] = state->state[0];
+
+  #pragma barrier
 
   #pragma omp single
   {
