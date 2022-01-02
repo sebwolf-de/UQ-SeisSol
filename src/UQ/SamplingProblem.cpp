@@ -55,13 +55,13 @@ double UQ::MySamplingProblem::LogDensity(std::shared_ptr<SamplingState> const& s
   #pragma omp single
   {
     parameters.resize(4); // numberOfFusedSims
-    std::cout << "Parametersize: " << parameters.size() << std::endl;
+    // std::cout << "Parametersize: " << parameters.size() << std::endl;
   }
 
   #pragma omp critical
   {
     parameters[omp_get_thread_num()] = state->state[0];
-    std::cout << "Thread: " << omp_get_thread_num() << std::endl;
+    // std::cout << "Thread: " << omp_get_thread_num() << std::endl;
   }
 
   #pragma omp barrier
@@ -88,7 +88,7 @@ double UQ::MySamplingProblem::LogDensity(std::shared_ptr<SamplingState> const& s
   std::vector<std::vector<double>> norms;
   size_t numberOfReceivers;
 
-  #pragma omp single copyprivate(norm_diffs, norms, numberOfReceivers) // critical
+  #pragma omp critical // single copyprivate(norm_diffs, norms, numberOfReceivers) 
   {
     numberOfReceivers = observationsReceiverDB->numberOfReceivers(1);
     for (size_t i = 1; i < numberOfReceivers + 1; i++) {
