@@ -59,7 +59,10 @@ double UQ::MySamplingProblem::LogDensity(std::shared_ptr<SamplingState> const& s
   }
 
   #pragma omp critical
+  {
     parameters[omp_get_thread_num()] = state->state[0];
+    std::cout << "Thread: " << omp_get_thread_num() << std::endl;
+  }
 
   #pragma omp barrier
 
