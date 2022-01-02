@@ -19,7 +19,7 @@
 #include <omp.h>
 
 size_t UQ::MySamplingProblem::MySamplingProblem::runCount = 0;
-std::vector<Eigen::VectorXd> UQ::MySamplingProblem::MySamplingProblem::parameters;
+// std::vector<Eigen::VectorXd> UQ::MySamplingProblem::MySamplingProblem::parameters;
 
 UQ::MySamplingProblem::MySamplingProblem(
     std::shared_ptr<MultiIndex> index, std::shared_ptr<SeisSol::Runner> runner,
