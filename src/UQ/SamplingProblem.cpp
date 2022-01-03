@@ -54,7 +54,7 @@ double UQ::MySamplingProblem::LogDensity(std::shared_ptr<SamplingState> const& s
   
   #pragma omp single
   {
-    parameters.resize(4); // numberOfFusedSims
+    parameters.resize(numberOfFusedSims);
     // std::cout << "Parametersize: " << parameters.size() << std::endl;
   }
 
@@ -117,7 +117,6 @@ double UQ::MySamplingProblem::LogDensity(std::shared_ptr<SamplingState> const& s
     spdlog::debug("Relative norm of receiver {}: {}, fused sim: {}", i, receiverRelativeNorm, fsn);
     }
 
-    // std::cout << "Num fused sim: " << fsn << std::endl;
     relativeNorm /= numberOfReceivers;
     logDensity = -std::pow(relativeNorm, 4); // logDensityArray[fsn-1] 
     spdlog::info("LogDensity {} = {}", fsn, logDensity); // logDensityArray[fsn-1]);
