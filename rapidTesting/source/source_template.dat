@@ -5,10 +5,10 @@
  number of faults
                      4
  x,y,z,strike, dip, rake, area, onset time.
-     0.0             0.0     @param_source_z@     0.00000    00.00000     0.00000  1.0     0.00000
-     0.0             0.0     @param_source_2@     0.00000    00.00000     0.00000  1.0     0.00000
-     0.0             0.0     @param_source_3@     0.00000    00.00000     0.00000  1.0     0.00000
-     0.0             0.0     @param_source_4@     0.00000    00.00000     0.00000  1.0     0.00000
+     0.0    0.0    @param_source_z_1@     0.00000    00.00000     0.00000  1.0     0.00000
+     0.0    0.0    @param_source_z_2@     0.00000    00.00000     0.00000  1.0     0.00000
+     0.0    0.0    @param_source_z_3@     0.00000    00.00000     0.00000  1.0     0.00000
+     0.0    0.0    @param_source_z_4@     0.00000    00.00000     0.00000  1.0     0.00000
  source time function: dela, total sample point
      0.00020                  20000
  samples
