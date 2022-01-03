@@ -75,7 +75,7 @@ double UQ::MySamplingProblem::LogDensity(std::shared_ptr<SamplingState> const& s
     runner->run(0); // index->GetValue(0)
 
     runCount++;
-    spdlog::info("Executed SeisSol successfully {} times on thread: {}", runCount, fsn);
+    spdlog::info("Executed SeisSol successfully {} times on thread: {}", runCount, omp_get_thread_num());
   }
   
   double relativeNorm = 0.0;
