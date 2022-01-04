@@ -14,7 +14,7 @@ std::shared_ptr<UQ::MCMCProposal> UQ::MyMIComponentFactory::Proposal(
   pt::ptree pt;
   pt.put("BlockIndex", 0);
 
-  size_t numberOfParameters = 1; // materialParameterWriter->numberOfParameters();
+  size_t numberOfParameters = materialParameterWriter->numberOfParameters(); // 1; // 
 
   auto mu = Eigen::VectorXd::Zero(numberOfParameters);
   Eigen::MatrixXd cov = Eigen::MatrixXd::Identity(numberOfParameters, numberOfParameters);
