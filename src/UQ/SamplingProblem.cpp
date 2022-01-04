@@ -42,15 +42,9 @@ double UQ::MySamplingProblem::LogDensity(std::shared_ptr<SamplingState> const& s
   lastState = state;
 
   
-  // spdlog::info("Running SeisSol on index {}", index->GetValue(0));
-  // spdlog::debug("Running SeisSol with {} fused sims", numberOfFusedSims);
-  // Eigen::VectorXd stateVector(numberOfFusedSims);
-  // for (size_t i = 0; i < numberOfFusedSims; i++) {
-  //   stateVector[i] = state->state[i][0];
-  // }
+  // spdlog::info("Running SeisSol on index {}", index->GetValue(0));  
   
-  
-  size_t fsn = omp_get_thread_num() + 1; // 1; // 
+  size_t fsn = omp_get_thread_num() + 1;
   
   #pragma omp single
   {
@@ -81,14 +75,12 @@ double UQ::MySamplingProblem::LogDensity(std::shared_ptr<SamplingState> const& s
   double relativeNorm = 0.0;
   const double epsilon = 1e-2;
   double logDensity;
-  // double* logDensityArray = new double[numberOfFusedSims];
 
-  // for (size_t fsn = 1; fsn <= numberOfFusedSims; fsn++) {
   std::vector<std::vector<double>> norm_diffs;
   std::vector<std::vector<double>> norms;
   size_t numberOfReceivers;
 
-  #pragma omp critical // single copyprivate(norm_diffs, norms, numberOfReceivers) 
+  #pragma omp critical
   {
     numberOfReceivers = observationsReceiverDB->numberOfReceivers(1);
     for (size_t i = 1; i < numberOfReceivers + 1; i++) {
@@ -100,7 +92,7 @@ double UQ::MySamplingProblem::LogDensity(std::shared_ptr<SamplingState> const& s
   }
 
   relativeNorm = 0.0;
-  #pragma omp critical
+  #pragma omp critical // only for nicely formated output
   {
     for (size_t i = 0; i < numberOfReceivers; i++) {
     double receiverRelativeNorm = 0.0;
@@ -118,13 +110,13 @@ double UQ::MySamplingProblem::LogDensity(std::shared_ptr<SamplingState> const& s
     }
 
     relativeNorm /= numberOfReceivers;
-    logDensity = -std::pow(relativeNorm, 4); // logDensityArray[fsn-1] 
-    spdlog::info("LogDensity {} = {}", fsn, logDensity); // logDensityArray[fsn-1]);
+    logDensity = -std::pow(relativeNorm, 4); 
+    spdlog::info("LogDensity {} = {}", fsn, logDensity); 
   }
   // }
 
-  state->meta["LogTarget"] = logDensity; //logDensityArray;
-  return logDensity; // logDensityArray[0];
+  state->meta["LogTarget"] = logDensity; 
+  return logDensity; 
 }
 
 std::shared_ptr<UQ::SamplingState> UQ::MySamplingProblem::QOI() {
