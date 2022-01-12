@@ -49,13 +49,13 @@ double UQ::MySamplingProblem::LogDensity(std::shared_ptr<SamplingState> const& s
   #pragma omp single
   {
     parameters.resize(numberOfFusedSims);
-    std::cout << "Parametersize: " << parameters.size() << std::endl;
+    // std::cout << "Parametersize: " << parameters.size() << std::endl;
   }
 
   #pragma omp critical
   {
     parameters[omp_get_thread_num()] = state->state[0];
-    std::cout << "Thread: " << omp_get_thread_num() << std::endl;
+    // std::cout << "Thread: " << omp_get_thread_num() << std::endl;
   }
 
   #pragma omp barrier

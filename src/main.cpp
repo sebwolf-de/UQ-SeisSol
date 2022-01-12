@@ -49,7 +49,7 @@ int main(int argc, char** argv) {
     spdlog::info("Use {} samples on level {}", parameterReader.getNumberOfSamples(i), i);
   }
 
-  omp_set_num_threads(4); // numberOfFusedSims
+  omp_set_num_threads(numberOfFusedSims);
   omp_set_nested(1);
 
   #pragma omp parallel firstprivate(pt, miComponentFactory)
