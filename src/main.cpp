@@ -48,7 +48,7 @@ int main(int argc, char** argv){
 
   auto index = std::make_shared<MultiIndex>(1);
   index->SetValue(0, 0);
-  auto problem = miComponentFactory.SamplingProblem(index);
+  auto problem = miComponentFactory->SamplingProblem(index);
   auto proposal = miComponentFactory->Proposal(index, problem);
 
   // parameters for the sampler
@@ -71,13 +71,13 @@ int main(int argc, char** argv){
   std::vector<std::shared_ptr<TransitionKernel>> kernels(1);
   kernels[0] = std::make_shared<FusedGMHKernel>(pt, problem, proposal);
 
-  auto chain = std::make_shared<SingleChainMCMC>(pt, kernel);
+  auto chain = std::make_shared<SingleChainMCMC>(pt, kernels);
   chain->SetState(initialParameterValues);
   std::shared_ptr<SampleCollection> samps = chain->Run();
 
   std::cout << "\nSample Mean = \n" << samps->Mean().transpose() << std::endl;
 
-  samps..WriteToFile("test.h5");
+  samps.WriteToFile("test.h5");
 
   return 0;
 }
