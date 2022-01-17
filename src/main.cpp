@@ -77,7 +77,7 @@ int main(int argc, char** argv){
 
   std::cout << "\nSample Mean = \n" << samps->Mean().transpose() << std::endl;
 
-  samps.WriteToFile("test.h5");
+  samps->WriteToFile("test.h5");
 
   return 0;
 }
