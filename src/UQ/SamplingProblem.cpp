@@ -17,8 +17,6 @@
 #include "spdlog/spdlog.h"
 
 size_t UQ::MySamplingProblem::MySamplingProblem::runCount = 0;
-// std::vector<Eigen::VectorXd> UQ::MySamplingProblem::MySamplingProblem::parameters;
-std::vector<Eigen::VectorXd> parameters;
 
 UQ::MySamplingProblem::MySamplingProblem(
     std::shared_ptr<MultiIndex> index, std::shared_ptr<SeisSol::Runner> runner,
@@ -38,22 +36,10 @@ UQ::MySamplingProblem::MySamplingProblem(
 
 double UQ::MySamplingProblem::LogDensity(std::shared_ptr<SamplingState> const& state) {
   lastState = state;
-
   
-  // spdlog::info("Running SeisSol on index {}", index->GetValue(0));  
-  
-  size_t fsn = omp_get_thread_num() + 1;
-  
-  
-  parameters.resize(numberOfFusedSims);
-  // std::cout << "Parametersize: " << parameters.size() << std::endl;
-  parameters[omp_get_thread_num()] = state->state[0];
-  // std::cout << "Thread: " << omp_get_thread_num() << std::endl;
-  
-
-  materialParameterWriter->updateParameters(parameters); //   state->state[0]
+  materialParameterWriter->updateParameters(state->state); //   state->state[0]
   spdlog::info("----------------------");
-  spdlog::info("Running SeisSol");
+  spdlog::info("Running SeisSol on index {}", index->GetValue(0));
   runner->prepareFilesystem(runCount);
   runner->run(0); // index->GetValue(0)
 
@@ -63,46 +49,46 @@ double UQ::MySamplingProblem::LogDensity(std::shared_ptr<SamplingState> const& s
   
   double relativeNorm = 0.0;
   const double epsilon = 1e-2;
-  double logDensity;
+  double* logDensityArray = new double[numberOfFusedSims];
 
-  std::vector<std::vector<double>> norm_diffs;
-  std::vector<std::vector<double>> norms;
-  size_t numberOfReceivers;
+  for (size_t fsn = 1; fsn <= numberOfFusedSims; fsn++) {
 
-  
-  numberOfReceivers = observationsReceiverDB->numberOfReceivers(1);
-  for (size_t i = 1; i < numberOfReceivers + 1; i++) {
-    simulationsReceiverDB->addReceiver(i, fsn);
+
+    std::vector<std::vector<double>> norm_diffs;
+    std::vector<std::vector<double>> norms;
+
+    for (size_t i = 1; i < observationsReceiverDB->numberOfReceivers(1) + 1; i++) {
+      simulationsReceiverDB->addReceiver(i, fsn);
+      
+      norm_diffs.push_back(simulationsReceiverDB->l1Difference(i, observationsReceiverDB->getReceiver(i), numberOfSubintervals, fsn));
+      norms.push_back(observationsReceiverDB->getReceiver(i).l1Norm(numberOfSubintervals));
+    }
     
-    norm_diffs.push_back(simulationsReceiverDB->l1Difference(i, observationsReceiverDB->getReceiver(i), numberOfSubintervals, fsn));
-    norms.push_back(observationsReceiverDB->getReceiver(i).l1Norm(numberOfSubintervals));
-  }
-  
 
-  relativeNorm = 0.0;
-  
-  for (size_t i = 0; i < numberOfReceivers; i++) {
-  double receiverRelativeNorm = 0.0;
-  for (size_t j = 0; j < norm_diffs[i].size(); j++) {
-    if (norms[i][j] > epsilon) {
-      receiverRelativeNorm += norm_diffs[i][j] / norms[i][j];
+    relativeNorm = 0.0;
+    
+    for (size_t i = 0; i < observationsReceiverDB->numberOfReceivers(1); i++) {
+    double receiverRelativeNorm = 0.0;
+    for (size_t j = 0; j < norm_diffs[i].size(); j++) {
+      if (norms[i][j] > epsilon) {
+        receiverRelativeNorm += norm_diffs[i][j] / norms[i][j];
+      }
+      else {
+        receiverRelativeNorm += norm_diffs[i][j];
+      }
     }
-    else {
-      receiverRelativeNorm += norm_diffs[i][j];
+    receiverRelativeNorm = receiverRelativeNorm / (double)numberOfSubintervals;
+    relativeNorm += receiverRelativeNorm;
+    spdlog::debug("Relative norm of receiver {}: {}, fused sim: {}", i, receiverRelativeNorm, fsn);
     }
-  }
-  receiverRelativeNorm = receiverRelativeNorm / (double)numberOfSubintervals;
-  relativeNorm += receiverRelativeNorm;
-  spdlog::debug("Relative norm of receiver {}: {}, fused sim: {}", i, receiverRelativeNorm, fsn);
+
+    relativeNorm /= observationsReceiverDB->numberOfReceivers(1);
+    logDensityArray[fsn-1] = -std::pow(relativeNorm, 4); 
+    spdlog::info("LogDensity {} = {}", fsn, logDensityArray[fsn-1]); 
   }
 
-  relativeNorm /= numberOfReceivers;
-  logDensity = -std::pow(relativeNorm, 4); 
-  spdlog::info("LogDensity {} = {}", fsn, logDensity); 
-  
-
-  state->meta["LogTarget"] = logDensity; 
-  return logDensity; 
+  state->meta["LogTarget"] = logDensityArray; 
+  return logDensityArray[0]; 
 }
 
 std::shared_ptr<UQ::SamplingState> UQ::MySamplingProblem::QOI() {

@@ -1,9 +1,12 @@
-#include "MUQ/SamplingAlgorithms/DummyKernel.h"
-#include "MUQ/SamplingAlgorithms/GreedyMLMCMC.h"
-#include "MUQ/SamplingAlgorithms/MIMCMC.h"
-#include "MUQ/SamplingAlgorithms/ParallelFixedSamplesMIMCMC.h"
-#include "MUQ/SamplingAlgorithms/ParallelMIComponentFactory.h"
-#include "MUQ/SamplingAlgorithms/SLMCMC.h"
+#include "MUQ/SamplingAlgorithms/SamplingProblem.h"
+#include "MUQ/SamplingAlgorithms/SingleChainMCMC.h"
+
+#include "MUQ/SamplingAlgorithms/FusedGMHKernel.h"
+#include "MUQ/SamplingAlgorithms/TransitionKernel.h"
+#include "MUQ/SamplingAlgorithms/SampleCollection.h"
+#include "MUQ/Utilities/MultiIndices/MultiIndex.h"
+
+
 #include <boost/property_tree/ptree.hpp>
 
 #include "UQ/MIComponentFactory.h"
@@ -15,7 +18,12 @@
 
 #include "spdlog/spdlog.h"
 
-int main(int argc, char** argv) {
+using namespace muq::Modeling;
+using namespace muq::SamplingAlgorithms;
+using namespace muq::Utilities;
+
+
+int main(int argc, char** argv){
   assert(argc == 2);
   spdlog::set_level(spdlog::level::debug); // Set global log level to debug
 
@@ -37,9 +45,17 @@ int main(int argc, char** argv) {
       runner, observationsReceiverDB, simulationsReceiverDB, materialParameterWriter,
       initialParameterValues, parameterReader.getNumberOfIndices()-1, numberOfSubintervals, numberOfFusedSims);
 
+
+  auto index = std::make_shared<MultiIndex>(1);
+  index->SetValue(0, 0);
+  auto problem = miComponentFactory.SamplingProblem(index);
+  auto proposal = miComponentFactory->Proposal(index, problem);
+
+  // parameters for the sampler
   boost::property_tree::ptree pt;
   pt.put("verbosity", 1); // show some output
   pt.put("BurnIn", 1);
+  pt.put("PrintLevel", 0);
   for (size_t i = 0; i < parameterReader.getNumberOfIndices(); i++) {
     char buffer_num[13];
     sprintf(buffer_num, "NumSamples_%lu", i);
@@ -47,20 +63,21 @@ int main(int argc, char** argv) {
     spdlog::info("Use {} samples on level {}", parameterReader.getNumberOfSamples(i), i);
   }
 
+  const unsigned int N = numberOfFusedSims;
+  const unsigned int M = numberOfFusedSims;
+  pt.put("NumProposals", N);
+  pt.put("NumAccepted", M); // optional: defaults to N
 
-  
-  muq::SamplingAlgorithms::MIMCMC mimcmc(pt, miComponentFactory);
-  std::shared_ptr<muq::SamplingAlgorithms::SampleCollection> samples = mimcmc.Run();
+  std::vector<std::shared_ptr<TransitionKernel>> kernels(1);
+  kernels[0] = std::make_shared<FusedGMHKernel>(pt, problem, proposal);
 
-  std::stringstream output_mean;
-  output_mean << "Thread: " << omp_get_thread_num() << "; ML mean Param: " << mimcmc.MeanParam().transpose();
-  spdlog::info(output_mean.str());
-  //std::stringstream output_qoi;
-  //output_qoi << "ML qoi Param: " << mimcmc.MeanQOI().transpose();
-  //spdlog::info(output_qoi.str());
+  auto chain = std::make_shared<SingleChainMCMC>(pt, kernel);
+  chain->SetState(initialParameterValues);
+  std::shared_ptr<SampleCollection> samps = chain->Run();
 
-  mimcmc.WriteToFile("test.h5");
-  
-  
+  std::cout << "\nSample Mean = \n" << samps->Mean().transpose() << std::endl;
+
+  samps..WriteToFile("test.h5");
+
   return 0;
 }

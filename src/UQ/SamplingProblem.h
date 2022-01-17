@@ -41,7 +41,6 @@ class MySamplingProblem : public AbstractSamplingProblem {
   std::shared_ptr<SamplingState> lastState = nullptr;
   std::shared_ptr<MultiIndex> index;
   static size_t runCount;
-  // std::vector<Eigen::VectorXd> parameters;
 
   size_t numberOfSubintervals;
   size_t numberOfFusedSims;
