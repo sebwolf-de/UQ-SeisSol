@@ -19,6 +19,8 @@
 
 #include "spdlog/spdlog.h"
 
+#include <iostream>
+
 using namespace muq::Modeling;
 using namespace muq::SamplingAlgorithms;
 using namespace muq::Utilities;
@@ -69,6 +71,7 @@ int main(int argc, char** argv){
   const unsigned int M = numberOfFusedSims;
   pt.put("NumProposals", N);
   pt.put("NumAccepted", M); // optional: defaults to N
+  std::cout << "Num of N: " << N << std::endl;
 
   std::vector<std::shared_ptr<TransitionKernel>> kernels(1);
   kernels[0] = std::make_shared<GMHKernel>(pt, problem, proposal);

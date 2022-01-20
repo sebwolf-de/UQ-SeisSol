@@ -36,7 +36,7 @@ UQ::MySamplingProblem::MySamplingProblem(
 
 double UQ::MySamplingProblem::LogDensity(std::shared_ptr<SamplingState> const& state) {
   lastState = state;
-  
+  std::cout << "Size of state vector: " << state->state.size() << std::endl;
   materialParameterWriter->updateParameters(state->state); //   state->state[0]
   spdlog::info("----------------------");
   spdlog::info("Running SeisSol on index {}", index->GetValue(0));
