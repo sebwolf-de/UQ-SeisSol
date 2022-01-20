@@ -19,6 +19,8 @@
 
 #include "spdlog/spdlog.h"
 
+#include <iostream>
+
 using namespace muq::Modeling;
 using namespace muq::SamplingAlgorithms;
 using namespace muq::Utilities;
@@ -57,7 +59,7 @@ int main(int argc, char** argv){
   pt.put("verbosity", 1); // show some output
   pt.put("BurnIn", 1);
   pt.put("NumSamples", parameterReader.getNumberOfSamples(0));
-  pt.put("PrintLevel", 0);
+  pt.put("PrintLevel", 1);
   // for (size_t i = 0; i < parameterReader.getNumberOfIndices(); i++) {
   //   char buffer_num[13];
   //   sprintf(buffer_num, "NumSamples_%lu", i);
@@ -73,8 +75,10 @@ int main(int argc, char** argv){
   std::vector<std::shared_ptr<TransitionKernel>> kernels(1);
   kernels[0] = std::make_shared<FusedGMHKernel>(pt, problem, proposal);
 
+  std::cout << "Main line 78" << std::endl;
   auto chain = std::make_shared<SingleChainMCMC>(pt, kernels);
   chain->SetState(initialParameterValues);
+  std::cout << "Main line 81" << std::endl;
   std::shared_ptr<SampleCollection> samps = chain->Run();
 
   std::cout << "\nSample Mean = \n" << samps->Mean().transpose() << std::endl;
