@@ -2,8 +2,6 @@
 
 #include "MaterialParameterWriter.h"
 
-#include <iostream>
-
 IO::MaterialParameterWriter::MaterialParameterWriter(const std::string& templateFileContent,
                                                      const std::string& outputFilename,
                                                      const std::vector<std::string>& parameterKeys)

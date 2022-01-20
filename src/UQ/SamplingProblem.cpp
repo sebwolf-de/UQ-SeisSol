@@ -36,13 +36,13 @@ UQ::MySamplingProblem::MySamplingProblem(
 
 double UQ::MySamplingProblem::LogDensity(std::shared_ptr<SamplingState> const& state) {
   lastState = state;
-  std::cout << "Size of state vector: " << state->state.size() << std::endl;
-  std::cout << "numberOfFusedSims: " << numberOfFusedSims << std::endl;
-  materialParameterWriter->updateParameters(state->state, numberOfFusedSims); //   state->state[0]
+  std::cout << "Size of state: " << state->state.size() << std::endl;
+  std::cout << "Size of state: " << state->state[0].size() << std::endl;
+  materialParameterWriter->updateParameters(state->state, numberOfFusedSims);
   spdlog::info("----------------------");
   spdlog::info("Running SeisSol on index {}", index->GetValue(0));
   runner->prepareFilesystem(runCount);
-  runner->run(0); // index->GetValue(0)
+  runner->run(0);
 
   runCount++;
   spdlog::info("Executed SeisSol successfully {} times", runCount);
