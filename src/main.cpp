@@ -20,6 +20,7 @@
 #include "spdlog/spdlog.h"
 
 #include <iostream>
+#include <Eigen/Dense>
 
 using namespace muq::Modeling;
 using namespace muq::SamplingAlgorithms;
@@ -75,13 +76,13 @@ int main(int argc, char** argv){
   std::vector<std::shared_ptr<TransitionKernel>> kernels(1);
   kernels[0] = std::make_shared<FusedGMHKernel>(pt, problem, proposal);
 
-  std::cout << "Main line 78" << std::endl;
   auto chain = std::make_shared<SingleChainMCMC>(pt, kernels);
   chain->SetState(initialParameterValues);
-  std::cout << "Main line 81" << std::endl;
   std::shared_ptr<SampleCollection> samps = chain->Run();
 
-  std::cout << "\nSample Mean = \n" << samps->Mean().transpose() << std::endl;
+  // std::cout << "\nSample Mean = \n" << samps->Mean().transpose() << std::endl;
+  Eigen::VectorXd sampMean = samps->Mean();
+  std::cout << "\nSample Mean = " << sampMean.transpose() << std::endl;
 
   samps->WriteToFile("test.h5");
 
