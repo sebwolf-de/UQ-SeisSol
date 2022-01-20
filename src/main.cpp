@@ -21,6 +21,7 @@
 
 #include <iostream>
 #include <Eigen/Dense>
+#include <Eigen/Core>
 
 using namespace muq::Modeling;
 using namespace muq::SamplingAlgorithms;
@@ -80,9 +81,16 @@ int main(int argc, char** argv){
   chain->SetState(initialParameterValues);
   std::shared_ptr<SampleCollection> samps = chain->Run();
 
-  // std::cout << "\nSample Mean = \n" << samps->Mean().transpose() << std::endl;
-  Eigen::VectorXd sampMean = samps->Mean();
-  std::cout << "\nSample Mean = " << sampMean.transpose() << std::endl;
+  try
+  {
+    Eigen::VectorXd sampMean = samps->Mean();
+    std::cout << "\nSample Mean = " << sampMean.transpose() << std::endl;
+  }
+  catch(const std::exception& e)
+  {
+    std::cerr << "Exception: " << e.what() << '\n';
+  }
+  
 
   samps->WriteToFile("test.h5");
 
