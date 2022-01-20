@@ -2,6 +2,8 @@
 
 #include "MaterialParameterWriter.h"
 
+#include <iostream>
+
 IO::MaterialParameterWriter::MaterialParameterWriter(const std::string& templateFileContent,
                                                      const std::string& outputFilename,
                                                      const std::vector<std::string>& parameterKeys)
@@ -29,7 +31,7 @@ void IO::MaterialParameterWriter::updateParameters(std::vector<Eigen::VectorXd> 
   std::string unsavedFileContent = templateFileContent;
   size_t paramSize = parameters.size();
   if (numberOfFusedSims > parameters.size()) paramSize = numberOfFusedSims;
-  
+  std::cout << "paramSize: " << paramSize << std::endl;
   for (size_t j = 0; j < paramSize; j++)
   {
     for (size_t i = 0; i < parameterKeys.size(); i++) {
