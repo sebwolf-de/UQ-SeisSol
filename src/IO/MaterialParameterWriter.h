@@ -14,7 +14,7 @@ class MaterialParameterWriter {
                           const std::string& outputFilename,
                           const std::vector<std::string>& parameterKeys);
   void updateParameters(Eigen::VectorXd parameters) const;
-  void updateParameters(std::vector<Eigen::VectorXd> parameters, size_t numberOfFusedSims) const;
+  void updateParameters(std::vector<Eigen::VectorXd> parameters) const;
   size_t numberOfParameters() const;
 
   private:

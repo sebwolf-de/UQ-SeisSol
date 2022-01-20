@@ -25,34 +25,19 @@ void IO::MaterialParameterWriter::updateParameters(Eigen::VectorXd parameters) c
   materialParametersFile.close();
 }
 
-void IO::MaterialParameterWriter::updateParameters(std::vector<Eigen::VectorXd> parameters, size_t numberOfFusedSims) const {
+void IO::MaterialParameterWriter::updateParameters(std::vector<Eigen::VectorXd> parameters) const {
   std::string unsavedFileContent = templateFileContent;
-  if (numberOfFusedSims > parameters.size()) {
-    for (size_t j = 0; j < numberOfFusedSims; j++)
-    {
-      for (size_t i = 0; i < parameterKeys.size(); i++) {
-      std::string key = parameterKeys[i] + "_" + std::to_string(j+1);
+  for (size_t j = 0; j < parameters.size(); j++)
+  {
+    for (size_t i = 0; i < parameterKeys.size(); i++) {
+    std::string key = parameterKeys[i] + "_" + std::to_string(j+1);
 
-      size_t locationOfKey = unsavedFileContent.find("@" + key + "@");
+    size_t locationOfKey = unsavedFileContent.find("@" + key + "@");
 
-      unsavedFileContent.replace(locationOfKey, key.length() + 2, std::to_string(parameters[0](i)));
-      spdlog::info("{:<25s}: {:e}: {}", key, parameters[0](i), j);
-      }
-    }
-  } else {
-    for (size_t j = 0; j < parameters.size(); j++)
-    {
-      for (size_t i = 0; i < parameterKeys.size(); i++) {
-      std::string key = parameterKeys[i] + "_" + std::to_string(j+1);
-
-      size_t locationOfKey = unsavedFileContent.find("@" + key + "@");
-
-      unsavedFileContent.replace(locationOfKey, key.length() + 2, std::to_string(parameters[j](i)));
-      spdlog::info("{:<25s}: {:e}: {}", key, parameters[j](i), j);
-      }
+    unsavedFileContent.replace(locationOfKey, key.length() + 2, std::to_string(parameters[j](i)));
+    spdlog::info("{:<25s}: {:e}: {}", key, parameters[j](i), j);
     }
   }
-  
 
   std::ofstream materialParametersFile(outputFilename);
 
