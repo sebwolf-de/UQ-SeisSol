@@ -1,8 +1,8 @@
 #include "MUQ/SamplingAlgorithms/SamplingProblem.h"
 #include "MUQ/SamplingAlgorithms/SingleChainMCMC.h"
 
-#include "MUQ/SamplingAlgorithms/GMHKernel.h"
-// #include "MUQ/SamplingAlgorithms/FusedGMHKernel.h"
+// #include "MUQ/SamplingAlgorithms/GMHKernel.h"
+#include "MUQ/SamplingAlgorithms/FusedGMHKernel.h"
 #include "MUQ/SamplingAlgorithms/TransitionKernel.h"
 #include "MUQ/SamplingAlgorithms/SampleCollection.h"
 #include "MUQ/Utilities/MultiIndices/MultiIndex.h"
@@ -71,7 +71,7 @@ int main(int argc, char** argv){
   pt.put("NumAccepted", M); // optional: defaults to N
 
   std::vector<std::shared_ptr<TransitionKernel>> kernels(1);
-  kernels[0] = std::make_shared<GMHKernel>(pt, problem, proposal);
+  kernels[0] = std::make_shared<FusedGMHKernel>(pt, problem, proposal);
 
   auto chain = std::make_shared<SingleChainMCMC>(pt, kernels);
   chain->SetState(initialParameterValues);
