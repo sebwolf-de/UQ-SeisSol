@@ -25,10 +25,12 @@ void IO::MaterialParameterWriter::updateParameters(Eigen::VectorXd parameters) c
   materialParametersFile.close();
 }
 
-void IO::MaterialParameterWriter::updateParameters(std::vector<Eigen::VectorXd> parameters) const {
+void IO::MaterialParameterWriter::updateParameters(std::vector<Eigen::VectorXd> parameters, size_t numberOfFusedSims) const {
   std::string unsavedFileContent = templateFileContent;
-
-  for (size_t j = 0; j < parameters.size(); j++)
+  size_t paramSize = parameters.size();
+  if (numberOfFusedSims > parameters.size()) paramSize = numberOfFusedSims;
+  
+  for (size_t j = 0; j < paramSize; j++)
   {
     for (size_t i = 0; i < parameterKeys.size(); i++) {
     std::string key = parameterKeys[i] + "_" + std::to_string(j+1);
