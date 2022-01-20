@@ -56,13 +56,14 @@ int main(int argc, char** argv){
   boost::property_tree::ptree pt;
   pt.put("verbosity", 1); // show some output
   pt.put("BurnIn", 1);
+  pt.put("NumSamples", parameterReader.getNumberOfSamples(0));
   pt.put("PrintLevel", 0);
-  for (size_t i = 0; i < parameterReader.getNumberOfIndices(); i++) {
-    char buffer_num[13];
-    sprintf(buffer_num, "NumSamples_%lu", i);
-    pt.put(buffer_num, parameterReader.getNumberOfSamples(i));
-    spdlog::info("Use {} samples on level {}", parameterReader.getNumberOfSamples(i), i);
-  }
+  // for (size_t i = 0; i < parameterReader.getNumberOfIndices(); i++) {
+  //   char buffer_num[13];
+  //   sprintf(buffer_num, "NumSamples_%lu", i);
+  //   pt.put(buffer_num, parameterReader.getNumberOfSamples(i));
+  //   spdlog::info("Use {} samples on level {}", parameterReader.getNumberOfSamples(i), i);
+  // }
 
   const unsigned int N = numberOfFusedSims;
   const unsigned int M = numberOfFusedSims;
