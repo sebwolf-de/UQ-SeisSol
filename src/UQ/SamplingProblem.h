@@ -27,7 +27,7 @@ class MySamplingProblem : public AbstractSamplingProblem {
                     std::shared_ptr<SeisSol::ReceiverDB> simulationsReceiverDB,
                     std::shared_ptr<IO::MaterialParameterWriter> materialParameterWriter,
                     size_t numberOfSubintervals, size_t numberOfFusedSims, 
-                    std::shared_ptr<muq::Modeling::ModPiece> const& targetIn);
+                    std::shared_ptr<muq::Modeling::Gaussian> const& targetIn);
 
   virtual ~MySamplingProblem(){};
 
@@ -50,7 +50,7 @@ class MySamplingProblem : public AbstractSamplingProblem {
   size_t numberOfFusedSims;
 
   /// The target distribution (the prior in the inference case)
-  std::shared_ptr<muq::Modeling::ModPiece> target;
+  std::shared_ptr<muq::Modeling::Gaussian> target;
 };
 
 } // namespace UQ

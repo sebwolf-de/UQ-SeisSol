@@ -25,7 +25,7 @@ UQ::MySamplingProblem::MySamplingProblem(
     std::shared_ptr<IO::MaterialParameterWriter> materialParameterWriter,
     size_t numberOfSubintervals,
     size_t numberOfFusedSims,
-    std::shared_ptr<muq::Modeling::ModPiece> const& targetIn)
+    std::shared_ptr<muq::Modeling::Gaussian> const& targetIn)
     : AbstractSamplingProblem(
           Eigen::VectorXi::Constant(1, materialParameterWriter->numberOfParameters()),
           Eigen::VectorXi::Constant(1, materialParameterWriter->numberOfParameters())),
@@ -37,9 +37,10 @@ UQ::MySamplingProblem::MySamplingProblem(
       spdlog::info("Run Sampling Problem with index {}", index->GetValue(0));
 }
 
-Eigen::VectorXd SamplingProblem::GradLogDensity(std::shared_ptr<SamplingState> const& state,
+Eigen::VectorXd UQ::MySamplingProblem::GradLogDensity(std::shared_ptr<SamplingState> const& state,
                                                 unsigned                       const  blockWrt) {
-  return target->Gradient(0,blockWrt, state->state, Eigen::VectorXd::Ones(1).eval());
+  return target->GradLogDensity(0, state->state); // 0 instead of wrt
+  //target->Gradient(0,blockWrt, state->state, Eigen::VectorXd::Ones(1).eval());
 }
 
 double UQ::MySamplingProblem::LogDensity(std::shared_ptr<SamplingState> const& state) {
