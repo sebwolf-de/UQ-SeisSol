@@ -26,12 +26,16 @@ class MySamplingProblem : public AbstractSamplingProblem {
                     std::shared_ptr<SeisSol::ReceiverDB> observationsReceiverDB,
                     std::shared_ptr<SeisSol::ReceiverDB> simulationsReceiverDB,
                     std::shared_ptr<IO::MaterialParameterWriter> materialParameterWriter,
-                    size_t numberOfSubintervals, size_t numberOfFusedSims);
+                    size_t numberOfSubintervals, size_t numberOfFusedSims, 
+                    std::shared_ptr<muq::Modeling::ModPiece> const& targetIn);
 
   virtual ~MySamplingProblem(){};
 
   virtual double LogDensity(std::shared_ptr<SamplingState> const& state) override;
   virtual std::shared_ptr<SamplingState> QOI() override;
+  // Needed for MALAProposal:
+  virtual Eigen::VectorXd GradLogDensity(std::shared_ptr<SamplingState> const& state,
+                                             unsigned                   const  blockWrt);
 
   private:
   std::shared_ptr<SeisSol::Runner> runner;
@@ -44,6 +48,9 @@ class MySamplingProblem : public AbstractSamplingProblem {
 
   size_t numberOfSubintervals;
   size_t numberOfFusedSims;
+
+  /// The target distribution (the prior in the inference case)
+  std::shared_ptr<muq::Modeling::ModPiece> target;
 };
 
 } // namespace UQ

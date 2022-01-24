@@ -17,7 +17,7 @@ std::shared_ptr<UQ::MCMCProposal> UQ::MyMIComponentFactory::Proposal(
   pt::ptree pt;
   pt.put("BlockIndex", 0);
 
-  size_t numberOfParameters = materialParameterWriter->numberOfParameters(); // 1; // 
+  size_t numberOfParameters = materialParameterWriter->numberOfParameters();
 
   auto mu = Eigen::VectorXd::Zero(numberOfParameters);
   Eigen::MatrixXd cov = Eigen::MatrixXd::Identity(numberOfParameters, numberOfParameters);
@@ -51,8 +51,18 @@ std::shared_ptr<UQ::MCMCProposal> UQ::MyMIComponentFactory::CoarseProposal(
 
 std::shared_ptr<UQ::AbstractSamplingProblem>
 UQ::MyMIComponentFactory::SamplingProblem(std::shared_ptr<MultiIndex> const& index) {
+  size_t numberOfParameters = materialParameterWriter->numberOfParameters();
+
+  auto mu = Eigen::VectorXd::Zero(numberOfParameters);
+  Eigen::MatrixXd cov = Eigen::MatrixXd::Identity(numberOfParameters, numberOfParameters);
+  
+  for (size_t i=0; i < numberOfParameters; i++) {
+    cov(i, i) = cov(i, i) * std::pow(startingParameters(i), 2) / 100;
+  }
+
+  auto prior = std::make_shared<Gaussian>(mu, cov, Gaussian::Mode::Covariance);
   return std::make_shared<MySamplingProblem>(index, runner, observationsReceiverDB,
-                                             simulationsReceiverDB, materialParameterWriter, numberOfSubintervals, numberOfFusedSims);
+                                             simulationsReceiverDB, materialParameterWriter, numberOfSubintervals, numberOfFusedSims, prior);
 }
 
 std::shared_ptr<UQ::MIInterpolation> UQ::MyMIComponentFactory::Interpolation([

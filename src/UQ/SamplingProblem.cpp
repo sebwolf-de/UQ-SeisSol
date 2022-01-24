@@ -24,14 +24,22 @@ UQ::MySamplingProblem::MySamplingProblem(
     std::shared_ptr<SeisSol::ReceiverDB> simulationsReceiverDB,
     std::shared_ptr<IO::MaterialParameterWriter> materialParameterWriter,
     size_t numberOfSubintervals,
-    size_t numberOfFusedSims)
+    size_t numberOfFusedSims,
+    std::shared_ptr<muq::Modeling::ModPiece> const& targetIn)
     : AbstractSamplingProblem(
           Eigen::VectorXi::Constant(1, materialParameterWriter->numberOfParameters()),
           Eigen::VectorXi::Constant(1, materialParameterWriter->numberOfParameters())),
       runner(runner), observationsReceiverDB(observationsReceiverDB),
       simulationsReceiverDB(simulationsReceiverDB),
-      materialParameterWriter(materialParameterWriter), index(index), numberOfSubintervals(numberOfSubintervals), numberOfFusedSims(numberOfFusedSims) {
+      materialParameterWriter(materialParameterWriter), index(index), 
+      numberOfSubintervals(numberOfSubintervals), numberOfFusedSims(numberOfFusedSims),
+      target(targetIn) {
       spdlog::info("Run Sampling Problem with index {}", index->GetValue(0));
+}
+
+Eigen::VectorXd SamplingProblem::GradLogDensity(std::shared_ptr<SamplingState> const& state,
+                                                unsigned                       const  blockWrt) {
+  return target->Gradient(0,blockWrt, state->state, Eigen::VectorXd::Ones(1).eval());
 }
 
 double UQ::MySamplingProblem::LogDensity(std::shared_ptr<SamplingState> const& state) {
