@@ -10,6 +10,7 @@
 
 
 #include "MUQ/SamplingAlgorithms/MALAProposal.h"
+#include "MUQ/SamplingAlgorithms/InfMALAProposal.h"
 
 std::shared_ptr<UQ::MCMCProposal> UQ::MyMIComponentFactory::Proposal(
     [[maybe_unused]] std::shared_ptr<MultiIndex> const& index,
@@ -28,7 +29,7 @@ std::shared_ptr<UQ::MCMCProposal> UQ::MyMIComponentFactory::Proposal(
 
   auto prior = std::make_shared<Gaussian>(mu, cov, Gaussian::Mode::Covariance);
 
-  return std::make_shared<MALAProposal>(pt, samplingProblem, prior); // MHProposal
+  return std::make_shared<InfMALAProposal>(pt, samplingProblem, prior); // MHProposal
 }
 
 std::shared_ptr<UQ::MultiIndex> UQ::MyMIComponentFactory::FinestIndex() {
