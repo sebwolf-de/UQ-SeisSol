@@ -24,7 +24,7 @@ std::shared_ptr<UQ::MCMCProposal> UQ::MyMIComponentFactory::Proposal(
   Eigen::MatrixXd cov = Eigen::MatrixXd::Identity(numberOfParameters, numberOfParameters);
   
   for (size_t i=0; i < numberOfParameters; i++) {
-    cov(i, i) = cov(i, i) * std::pow(startingParameters(i), 2) / 100;
+    cov(i, i) = startingParameters.variances(i);
   }
 
   auto prior = std::make_shared<Gaussian>(mu, cov, Gaussian::Mode::Covariance);
@@ -58,7 +58,7 @@ UQ::MyMIComponentFactory::SamplingProblem(std::shared_ptr<MultiIndex> const& ind
   Eigen::MatrixXd cov = Eigen::MatrixXd::Identity(numberOfParameters, numberOfParameters);
   
   for (size_t i=0; i < numberOfParameters; i++) {
-    cov(i, i) = cov(i, i) * std::pow(startingParameters(i), 2) / 100;
+    cov(i, i) = startingParameters.variances(i);
   }
 
   auto prior = std::make_shared<Gaussian>(mu, cov, Gaussian::Mode::Covariance);
@@ -73,7 +73,7 @@ std::shared_ptr<UQ::MIInterpolation> UQ::MyMIComponentFactory::Interpolation([
 
 Eigen::VectorXd UQ::MyMIComponentFactory::StartingPoint([
     [maybe_unused]] std::shared_ptr<MultiIndex> const& index) {
-  return startingParameters;
+  return startingParameters.values;
 }
 
 UQ::MyMIComponentFactory::MyMIComponentFactory(
@@ -81,7 +81,7 @@ UQ::MyMIComponentFactory::MyMIComponentFactory(
     std::shared_ptr<SeisSol::ReceiverDB> observationsReceiverDB,
     std::shared_ptr<SeisSol::ReceiverDB> simulationsReceiverDB,
     std::shared_ptr<IO::MaterialParameterWriter> materialParameterWriter,
-    const Eigen::VectorXd& startingParameters,
+    const IO::ValuesAndVariances& startingParameters,
     size_t finestIndex,
     size_t numberOfSubintervals,
     size_t numberOfFusedSims)

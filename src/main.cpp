@@ -42,13 +42,13 @@ int main(int argc, char** argv){
 
   runner->archivePreviousRun();
 
-  auto initialParameterValues = parameterReader.getInitialMaterialParameterValues();
+  auto initialParameterValuesAndVariance = parameterReader.getInitialMaterialParameterValuesAndVariance();
   size_t numberOfSubintervals = parameterReader.getNumberOfSubintervals();
   size_t numberOfFusedSims    = parameterReader.getNumberOfFusedSims();
 
   auto miComponentFactory = std::make_shared<UQ::MyMIComponentFactory>(
       runner, observationsReceiverDB, simulationsReceiverDB, materialParameterWriter,
-      initialParameterValues, parameterReader.getNumberOfIndices()-1, numberOfSubintervals, numberOfFusedSims);
+      initialParameterValuesAndVariance, parameterReader.getNumberOfIndices()-1, numberOfSubintervals, numberOfFusedSims);
 
 
   auto index = std::make_shared<MultiIndex>(1);
@@ -79,7 +79,7 @@ int main(int argc, char** argv){
   kernels[0] = std::make_shared<FusedGMHKernel>(pt, problem, proposal);
 
   auto chain = std::make_shared<SingleChainMCMC>(pt, kernels);
-  chain->SetState(initialParameterValues);
+  chain->SetState(initialParameterValuesAndVariance.values);
   std::shared_ptr<SampleCollection> samps = chain->Run();
 
   try
