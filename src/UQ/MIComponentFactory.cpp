@@ -21,10 +21,11 @@ std::shared_ptr<UQ::MCMCProposal> UQ::MyMIComponentFactory::Proposal(
   size_t numberOfParameters = materialParameterWriter->numberOfParameters();
 
   auto mu = Eigen::VectorXd::Zero(numberOfParameters);
-  Eigen::MatrixXd cov = Eigen::MatrixXd::Identity(numberOfParameters, numberOfParameters);
+  // Eigen::MatrixXd cov = Eigen::MatrixXd::Identity(numberOfParameters, numberOfParameters);
+  auto cov = Eigen::VectorXd::Zero(numberOfParameters);
   
   for (size_t i=0; i < numberOfParameters; i++) {
-    cov(i, i) = startingParameters.variances(i);
+    cov(i) = startingParameters.variances(i); // cov(i, i)
   }
 
   auto prior = std::make_shared<Gaussian>(mu, cov, Gaussian::Mode::Covariance);
@@ -55,10 +56,11 @@ UQ::MyMIComponentFactory::SamplingProblem(std::shared_ptr<MultiIndex> const& ind
   size_t numberOfParameters = materialParameterWriter->numberOfParameters();
 
   auto mu = Eigen::VectorXd::Zero(numberOfParameters);
-  Eigen::MatrixXd cov = Eigen::MatrixXd::Identity(numberOfParameters, numberOfParameters);
-  
+  // Eigen::MatrixXd cov = Eigen::MatrixXd::Identity(numberOfParameters, numberOfParameters);
+  auto cov = Eigen::VectorXd::Zero(numberOfParameters);
+
   for (size_t i=0; i < numberOfParameters; i++) {
-    cov(i, i) = startingParameters.variances(i);
+    cov(i) = startingParameters.variances(i); // cov(i, i)
   }
 
   auto prior = std::make_shared<Gaussian>(mu, cov, Gaussian::Mode::Covariance);
