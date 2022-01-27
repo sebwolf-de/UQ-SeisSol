@@ -1,7 +1,6 @@
 #include "MUQ/SamplingAlgorithms/SamplingProblem.h"
 #include "MUQ/SamplingAlgorithms/SingleChainMCMC.h"
 
-// #include "MUQ/SamplingAlgorithms/GMHKernel.h"
 #include "MUQ/SamplingAlgorithms/FusedGMHKernel.h"
 #include "MUQ/SamplingAlgorithms/TransitionKernel.h"
 #include "MUQ/SamplingAlgorithms/SampleCollection.h"
@@ -61,13 +60,7 @@ int main(int argc, char** argv){
   pt.put("verbosity", 1); // show some output
   pt.put("BurnIn", 1);
   pt.put("NumSamples", parameterReader.getNumberOfSamples(0));
-  pt.put("PrintLevel", 1);
-  // for (size_t i = 0; i < parameterReader.getNumberOfIndices(); i++) {
-  //   char buffer_num[13];
-  //   sprintf(buffer_num, "NumSamples_%lu", i);
-  //   pt.put(buffer_num, parameterReader.getNumberOfSamples(i));
-  //   spdlog::info("Use {} samples on level {}", parameterReader.getNumberOfSamples(i), i);
-  // }
+  pt.put("PrintLevel", 0);
 
   const unsigned int N = numberOfFusedSims;
   const unsigned int M = numberOfFusedSims;
