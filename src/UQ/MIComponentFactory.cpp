@@ -21,16 +21,16 @@ std::shared_ptr<UQ::MCMCProposal> UQ::MyMIComponentFactory::Proposal(
   size_t numberOfParameters = materialParameterWriter->numberOfParameters();
 
   auto mu = Eigen::VectorXd::Zero(numberOfParameters);
-  // Eigen::MatrixXd cov = Eigen::MatrixXd::Identity(numberOfParameters, numberOfParameters);
-  Eigen::VectorXd cov = Eigen::VectorXd::Ones(numberOfParameters);
+  Eigen::MatrixXd cov = Eigen::MatrixXd::Identity(numberOfParameters, numberOfParameters);
+  // Eigen::VectorXd cov = Eigen::VectorXd::Ones(numberOfParameters);
   
   for (size_t i=0; i < numberOfParameters; i++) {
-    cov(i) = startingParameters.variances(i); // cov(i, i)
+    cov(i, i) = startingParameters.variances(i); // cov(i, i)
   }
 
   auto prior = std::make_shared<Gaussian>(mu, cov, Gaussian::Mode::Covariance);
 
-  return std::make_shared<InfMALAProposal>(pt, samplingProblem, prior); //   InfMALAProposal MHProposal
+  return std::make_shared<MALAProposal>(pt, samplingProblem, prior); //   InfMALAProposal MHProposal
 }
 
 std::shared_ptr<UQ::MultiIndex> UQ::MyMIComponentFactory::FinestIndex() {
@@ -56,11 +56,11 @@ UQ::MyMIComponentFactory::SamplingProblem(std::shared_ptr<MultiIndex> const& ind
   size_t numberOfParameters = materialParameterWriter->numberOfParameters();
 
   auto mu = Eigen::VectorXd::Zero(numberOfParameters);
-  // Eigen::MatrixXd cov = Eigen::MatrixXd::Identity(numberOfParameters, numberOfParameters);
-  Eigen::VectorXd cov = Eigen::VectorXd::Ones(numberOfParameters);
+  Eigen::MatrixXd cov = Eigen::MatrixXd::Identity(numberOfParameters, numberOfParameters);
+  // Eigen::VectorXd cov = Eigen::VectorXd::Ones(numberOfParameters);
 
   for (size_t i=0; i < numberOfParameters; i++) {
-    cov(i) = startingParameters.variances(i); // cov(i, i)
+    cov(i, i) = startingParameters.variances(i); // cov(i, i)
   }
 
   auto prior = std::make_shared<Gaussian>(mu, cov, Gaussian::Mode::Covariance);
