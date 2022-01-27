@@ -22,7 +22,7 @@ std::shared_ptr<UQ::MCMCProposal> UQ::MyMIComponentFactory::Proposal(
 
   auto mu = Eigen::VectorXd::Zero(numberOfParameters);
   // Eigen::MatrixXd cov = Eigen::MatrixXd::Identity(numberOfParameters, numberOfParameters);
-  auto cov = Eigen::VectorXd::Zero(numberOfParameters);
+  Eigen::VectorXd cov = Eigen::VectorXd::Ones(numberOfParameters);
   
   for (size_t i=0; i < numberOfParameters; i++) {
     cov(i) = startingParameters.variances(i); // cov(i, i)
@@ -57,7 +57,7 @@ UQ::MyMIComponentFactory::SamplingProblem(std::shared_ptr<MultiIndex> const& ind
 
   auto mu = Eigen::VectorXd::Zero(numberOfParameters);
   // Eigen::MatrixXd cov = Eigen::MatrixXd::Identity(numberOfParameters, numberOfParameters);
-  auto cov = Eigen::VectorXd::Zero(numberOfParameters);
+  Eigen::VectorXd cov = Eigen::VectorXd::Ones(numberOfParameters);
 
   for (size_t i=0; i < numberOfParameters; i++) {
     cov(i) = startingParameters.variances(i); // cov(i, i)
