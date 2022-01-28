@@ -41,6 +41,8 @@ int main(int argc, char** argv){
 
   runner->archivePreviousRun();
 
+  std::cout << parameterReader.getMaterialFileTemplateKeys() << std::endl;
+
   auto initialParameterValuesAndVariance = parameterReader.getInitialMaterialParameterValuesAndVariance();
   size_t numberOfSubintervals = parameterReader.getNumberOfSubintervals();
   size_t numberOfFusedSims    = parameterReader.getNumberOfFusedSims();

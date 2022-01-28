@@ -51,7 +51,7 @@ IO::ValuesAndVariances IO::ParameterReader::getInitialMaterialParameterValuesAnd
   }
 
   std::cout << "Values: " << parameterValues << std::endl;
-  std::cout <<"Variance: " << parameterVariances << std::endl;
+  std::cout << "Variance: " << parameterVariances << std::endl;
 
   return {parameterValues, parameterVariances};
 }
