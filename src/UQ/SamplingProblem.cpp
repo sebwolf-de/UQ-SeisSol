@@ -61,7 +61,7 @@ double UQ::MySamplingProblem::LogDensity(std::shared_ptr<SamplingState> const& s
 
   for (size_t fsn = 1; fsn <= numberOfFusedSims; fsn++) {
 
-    if(state->state[fsn-1].at(0) < 0) {
+    if(state->state[fsn-1][0] < 0) {
       logDensityArray[fsn-1] = -100; 
       spdlog::info("LogDensity {} = {}", fsn, logDensityArray[fsn-1]); 
       continue;
