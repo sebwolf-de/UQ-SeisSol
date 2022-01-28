@@ -41,7 +41,13 @@ int main(int argc, char** argv){
 
   runner->archivePreviousRun();
 
-  std::cout << parameterReader.getMaterialFileTemplateKeys() << std::endl;
+  auto keys = parameterReader.getMaterialFileTemplateKeys();
+  for (size_t i = 0; i < keys.size() ; i++)
+  {
+    std::cout << keys[i] << std::endl;
+  }
+  
+  
 
   auto initialParameterValuesAndVariance = parameterReader.getInitialMaterialParameterValuesAndVariance();
   size_t numberOfSubintervals = parameterReader.getNumberOfSubintervals();
