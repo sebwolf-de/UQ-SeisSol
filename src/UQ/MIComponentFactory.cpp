@@ -63,11 +63,6 @@ UQ::MyMIComponentFactory::SamplingProblem(std::shared_ptr<MultiIndex> const& ind
   Eigen::MatrixXd cov = Eigen::MatrixXd::Identity(numberOfParameters, numberOfParameters);
   // Eigen::VectorXd cov = Eigen::VectorXd::Ones(numberOfParameters);
 
-  std::cout << cov << std::endl;
-  std::cout << "---" << std::endl;
-  std::cout << startingParameters.variances << std::endl;
-  std::cout << startingParameters.values << std::endl;
-
   for (size_t i=0; i < numberOfParameters; i++) {
     cov(i, i) = startingParameters.variances(i); // cov(i, i)
   }

@@ -48,6 +48,7 @@ IO::ValuesAndVariances IO::ParameterReader::getInitialMaterialParameterValuesAnd
     const std::vector<double> parameterVector = iter->second.as<std::vector<double>>();
     parameterValues(i) = parameterVector.at(0);
     parameterVariances(i) = parameterVector.at(1);
+    i++;
   }
 
   std::cout << "Values: " << parameterValues << std::endl;
