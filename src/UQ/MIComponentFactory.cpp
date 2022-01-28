@@ -12,6 +12,8 @@
 #include "MUQ/SamplingAlgorithms/MALAProposal.h"
 #include "MUQ/SamplingAlgorithms/InfMALAProposal.h"
 
+#include <iostream>
+
 std::shared_ptr<UQ::MCMCProposal> UQ::MyMIComponentFactory::Proposal(
     [[maybe_unused]] std::shared_ptr<MultiIndex> const& index,
     std::shared_ptr<AbstractSamplingProblem> const& samplingProblem) {
@@ -27,6 +29,8 @@ std::shared_ptr<UQ::MCMCProposal> UQ::MyMIComponentFactory::Proposal(
   for (size_t i=0; i < numberOfParameters; i++) {
     cov(i, i) = startingParameters.variances(i); // cov(i, i)
   }
+
+  std::cout << cov << std::endl;
 
   auto prior = std::make_shared<Gaussian>(mu, cov, Gaussian::Mode::Covariance);
 
@@ -62,6 +66,9 @@ UQ::MyMIComponentFactory::SamplingProblem(std::shared_ptr<MultiIndex> const& ind
   for (size_t i=0; i < numberOfParameters; i++) {
     cov(i, i) = startingParameters.variances(i); // cov(i, i)
   }
+
+  std::cout << "---" << std::endl;
+  std::cout << cov << std::endl;
 
   auto prior = std::make_shared<Gaussian>(mu, cov, Gaussian::Mode::Covariance);
   return std::make_shared<MySamplingProblem>(index, runner, observationsReceiverDB,
