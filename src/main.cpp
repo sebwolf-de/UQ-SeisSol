@@ -66,7 +66,7 @@ int main(int argc, char** argv){
   const unsigned int M = numberOfFusedSims;
   pt.put("NumProposals", N);
   pt.put("NumAccepted", M); // optional: defaults to N
-  // pt.put("StepSize", 0.5);
+  pt.put("StepSize", 0.5);
 
   std::vector<std::shared_ptr<TransitionKernel>> kernels(1);
   kernels[0] = std::make_shared<FusedGMHKernel>(pt, problem, proposal);
