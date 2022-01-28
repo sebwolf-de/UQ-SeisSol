@@ -66,6 +66,7 @@ UQ::MyMIComponentFactory::SamplingProblem(std::shared_ptr<MultiIndex> const& ind
   std::cout << cov << std::endl;
   std::cout << "---" << std::endl;
   std::cout << startingParameters.variances << std::endl;
+  std::cout << startingParameters.values << std::endl;
 
   for (size_t i=0; i < numberOfParameters; i++) {
     cov(i, i) = startingParameters.variances(i); // cov(i, i)

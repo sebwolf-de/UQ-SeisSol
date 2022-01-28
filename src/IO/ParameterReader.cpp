@@ -3,6 +3,8 @@
 #include <cassert>
 #include <yaml-cpp/emittermanip.h>
 
+#include <iostream>
+
 IO::ParameterReader::ParameterReader(std::string filename) : root(YAML::LoadFile(filename)) {
   assert((root["SeisSolBinary"] && "Parameter file contains link to SeisSol binary"));
   assert((root["MaterialFileTemplate"] &&
@@ -47,6 +49,9 @@ IO::ValuesAndVariances IO::ParameterReader::getInitialMaterialParameterValuesAnd
     parameterValues(i) = parameterVector.at(0);
     parameterVariances(i) = parameterVector.at(1);
   }
+
+  std::cout << "Values: " << parameterValues << std::endl;
+  std::cout <<"Variance: " << parameterVariances << std::endl;
 
   return {parameterValues, parameterVariances};
 }
