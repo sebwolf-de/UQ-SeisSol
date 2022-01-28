@@ -39,12 +39,12 @@ UQ::MySamplingProblem::MySamplingProblem(
 
 Eigen::VectorXd UQ::MySamplingProblem::GradLogDensity(std::shared_ptr<SamplingState> const& state,
                                                 unsigned                       const  blockWrt) {
-  return -1.0 * target->GradLogDensity(0, state->state); // 0 instead of wrt
+  return target->GradLogDensity(0, state->state); // 0 instead of wrt
 }
 
 double UQ::MySamplingProblem::LogDensity(std::shared_ptr<SamplingState> const& state) {
   lastState = state;
-  // std::cout << "Size of state: " << state->state.size() << std::endl;
+  
   materialParameterWriter->updateParameters(state->state);
   spdlog::info("----------------------");
   spdlog::info("Running SeisSol on index {}", index->GetValue(0));
@@ -60,6 +60,12 @@ double UQ::MySamplingProblem::LogDensity(std::shared_ptr<SamplingState> const& s
   double* logDensityArray = new double[numberOfFusedSims];
 
   for (size_t fsn = 1; fsn <= numberOfFusedSims; fsn++) {
+
+    if(state->state[fsn-1].at(0) < 0) {
+      logDensityArray[fsn-1] = -100; 
+      spdlog::info("LogDensity {} = {}", fsn, logDensityArray[fsn-1]); 
+      continue;
+    }
 
 
     std::vector<std::vector<double>> norm_diffs;
