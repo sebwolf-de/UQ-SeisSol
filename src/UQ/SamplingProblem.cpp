@@ -39,7 +39,7 @@ UQ::MySamplingProblem::MySamplingProblem(
 
 Eigen::VectorXd UQ::MySamplingProblem::GradLogDensity(std::shared_ptr<SamplingState> const& state,
                                                 unsigned                       const  blockWrt) {
-  return target->GradLogDensity(0, state->state); // 0 instead of wrt
+  return -1.0 * target->GradLogDensity(0, state->state); // 0 instead of wrt
 }
 
 double UQ::MySamplingProblem::LogDensity(std::shared_ptr<SamplingState> const& state) {
