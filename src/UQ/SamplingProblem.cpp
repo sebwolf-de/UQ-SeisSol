@@ -49,6 +49,9 @@ double UQ::MySamplingProblem::LogDensity(std::shared_ptr<SamplingState> const& s
   const double epsilon = 1e-2;
   double* logDensityArray = new double[numberOfFusedSims];
 
+
+  materialParameterWriter->updateParameters(state->state);
+
   size_t numOutOfMesh = 0;
   for (size_t fsn = 1; fsn <= numberOfFusedSims; fsn++) {
     if(state->state[fsn-1][0] < 0) {
@@ -63,7 +66,6 @@ double UQ::MySamplingProblem::LogDensity(std::shared_ptr<SamplingState> const& s
     return logDensityArray[0];
   }
 
-  materialParameterWriter->updateParameters(state->state);
   spdlog::info("----------------------");
   spdlog::info("Running SeisSol on index {}", index->GetValue(0));
   runner->prepareFilesystem(runCount);
