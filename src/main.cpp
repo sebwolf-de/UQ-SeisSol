@@ -75,15 +75,10 @@ int main(int argc, char** argv){
   chain->SetState(initialParameterValuesAndVariance.values);
   std::shared_ptr<SampleCollection> samps = chain->Run();
 
-  try
-  {
-    Eigen::VectorXd sampMean = samps->Mean();
-    std::cout << "\nSample Mean = " << sampMean.transpose() << std::endl;
-  }
-  catch(const std::exception& e)
-  {
-    std::cerr << "Exception: " << e.what() << '\n';
-  }
+  
+  Eigen::VectorXd sampMean = samps->Mean();
+  std::cout << "\nSample Mean = " << sampMean << std::endl; // .transpose()
+  
   
 
   samps->WriteToFile("test.h5");
