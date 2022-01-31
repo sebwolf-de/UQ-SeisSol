@@ -58,7 +58,10 @@ double UQ::MySamplingProblem::LogDensity(std::shared_ptr<SamplingState> const& s
     }
   }
 
-  if(numOutOfMesh==numberOfFusedSims) return logDensityArray[0];
+  if(numOutOfMesh==numberOfFusedSims) {
+    state->meta["LogTarget"] = logDensityArray; 
+    return logDensityArray[0];
+  }
 
   materialParameterWriter->updateParameters(state->state);
   spdlog::info("----------------------");
