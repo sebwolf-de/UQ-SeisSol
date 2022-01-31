@@ -45,6 +45,21 @@ Eigen::VectorXd UQ::MySamplingProblem::GradLogDensity(std::shared_ptr<SamplingSt
 double UQ::MySamplingProblem::LogDensity(std::shared_ptr<SamplingState> const& state) {
   lastState = state;
   
+  double relativeNorm = 0.0;
+  const double epsilon = 1e-2;
+  double* logDensityArray = new double[numberOfFusedSims];
+
+  size_t numOutOfMesh = 0;
+  for (size_t fsn = 1; fsn <= numberOfFusedSims; fsn++) {
+    if(state->state[fsn-1][0] < 0) {
+      logDensityArray[fsn-1] = -4000; 
+      spdlog::info("LogDensity {} = {}", fsn, logDensityArray[fsn-1]);
+      numOutOfMesh++;
+    }
+  }
+
+  if(numOutOfMesh==numberOfFusedSims) return logDensityArray[0];
+
   materialParameterWriter->updateParameters(state->state);
   spdlog::info("----------------------");
   spdlog::info("Running SeisSol on index {}", index->GetValue(0));
@@ -55,17 +70,10 @@ double UQ::MySamplingProblem::LogDensity(std::shared_ptr<SamplingState> const& s
   spdlog::info("Executed SeisSol successfully {} times", runCount);
   
   
-  double relativeNorm = 0.0;
-  const double epsilon = 1e-2;
-  double* logDensityArray = new double[numberOfFusedSims];
 
   for (size_t fsn = 1; fsn <= numberOfFusedSims; fsn++) {
 
-    if(state->state[fsn-1][0] < 0) {
-      logDensityArray[fsn-1] = -100; 
-      spdlog::info("LogDensity {} = {}", fsn, logDensityArray[fsn-1]); 
-      continue;
-    }
+    if(state->state[fsn-1][0] < 0) continue;
 
 
     std::vector<std::vector<double>> norm_diffs;
