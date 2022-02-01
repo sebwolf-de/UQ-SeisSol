@@ -8,6 +8,8 @@
 #include <string>
 #include <map>
 
+#include "spdlog/spdlog.h"
+
 IO::ReceiverReader::ReceiverReader(std::string dir, std::string prefix)
     : observationsDirectory(dir), receiverPrefix(prefix) {}
 
@@ -26,6 +28,8 @@ std::map<size_t, std::string> IO::getReceiversInDirectory(std::string directory,
       std::smatch m;
       if (std::regex_match(e.path().filename().string(), m,  matcher)) {
         fileName = e.path().string();
+        // m[1] und fileName loggen
+        spdlog::debug("ReceiverReader - m[1]: {} with fileName: {}", m[1], fileName);
         fileList.insert({std::stoi(m[1]), fileName});
       }
     }

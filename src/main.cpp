@@ -78,8 +78,7 @@ int main(int argc, char** argv){
 
   samps->WriteToFile("test.h5");
   std::cout << "Finished all" << std::endl;
-  // Eigen::VectorXd sampMean = samps->Mean();
-  std::cout << "\nSample Mean = " << samps->Mean() << std::endl; // .transpose()
+  std::cout << "Sample Mean = " << samps->Mean()[0] << std::endl; // .transpose()
   
 
   return 0;
