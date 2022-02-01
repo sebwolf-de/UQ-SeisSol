@@ -29,7 +29,7 @@ std::map<size_t, std::string> IO::getReceiversInDirectory(std::string directory,
       if (std::regex_match(e.path().filename().string(), m,  matcher)) {
         fileName = e.path().string();
         // m[1] und fileName loggen
-        spdlog::debug("ReceiverReader - m[1]: {} with fileName: {}", m[1], fileName);
+        spdlog::debug("ReceiverReader - m[1]: {} with fileName: {}", m.str(1), fileName);
         fileList.insert({std::stoi(m[1]), fileName});
       }
     }
