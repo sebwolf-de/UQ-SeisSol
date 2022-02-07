@@ -9,6 +9,7 @@
 #include <map>
 
 #include "spdlog/spdlog.h"
+#include <iostream>
 
 IO::ReceiverReader::ReceiverReader(std::string dir, std::string prefix)
     : observationsDirectory(dir), receiverPrefix(prefix) {}
@@ -20,7 +21,7 @@ std::map<size_t, std::string> IO::getReceiversInDirectory(std::string directory,
   }
 
   std::string fileName;
-  std::regex matcher(prefix + "-([0-9])*-.*\\.dat");
+  std::regex matcher(prefix + "-([0-9]{5})-.{5}\\.dat");
 
   for (boost::filesystem::directory_entry& e :
        boost::filesystem::directory_iterator(directory)) {
@@ -28,9 +29,17 @@ std::map<size_t, std::string> IO::getReceiversInDirectory(std::string directory,
       std::smatch m;
       if (std::regex_match(e.path().filename().string(), m,  matcher)) {
         fileName = e.path().string();
-        // m[1] und fileName loggen
-        spdlog::debug("ReceiverReader - m[1]: {} with fileName: {}", m[1], fileName);
-        fileList.insert({std::stoi(m[1]), fileName});
+        try
+        {
+          fileList.insert({std::stoi(m[1]), fileName});
+        }
+        catch(const std::exception& e)
+        {
+          // m[1] und fileName loggen
+          spdlog::debug("ReceiverReader - m[1]: {} with fileName: {}", m[1], fileName);
+          std::cerr << e.what() << '\n';
+        }
+        
       }
     }
   }
