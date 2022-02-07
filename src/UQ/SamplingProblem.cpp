@@ -55,7 +55,7 @@ double UQ::MySamplingProblem::LogDensity(std::shared_ptr<SamplingState> const& s
   size_t numOutOfMesh = 0;
   for (size_t fsn = 1; fsn <= numberOfFusedSims; fsn++) {
     if(state->state[fsn-1][0] < 0) {
-      logDensityArray[fsn-1] = -12000; 
+      logDensityArray[fsn-1] = -1200000; 
       spdlog::info("LogDensity {} = {}", fsn, logDensityArray[fsn-1]);
       numOutOfMesh++;
     }
