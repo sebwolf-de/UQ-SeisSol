@@ -9,7 +9,7 @@
 #include "SeisSol/Runner.h"
 
 
-#include "MUQ/SamplingAlgorithms/MALAProposal.h"
+#include "MUQ/SamplingAlgorithms/InfMALAProposal.h"
 #include "MUQ/SamplingAlgorithms/MHProposal.h"
 
 std::shared_ptr<UQ::MCMCProposal> UQ::MyMIComponentFactory::Proposal(
@@ -30,7 +30,7 @@ std::shared_ptr<UQ::MCMCProposal> UQ::MyMIComponentFactory::Proposal(
 
   auto prior = std::make_shared<Gaussian>(mu, cov, Gaussian::Mode::Covariance);
 
-  return std::make_shared<MALAProposal>(pt, samplingProblem, prior); //   InfMALAProposal MHProposal
+  return std::make_shared<InfMALAProposal>(pt, samplingProblem, prior); //   InfMALAProposal MHProposal
 }
 
 std::shared_ptr<UQ::MultiIndex> UQ::MyMIComponentFactory::FinestIndex() {
