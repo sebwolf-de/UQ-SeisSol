@@ -36,7 +36,7 @@ std::map<size_t, std::string> IO::getReceiversInDirectory(std::string directory,
         catch(const std::exception& e)
         {
           // m[1] und fileName loggen
-          spdlog::debug("ReceiverReader - m[1]: {} with fileName: {}", m[1], fileName);
+          spdlog::debug("ReceiverReader - m[1]: {} with fileName: {}", m.str(1), fileName);
           std::cerr << e.what() << '\n';
         }
         
