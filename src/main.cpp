@@ -76,7 +76,14 @@ int main(int argc, char** argv){
   std::shared_ptr<SampleCollection> samps = chain->Run();
 
 
-  samps->WriteToFile("test.h5");
+  try
+  {
+    samps->WriteToFile("test.h5");
+  }
+  catch(const std::exception& e)
+  {
+    std::cerr << 'Error: ' << e.what() << '\n';
+  }
   std::cout << "Finished all" << std::endl;
   // try
   // {
