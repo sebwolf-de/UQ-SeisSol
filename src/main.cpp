@@ -63,7 +63,7 @@ int main(int argc, char** argv){
   pt.put("PrintLevel", 3);
 
   const unsigned int N = numberOfFusedSims;
-  const unsigned int M = numberOfFusedSims/2;
+  const unsigned int M = numberOfFusedSims; // /2;
   pt.put("NumProposals", N);
   pt.put("NumAccepted", M); // optional: defaults to N
   // pt.put("StepSize", 0.5);
@@ -77,15 +77,15 @@ int main(int argc, char** argv){
 
 
   samps->WriteToFile("test.h5");
-  try
-  {
-    std::cout << "Finished all" << std::endl;
-    std::cout << "Sample Mean = " << samps->Mean()[0] << std::endl; // .transpose()
-  }
-  catch(const std::exception& e)
-  {
-    std::cerr << "Error is: " << e.what() << '\n';
-  }
+  std::cout << "Finished all" << std::endl;
+  // try
+  // {
+  //   std::cout << "Sample Mean = " << samps->Mean()[0] << std::endl; // .transpose()
+  // }
+  // catch(const std::exception& e)
+  // {
+  //   std::cerr << "Error is: " << e.what() << '\n';
+  // }
   
   
   
