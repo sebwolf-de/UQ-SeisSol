@@ -60,7 +60,7 @@ int main(int argc, char** argv){
   pt.put("verbosity", 1); // show some output
   pt.put("BurnIn", 1);
   pt.put("NumSamples", parameterReader.getNumberOfSamples(0));
-  pt.put("PrintLevel", 0);
+  pt.put("PrintLevel", 3);
 
   const unsigned int N = numberOfFusedSims;
   const unsigned int M = numberOfFusedSims/2;
