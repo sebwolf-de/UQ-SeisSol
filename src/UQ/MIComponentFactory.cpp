@@ -11,6 +11,7 @@
 
 #include "MUQ/SamplingAlgorithms/InfMALAProposal.h"
 #include "MUQ/SamplingAlgorithms/MHProposal.h"
+#include "MUQ/SamplingAlgorithms/MALAProposal.h"
 
 std::shared_ptr<UQ::MCMCProposal> UQ::MyMIComponentFactory::Proposal(
     [[maybe_unused]] std::shared_ptr<MultiIndex> const& index,
