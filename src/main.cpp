@@ -63,7 +63,7 @@ int main(int argc, char** argv){
   pt.put("PrintLevel", 1);
 
   const unsigned int N = numberOfFusedSims;
-  const unsigned int M = numberOfFusedSims; // /2;
+  const unsigned int M = numberOfFusedSims/2;
   pt.put("NumProposals", N);
   pt.put("NumAccepted", M); // optional: defaults to N
   // pt.put("StepSize", 0.5);
