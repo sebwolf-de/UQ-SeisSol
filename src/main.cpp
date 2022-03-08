@@ -80,8 +80,16 @@ int main(int argc, char** argv){
   {
     samps->WriteToFile("test.h5");
     std::cout << "Sample Mean = " << samps->Mean() << std::endl;
-    std::cout << "ESS = " << samps->ESS() << std::endl;
     std::cout << "Variance = " << samps->Variance() << std::endl;
+  }
+  catch(const std::exception& e)
+  {
+    std::cout << "Error: ";
+    std::cerr << e.what() << '\n';
+  }
+  try
+  {
+    std::cout << "ESS = " << samps->ESS() << std::endl;
   }
   catch(const std::exception& e)
   {
