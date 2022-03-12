@@ -76,6 +76,10 @@ int main(int argc, char** argv){
   std::shared_ptr<SampleCollection> samps = chain->Run();
 
 
+  #include <chrono>
+  #include <thread>
+  std::this_thread::sleep_for(std::chrono::seconds(2));
+
   try
   {
     samps->WriteToFile("test.h5");
