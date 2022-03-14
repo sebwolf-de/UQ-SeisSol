@@ -80,26 +80,10 @@ int main(int argc, char** argv){
   #include <thread>
   std::this_thread::sleep_for(std::chrono::seconds(2));
 
-  try
-  {
-    samps->WriteToFile("test.h5");
-    std::cout << "Sample Mean = " << samps->Mean() << std::endl;
-    std::cout << "Variance = " << samps->Variance() << std::endl;
-  }
-  catch(const std::exception& e)
-  {
-    std::cout << "Error: ";
-    std::cerr << e.what() << '\n';
-  }
-  try
-  {
-    std::cout << "ESS = " << samps->ESS() << std::endl;
-  }
-  catch(const std::exception& e)
-  {
-    std::cout << "Error: ";
-    std::cerr << e.what() << '\n';
-  }
+  samps->WriteToFile("test.h5");
+  std::cout << "Sample Mean = " << samps->Mean() << std::endl;
+  std::cout << "Variance = " << samps->Variance() << std::endl;
+  std::cout << "ESS = " << samps->ESS() << std::endl;
   std::cout << "Finished all" << std::endl;
   // try
   // {
