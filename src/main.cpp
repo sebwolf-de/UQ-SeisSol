@@ -65,7 +65,7 @@ int main(int argc, char** argv){
   const unsigned int N = numberOfFusedSims;
   const unsigned int M = numberOfFusedSims; // /2;
   pt.put("NumProposals", N);
-  pt.put("NumAccepted", M); // optional: defaults to N
+  pt.put("NumAccepted", M);
   // pt.put("StepSize", 0.5);
 
   std::vector<std::shared_ptr<TransitionKernel>> kernels(1);
@@ -75,26 +75,11 @@ int main(int argc, char** argv){
   chain->SetState(initialParameterValuesAndVariance.values);
   std::shared_ptr<SampleCollection> samps = chain->Run();
 
-
-  #include <chrono>
-  #include <thread>
-  std::this_thread::sleep_for(std::chrono::seconds(2));
-
   samps->WriteToFile("test.h5");
-  std::cout << "Sample Mean = " << samps->Mean() << std::endl;
-  std::cout << "Variance = " << samps->Variance() << std::endl;
-  std::cout << "ESS = " << samps->ESS() << std::endl;
-  std::cout << "Finished all" << std::endl;
-  // try
-  // {
-  //   std::cout << "Sample Mean = " << samps->Mean()[0] << std::endl; // .transpose()
-  // }
-  // catch(const std::exception& e)
-  // {
-  //   std::cerr << "Error is: " << e.what() << '\n';
-  // }
-  
-  
+  std::cout << "Sample Mean = " << samps->Mean().transpose() << std::endl;
+  std::cout << "Variance = " << samps->Variance().transpose() << std::endl;
+  std::cout << "ESS = " << samps->ESS().transpose() << std::endl;
+  std::cout << "Finished all" << std::endl; 
   
 
   return 0;
