@@ -3,36 +3,63 @@ name: CMake
 on: [push]
 
 jobs:
-    build:
+    prepare:
       runs-on: ubuntu-20.04
-
-      strategy:
-        matrix:
-          build_type: ["Release", "Debug", "ALL_WARNINGS"]
 
       steps:
       - uses: actions/checkout@v2
 
       - name: install dependencies
         run: |
-          sudo apt-get install libeigen3-dev libhdf5-dev libboost-filesystem-dev libboost-dev libboost-graph-dev libyaml-cpp-dev libopenmpi-dev
-          conda install -c conda-forge muq cmake spdlog
-          ls $CONDA/lib/cmake
-          ls $CONDA/lib/cmake/MUQ
+          sudo apt-get install libeigen3-dev libhdf5-dev libboost-filesystem-dev libboost-dev libboost-graph-dev libyaml-cpp-dev libopenmpi-dev doxygen libnlopt-dev libspdlog-dev otf-trace
+
+      - name: install MUQ
+        run: |
+          cd ..
+          mkdir -p $HOME/opt
+          ls -la
+          git clone https://github.com/sebwolf-de/MUQ
+          cd MUQ/build
+          git checkout fused-simulations
+          cmake .. -DCMAKE_INSTALL_PREFIX=$HOME/opt -DMUQ_USE_MPI=ON
+          make install -j $(nproc) 
+          cd $HOME/opt
+          ls -la
+
+      - uses: actions/upload-artifact@master
+        with:
+          name: prebuilt-muq
+          path: /home/runner/opt
+
+    build:
+      runs-on: ubuntu-20.04
+      needs: prepare
+
+      strategy:
+        matrix:
+          build_type: ["Release", "Debug", "ALL_WARNINGS"]
+
+      steps: 
+      - uses: actions/checkout@v2
+
+      - uses: actions/download-artifact@master
+        with:
+          name: prebuilt-muq
+          path: /home/runner/opt
 
       - name: Create Build Environment
         run: |
+          sudo apt-get install libeigen3-dev libhdf5-dev libboost-filesystem-dev libboost-dev libboost-graph-dev libyaml-cpp-dev libopenmpi-dev doxygen libnlopt-dev libspdlog-dev otf-trace
           cmake -E make_directory ${{github.workspace}}/build
 
       - name: Configure CMake
         shell: bash
         working-directory: ${{github.workspace}}/build
         run: |
-          cmake $GITHUB_WORKSPACE -DCMAKE_CXX_FLAGS_ALL_WARNINGS:STRING="-Wall -Wextra -Wpedantic -Werror" -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} -DCMAKE_PREFIX_PATH=$CONDA/lib/cmake
-          echo "done"
+          cmake $GITHUB_WORKSPACE -DCMAKE_CXX_FLAGS_ALL_WARNINGS:STRING="-Wall -Wextra -Wpedantic -Werror" -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} -DCMAKE_PREFIX_PATH=$HOME/opt
 
       - name: Build
         working-directory: ${{github.workspace}}/build
         shell: bash
         run: |
-          cmake --build .
+          cmake --build . -j $(nproc)
