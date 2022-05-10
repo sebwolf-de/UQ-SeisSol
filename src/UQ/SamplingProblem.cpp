@@ -8,6 +8,7 @@
 #include <numeric>
 #include <functional>
 #include <iterator>
+#include <cmath>
 
 #include "spdlog/spdlog.h"
 
@@ -74,8 +75,9 @@ double UQ::MySamplingProblem::LogDensity(std::shared_ptr<SamplingState> const& s
     relativeNorm += receiverRelativeNorm;
     spdlog::debug("Relative norm of receiver {}: {}", i, receiverRelativeNorm);
   }
+  relativeNorm /= observationsReceiverDB->numberOfReceivers();
 
-  const auto logDensity = -std::pow(relativeNorm, 2);
+  const auto logDensity = -std::pow(relativeNorm-2, 4);
   spdlog::info("LogDensity = {}", logDensity);
   return logDensity;
 }
