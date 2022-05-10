@@ -11,6 +11,7 @@
 #include "MUQ/Utilities/MultiIndices/MultiIndex.h"
 
 #include "IO/MaterialParameterWriter.h"
+#include "IO/ParameterReader.h"
 #include "SeisSol/ReceiverDB.h"
 #include "SeisSol/Runner.h"
 
@@ -41,7 +42,7 @@ std::shared_ptr<MultiIndex> const& coarseIndex,
                        std::shared_ptr<SeisSol::ReceiverDB> observationsReceiverDB,
                        std::shared_ptr<SeisSol::ReceiverDB> simulationsReceiverDB,
                        std::shared_ptr<IO::MaterialParameterWriter> materialParameterWriter,
-                       const Eigen::VectorXd& startingParameters,
+                       const IO::ValuesAndVariances& startingParameters,
                        size_t finestIndex,
                        size_t numberOfSubintervals);
 
@@ -50,7 +51,7 @@ std::shared_ptr<MultiIndex> const& coarseIndex,
   const std::shared_ptr<SeisSol::ReceiverDB> observationsReceiverDB;
   const std::shared_ptr<SeisSol::ReceiverDB> simulationsReceiverDB;
   const std::shared_ptr<IO::MaterialParameterWriter> materialParameterWriter;
-  const Eigen::VectorXd& startingParameters;
+  const IO::ValuesAndVariances& startingParameters;
   const size_t finestIndex;
   size_t numberOfSubintervals;
 };

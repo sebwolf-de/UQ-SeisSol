@@ -34,17 +34,21 @@ std::vector<std::string> IO::ParameterReader::getMaterialFileTemplateKeys() cons
   return parameterKeys;
 }
 
-Eigen::VectorXd IO::ParameterReader::getInitialMaterialParameterValues() const {
+IO::ValuesAndVariances IO::ParameterReader::getInitialMaterialParameterValuesAndVariance() const {
   auto parametersNode = root["InitialParameters"];
   Eigen::VectorXd parameterValues(parametersNode.size());
+  Eigen::VectorXd parameterVariances(parametersNode.size());
 
   size_t i = 0;
 
   for (YAML::const_iterator iter = parametersNode.begin(); iter != parametersNode.end(); ++iter) {
-    parameterValues(i++) = iter->second.as<double>();
+    const std::vector<double> parameterVector = iter->second.as<std::vector<double>>();
+    parameterValues(i) = parameterVector.at(0);
+    parameterVariances(i) = parameterVector.at(1);
+    i++;
   }
 
-  return parameterValues;
+  return {parameterValues, parameterVariances};
 }
 
 std::string IO::ParameterReader::getObservationDir() const {

@@ -6,13 +6,18 @@
 
 namespace IO {
 
+struct ValuesAndVariances {
+  Eigen::VectorXd values;
+  Eigen::VectorXd variances;
+};
+
 class ParameterReader {
   public:
   ParameterReader(std::string filename);
   std::string getSeisSolBinary() const;
   std::string getMaterialFileTemplate() const;
   std::vector<std::string> getMaterialFileTemplateKeys() const;
-  Eigen::VectorXd getInitialMaterialParameterValues() const;
+  ValuesAndVariances getInitialMaterialParameterValuesAndVariance() const;
   std::string getObservationDir() const;
   size_t getNumberOfReceivers() const;
   size_t getNumberOfSamples(size_t index) const;

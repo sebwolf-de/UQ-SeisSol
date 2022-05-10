@@ -3,9 +3,9 @@ ParametersFile:         "parameters.par"
 
 MaterialFileTemplate:   "source/source_template.dat"
 InitialParameters:
-  param_source_x:   200
-  param_source_y:  -400
-  param_source_z:  1200
+  param_source_x:  [   0.0, 100]
+  param_source_y:  [-400,   100]
+  param_source_z:  [1200,   100]
 
 ObservationDirectory:   "observations"
 ReceiverPrefix:         "output-receiver"
