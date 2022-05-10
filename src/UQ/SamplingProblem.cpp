@@ -37,8 +37,7 @@ UQ::MySamplingProblem::MySamplingProblem(
       spdlog::info("Run Sampling Problem with index {}", index->GetValue(0));
 }
 
-Eigen::VectorXd UQ::MySamplingProblem::GradLogDensity(std::shared_ptr<SamplingState> const& state,
-                                                unsigned                       const  blockWrt) {
+Eigen::VectorXd UQ::MySamplingProblem::GradLogDensity(std::shared_ptr<SamplingState> const& state, [[maybe_unused]] unsigned blockWrt) {
   return target->GradLogDensity(0, state->state); // 0 instead of wrt
 }
 

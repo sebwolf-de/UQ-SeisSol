@@ -5,7 +5,7 @@
 #include <vector>
 
 
-SeisSol::ReceiverDB::ReceiverDB(std::string directory, std::string prefix, size_t fsn)
+SeisSol::ReceiverDB::ReceiverDB(std::string directory, std::string prefix, [[maybe_unused]] size_t fsn)
     : receiverReader(IO::ReceiverReader(directory, prefix)), directory(directory), prefix(prefix) {}
 
 void SeisSol::ReceiverDB::addReceiver(size_t i, size_t fsn) {
