@@ -2,10 +2,9 @@
 #include "MUQ/SamplingAlgorithms/SingleChainMCMC.h"
 
 #include "MUQ/SamplingAlgorithms/FusedGMHKernel.h"
-#include "MUQ/SamplingAlgorithms/TransitionKernel.h"
 #include "MUQ/SamplingAlgorithms/SampleCollection.h"
+#include "MUQ/SamplingAlgorithms/TransitionKernel.h"
 #include "MUQ/Utilities/MultiIndices/MultiIndex.h"
-
 
 #include <boost/property_tree/ptree.hpp>
 
@@ -18,16 +17,15 @@
 
 #include "spdlog/spdlog.h"
 
-#include <iostream>
-#include <Eigen/Dense>
 #include <Eigen/Core>
+#include <Eigen/Dense>
+#include <iostream>
 
 using namespace muq::Modeling;
 using namespace muq::SamplingAlgorithms;
 using namespace muq::Utilities;
 
-
-int main(int argc, char** argv){
+int main(int argc, char** argv) {
   assert(argc == 2);
   spdlog::set_level(spdlog::level::debug); // Set global log level to debug
 
@@ -41,14 +39,15 @@ int main(int argc, char** argv){
 
   runner->archivePreviousRun();
 
-  auto initialParameterValuesAndVariance = parameterReader.getInitialMaterialParameterValuesAndVariance();
+  auto initialParameterValuesAndVariance =
+      parameterReader.getInitialMaterialParameterValuesAndVariance();
   size_t numberOfSubintervals = parameterReader.getNumberOfSubintervals();
-  size_t numberOfFusedSims    = parameterReader.getNumberOfFusedSims();
+  size_t numberOfFusedSims = parameterReader.getNumberOfFusedSims();
 
   auto miComponentFactory = std::make_shared<UQ::MyMIComponentFactory>(
       runner, observationsReceiverDB, simulationsReceiverDB, materialParameterWriter,
-      initialParameterValuesAndVariance, parameterReader.getNumberOfIndices()-1, numberOfSubintervals, numberOfFusedSims);
-
+      initialParameterValuesAndVariance, parameterReader.getNumberOfIndices() - 1,
+      numberOfSubintervals, numberOfFusedSims);
 
   auto index = std::make_shared<MultiIndex>(1);
   index->SetValue(0, 0);
@@ -79,8 +78,7 @@ int main(int argc, char** argv){
   std::cout << "Sample Mean = " << samps->Mean().transpose() << std::endl;
   std::cout << "Variance = " << samps->Variance().transpose() << std::endl;
   std::cout << "ESS = " << samps->ESS().transpose() << std::endl;
-  std::cout << "Finished all" << std::endl; 
-  
+  std::cout << "Finished all" << std::endl;
 
   return 0;
 }

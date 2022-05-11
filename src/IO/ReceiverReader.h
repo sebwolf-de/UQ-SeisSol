@@ -1,8 +1,8 @@
 #pragma once
 
 #include "SeisSol/Receiver.h"
-#include <string>
 #include <map>
+#include <string>
 
 namespace IO {
 

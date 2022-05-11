@@ -29,7 +29,7 @@ class MyMIComponentFactory : public MIComponentFactory {
   virtual std::shared_ptr<MultiIndex> FinestIndex() override;
   virtual std::shared_ptr<MCMCProposal>
   CoarseProposal(std::shared_ptr<MultiIndex> const& fineIndex,
-std::shared_ptr<MultiIndex> const& coarseIndex,
+                 std::shared_ptr<MultiIndex> const& coarseIndex,
                  std::shared_ptr<AbstractSamplingProblem> const& coarseProblem,
                  std::shared_ptr<SingleChainMCMC> const& coarseChain) override;
   virtual std::shared_ptr<AbstractSamplingProblem>
@@ -42,10 +42,8 @@ std::shared_ptr<MultiIndex> const& coarseIndex,
                        std::shared_ptr<SeisSol::ReceiverDB> observationsReceiverDB,
                        std::shared_ptr<SeisSol::ReceiverDB> simulationsReceiverDB,
                        std::shared_ptr<IO::MaterialParameterWriter> materialParameterWriter,
-                       const IO::ValuesAndVariances& startingParameters,
-                       size_t finestIndex,
-                       size_t numberOfSubintervals,
-                       size_t numberOfFusedSims);
+                       const IO::ValuesAndVariances& startingParameters, size_t finestIndex,
+                       size_t numberOfSubintervals, size_t numberOfFusedSims);
 
   private:
   const std::shared_ptr<SeisSol::Runner> runner;

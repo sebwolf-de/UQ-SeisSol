@@ -26,7 +26,7 @@ class MySamplingProblem : public AbstractSamplingProblem {
                     std::shared_ptr<SeisSol::ReceiverDB> observationsReceiverDB,
                     std::shared_ptr<SeisSol::ReceiverDB> simulationsReceiverDB,
                     std::shared_ptr<IO::MaterialParameterWriter> materialParameterWriter,
-                    size_t numberOfSubintervals, size_t numberOfFusedSims, 
+                    size_t numberOfSubintervals, size_t numberOfFusedSims,
                     std::shared_ptr<muq::Modeling::Gaussian> const& targetIn);
 
   virtual ~MySamplingProblem(){};
@@ -35,7 +35,7 @@ class MySamplingProblem : public AbstractSamplingProblem {
   virtual std::shared_ptr<SamplingState> QOI() override;
   // Needed for MALAProposal:
   virtual Eigen::VectorXd GradLogDensity(std::shared_ptr<SamplingState> const& state,
-                                             unsigned                   const  blockWrt);
+                                         unsigned const blockWrt);
 
   private:
   std::shared_ptr<SeisSol::Runner> runner;

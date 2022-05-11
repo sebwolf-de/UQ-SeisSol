@@ -1,16 +1,15 @@
 #include "Runner.h"
 
+#include <map>
 #include <string>
 #include <sys/wait.h>
 #include <unistd.h>
-#include <map>
 
-#include <boost/filesystem.hpp>
-#include "spdlog/spdlog.h"
 #include "IO/ReceiverReader.h"
+#include "spdlog/spdlog.h"
+#include <boost/filesystem.hpp>
 
-SeisSol::Runner::Runner(std::string seisSolBinaryPath)
-    : binaryPath(seisSolBinaryPath) {}
+SeisSol::Runner::Runner(std::string seisSolBinaryPath) : binaryPath(seisSolBinaryPath) {}
 
 void SeisSol::Runner::run(size_t index) const {
   int status;
@@ -30,8 +29,8 @@ void SeisSol::Runner::run(size_t index) const {
 
     // execl returns -1 if there was an error
     // execl does not return if the command was successful
-    
-      std::string parameterFile = "parameters_" + std::to_string(index) + ".par";
+
+    std::string parameterFile = "parameters_" + std::to_string(index) + ".par";
     seissolError = execlp("srun", "srun", binaryPath.c_str(), parameterFile.c_str(), NULL);
 
     if (seissolError == -1)
@@ -56,10 +55,11 @@ void SeisSol::Runner::prepareFilesystem(size_t runCount) const {
   std::string current = "output/current";
   const auto receiverList = IO::getReceiversInDirectory(current, "output-receiver");
   for (auto it = receiverList.begin(); it != receiverList.end(); it++) {
-    //TODO: use C++20 std::format
-    char buffer [6];
-    sprintf (buffer, "%05lu", runCount);
-    const std::string output = chain + "/receiver-" + std::to_string(it->first) + "-chain-" + buffer + ".dat";
+    // TODO: use C++20 std::format
+    char buffer[6];
+    sprintf(buffer, "%05lu", runCount);
+    const std::string output =
+        chain + "/receiver-" + std::to_string(it->first) + "-chain-" + buffer + ".dat";
     boost::filesystem::copy_file(it->second, output);
   }
   boost::filesystem::remove_all(current);
@@ -80,14 +80,19 @@ void SeisSol::Runner::archivePreviousRun() const {
 
     size_t numOfArchivedRuns = 0;
 
-    for ([[maybe_unused]] boost::filesystem::directory_entry& e : boost::filesystem::directory_iterator(archiveDirectory)) {
+    for ([[maybe_unused]] boost::filesystem::directory_entry& e :
+         boost::filesystem::directory_iterator(archiveDirectory)) {
       numOfArchivedRuns += 1;
     }
 
-    boost::filesystem::create_directory(archiveDirectory + "/run-" + std::to_string(numOfArchivedRuns + 1));
+    boost::filesystem::create_directory(archiveDirectory + "/run-" +
+                                        std::to_string(numOfArchivedRuns + 1));
 
-    for (boost::filesystem::directory_entry& e : boost::filesystem::directory_iterator(chainDirectory)) {
-      boost::filesystem::copy_file(e.path(), archiveDirectory + "/run-" + std::to_string(numOfArchivedRuns + 1) + "/" + e.path().filename().string());
+    for (boost::filesystem::directory_entry& e :
+         boost::filesystem::directory_iterator(chainDirectory)) {
+      boost::filesystem::copy_file(e.path(), archiveDirectory + "/run-" +
+                                                 std::to_string(numOfArchivedRuns + 1) + "/" +
+                                                 e.path().filename().string());
     }
 
     boost::filesystem::remove_all(chainDirectory);

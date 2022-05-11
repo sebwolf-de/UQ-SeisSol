@@ -18,7 +18,9 @@ SeisSol::UQSeisSolFactory::createObservationsReceiverDB() const {
 
 std::shared_ptr<SeisSol::ReceiverDB>
 SeisSol::UQSeisSolFactory::createSimulationsReceiverDB() const {
-  return std::make_shared<SeisSol::ReceiverDB>("output/current", parameterReader.getReceiverPrefix(), parameterReader.getNumberOfFusedSims());
+  return std::make_shared<SeisSol::ReceiverDB>("output/current",
+                                               parameterReader.getReceiverPrefix(),
+                                               parameterReader.getNumberOfFusedSims());
 }
 
 std::shared_ptr<IO::MaterialParameterWriter>
@@ -35,8 +37,7 @@ SeisSol::UQSeisSolFactory::createMaterialParameterWriter() const {
   auto parameterKeys = parameterReader.getMaterialFileTemplateKeys();
 
   return std::make_shared<IO::MaterialParameterWriter>(materialFileTemplateBuffer.str(),
-                                                       outputFilename,
-                                                       parameterKeys);
+                                                       outputFilename, parameterKeys);
 }
 
 std::shared_ptr<SeisSol::Runner> SeisSol::UQSeisSolFactory::createSeisSolRunner() const {

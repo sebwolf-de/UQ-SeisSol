@@ -1,27 +1,30 @@
 #include "Receiver.h"
-#include <vector>
 #include <cmath>
+#include <vector>
 
 #include <iostream>
 
-SeisSol::Receiver::Receiver() : relevantQuantities({7,8,9}) {}
+SeisSol::Receiver::Receiver() : relevantQuantities({7, 8, 9}) {}
 
-std::vector<double> SeisSol::Receiver::l1Difference(const Receiver& otherReceiver, size_t numberOfSubintervals) const {
+std::vector<double> SeisSol::Receiver::l1Difference(const Receiver& otherReceiver,
+                                                    size_t numberOfSubintervals) const {
   // std::cout << "receiverData.size(): " << receiverData.size() << std::endl;
-  // std::cout << "otherReceiver.receiverData.size(): " << otherReceiver.receiverData.size() << std::endl;
+  // std::cout << "otherReceiver.receiverData.size(): " << otherReceiver.receiverData.size() <<
+  // std::endl;
   assert(receiverData.size() == otherReceiver.receiverData.size());
 
   std::vector<double> diffs;
-  
+
   size_t subintervalSize = std::floor(receiverData.size() / numberOfSubintervals);
-  //assume constant dt
-  const double dt = this->operator()(1,0) - this->operator()(0,0);
+  // assume constant dt
+  const double dt = this->operator()(1, 0) - this->operator()(0, 0);
 
   for (size_t s = 0; s < numberOfSubintervals; s++) {
     double l = 0.0;
 
     size_t start = s * subintervalSize;
-    size_t end = (start + subintervalSize > receiverData.size()) ? receiverData.size() : start + subintervalSize;
+    size_t end = (start + subintervalSize > receiverData.size()) ? receiverData.size()
+                                                                 : start + subintervalSize;
 
     for (size_t i = start; i < end; i++) {
       for (size_t j : relevantQuantities) {
@@ -37,16 +40,17 @@ std::vector<double> SeisSol::Receiver::l1Difference(const Receiver& otherReceive
 
 std::vector<double> SeisSol::Receiver::l1Norm(size_t numberOfSubintervals) const {
   std::vector<double> norms;
-  
+
   const size_t subintervalSize = std::floor(receiverData.size() / numberOfSubintervals);
-  //assume constant dt
-  const double dt = this->operator()(1,0) - this->operator()(0,0);
+  // assume constant dt
+  const double dt = this->operator()(1, 0) - this->operator()(0, 0);
 
   for (size_t s = 0; s < numberOfSubintervals; s++) {
     double l = 0.0;
 
     size_t start = s * subintervalSize;
-    size_t end = (start + subintervalSize > receiverData.size()) ? receiverData.size() : start + subintervalSize;
+    size_t end = (start + subintervalSize > receiverData.size()) ? receiverData.size()
+                                                                 : start + subintervalSize;
 
     for (size_t i = start; i < end; i++) {
       for (size_t j : relevantQuantities) {

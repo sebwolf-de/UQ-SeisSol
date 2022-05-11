@@ -2,16 +2,14 @@
 
 #include "MUQ/SamplingAlgorithms/MIComponentFactory.h"
 
-
 #include "UQ/MIInterpolation.h"
 #include "UQ/SamplingProblem.h"
 
 #include "SeisSol/Runner.h"
 
-
 #include "MUQ/SamplingAlgorithms/InfMALAProposal.h"
-#include "MUQ/SamplingAlgorithms/MHProposal.h"
 #include "MUQ/SamplingAlgorithms/MALAProposal.h"
+#include "MUQ/SamplingAlgorithms/MHProposal.h"
 
 std::shared_ptr<UQ::MCMCProposal> UQ::MyMIComponentFactory::Proposal(
     [[maybe_unused]] std::shared_ptr<MultiIndex> const& index,
@@ -24,14 +22,15 @@ std::shared_ptr<UQ::MCMCProposal> UQ::MyMIComponentFactory::Proposal(
   auto mu = Eigen::VectorXd::Zero(numberOfParameters);
   Eigen::MatrixXd cov = Eigen::MatrixXd::Identity(numberOfParameters, numberOfParameters);
   // Eigen::VectorXd cov = Eigen::VectorXd::Ones(numberOfParameters);
-  
-  for (size_t i=0; i < numberOfParameters; i++) {
+
+  for (size_t i = 0; i < numberOfParameters; i++) {
     cov(i, i) = startingParameters.variances(i); // cov(i, i)
   }
 
   auto prior = std::make_shared<Gaussian>(mu, cov, Gaussian::Mode::Covariance);
 
-  return std::make_shared<InfMALAProposal>(pt, samplingProblem, prior); //   InfMALAProposal MHProposal
+  return std::make_shared<InfMALAProposal>(pt, samplingProblem,
+                                           prior); //   InfMALAProposal MHProposal
 }
 
 std::shared_ptr<UQ::MultiIndex> UQ::MyMIComponentFactory::FinestIndex() {
@@ -49,7 +48,8 @@ std::shared_ptr<UQ::MCMCProposal> UQ::MyMIComponentFactory::CoarseProposal(
   ptProposal.put("BlockIndex", 0);
   int subsampling = 5;
   ptProposal.put("MLMCMC.Subsampling_0", subsampling);
-  return std::make_shared<SubsamplingMIProposal>(ptProposal, coarseProblem, coarseIndex, coarseChain);
+  return std::make_shared<SubsamplingMIProposal>(ptProposal, coarseProblem, coarseIndex,
+                                                 coarseChain);
 }
 
 std::shared_ptr<UQ::AbstractSamplingProblem>
@@ -60,22 +60,23 @@ UQ::MyMIComponentFactory::SamplingProblem(std::shared_ptr<MultiIndex> const& ind
   Eigen::MatrixXd cov = Eigen::MatrixXd::Identity(numberOfParameters, numberOfParameters);
   // Eigen::VectorXd cov = Eigen::VectorXd::Ones(numberOfParameters);
 
-  for (size_t i=0; i < numberOfParameters; i++) {
+  for (size_t i = 0; i < numberOfParameters; i++) {
     cov(i, i) = startingParameters.variances(i); // cov(i, i)
   }
 
   auto prior = std::make_shared<Gaussian>(mu, cov, Gaussian::Mode::Covariance);
   return std::make_shared<MySamplingProblem>(index, runner, observationsReceiverDB,
-                                             simulationsReceiverDB, materialParameterWriter, numberOfSubintervals, numberOfFusedSims, prior);
+                                             simulationsReceiverDB, materialParameterWriter,
+                                             numberOfSubintervals, numberOfFusedSims, prior);
 }
 
-std::shared_ptr<UQ::MIInterpolation> UQ::MyMIComponentFactory::Interpolation([
-    [maybe_unused]] std::shared_ptr<MultiIndex> const& index) {
+std::shared_ptr<UQ::MIInterpolation>
+UQ::MyMIComponentFactory::Interpolation([[maybe_unused]] std::shared_ptr<MultiIndex> const& index) {
   return std::make_shared<MyInterpolation>();
 }
 
-Eigen::VectorXd UQ::MyMIComponentFactory::StartingPoint([
-    [maybe_unused]] std::shared_ptr<MultiIndex> const& index) {
+Eigen::VectorXd
+UQ::MyMIComponentFactory::StartingPoint([[maybe_unused]] std::shared_ptr<MultiIndex> const& index) {
   return startingParameters.values;
 }
 
@@ -84,11 +85,10 @@ UQ::MyMIComponentFactory::MyMIComponentFactory(
     std::shared_ptr<SeisSol::ReceiverDB> observationsReceiverDB,
     std::shared_ptr<SeisSol::ReceiverDB> simulationsReceiverDB,
     std::shared_ptr<IO::MaterialParameterWriter> materialParameterWriter,
-    const IO::ValuesAndVariances& startingParameters,
-    size_t finestIndex,
-    size_t numberOfSubintervals,
-    size_t numberOfFusedSims)
+    const IO::ValuesAndVariances& startingParameters, size_t finestIndex,
+    size_t numberOfSubintervals, size_t numberOfFusedSims)
     : runner(runner), observationsReceiverDB(observationsReceiverDB),
       simulationsReceiverDB(simulationsReceiverDB),
       materialParameterWriter(materialParameterWriter), startingParameters(startingParameters),
-      finestIndex(finestIndex), numberOfSubintervals(numberOfSubintervals), numberOfFusedSims(numberOfFusedSims) {}
+      finestIndex(finestIndex), numberOfSubintervals(numberOfSubintervals),
+      numberOfFusedSims(numberOfFusedSims) {}
