@@ -9,7 +9,7 @@
 #include "spdlog/spdlog.h"
 #include <boost/filesystem.hpp>
 
-SeisSol::Runner::Runner(std::string seisSolBinaryPath) : binaryPath(seisSolBinaryPath) {}
+SeisSol::Runner::Runner(std::string seisSolBinaryPath) : binaryPath(std::move(seisSolBinaryPath)) {}
 
 void SeisSol::Runner::run(size_t index) const {
   int status;
@@ -33,8 +33,9 @@ void SeisSol::Runner::run(size_t index) const {
     std::string parameterFile = "parameters_" + std::to_string(index) + ".par";
     seissolError = execlp("srun", "srun", binaryPath.c_str(), parameterFile.c_str(), NULL);
 
-    if (seissolError == -1)
+    if (seissolError == -1) {
       exit(1);
+    }
   } else {
     waitpid(pid, &status, 0);
 
@@ -46,7 +47,7 @@ void SeisSol::Runner::run(size_t index) const {
   }
 }
 
-void SeisSol::Runner::prepareFilesystem(size_t runCount) const {
+void SeisSol::Runner::prepareFilesystem(size_t runCount) {
   // Copies the old receiver data to output/chain and removes them from output/current
   std::string chain = "output/chain";
   if (!boost::filesystem::exists(chain)) {
@@ -54,19 +55,19 @@ void SeisSol::Runner::prepareFilesystem(size_t runCount) const {
   }
   std::string current = "output/current";
   const auto receiverList = IO::getReceiversInDirectory(current, "output-receiver");
-  for (auto it = receiverList.begin(); it != receiverList.end(); it++) {
+  for (const auto& it : receiverList) {
     // TODO: use C++20 std::format
     char buffer[6];
     sprintf(buffer, "%05lu", runCount);
     const std::string output =
-        chain + "/receiver-" + std::to_string(it->first) + "-chain-" + buffer + ".dat";
-    boost::filesystem::copy_file(it->second, output);
+        chain + "/receiver-" + std::to_string(it.first) + "-chain-" + buffer + ".dat";
+    boost::filesystem::copy_file(it.second, output);
   }
   boost::filesystem::remove_all(current);
   boost::filesystem::create_directory(current);
 }
 
-void SeisSol::Runner::archivePreviousRun() const {
+void SeisSol::Runner::archivePreviousRun() {
   // Archives receiver output from previous UQ-SeisSol runs
   std::string chainDirectory = "output/chain";
 

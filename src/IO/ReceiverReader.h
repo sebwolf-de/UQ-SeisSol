@@ -10,7 +10,7 @@ class ReceiverReader {
   public:
   ReceiverReader(std::string dir, std::string prefix = "receiver");
   void parseReceiver(size_t number, SeisSol::Receiver& receiver, size_t fsn = 1) const;
-  void parseReceiver(std::string fileName, SeisSol::Receiver& receiver, size_t fsn = 1) const;
+  static void parseReceiver(std::string fileName, SeisSol::Receiver& receiver, size_t fsn = 1);
 
   private:
   const std::string observationsDirectory;

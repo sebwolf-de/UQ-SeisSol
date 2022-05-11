@@ -49,17 +49,25 @@ jobs:
 
       - name: Create Build Environment
         run: |
-          sudo apt-get install libeigen3-dev libhdf5-dev libboost-filesystem-dev libboost-dev libboost-graph-dev libyaml-cpp-dev libopenmpi-dev doxygen libnlopt-dev libspdlog-dev otf-trace
+          sudo apt-get install libeigen3-dev libhdf5-dev libboost-filesystem-dev libboost-dev libboost-graph-dev libyaml-cpp-dev libopenmpi-dev doxygen libnlopt-dev libspdlog-dev otf-trace clang-tidy
           cmake -E make_directory ${{github.workspace}}/build
 
       - name: Configure CMake
         shell: bash
         working-directory: ${{github.workspace}}/build
         run: |
-          cmake $GITHUB_WORKSPACE -DCMAKE_CXX_FLAGS_ALL_WARNINGS:STRING="-Wall -Wextra -Wpedantic -Werror" -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} -DCMAKE_PREFIX_PATH=$HOME/opt
+          cmake $GITHUB_WORKSPACE -DCMAKE_CXX_FLAGS_ALL_WARNINGS:STRING="-Wall -Wextra -Wpedantic -Werror" -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} -DCMAKE_PREFIX_PATH=$HOME/opt -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
 
       - name: Build
         working-directory: ${{github.workspace}}/build
         shell: bash
         run: |
           cmake --build . -j $(nproc)
+
+      - name: clang-tidy
+        working-directory: ${{github.workspace}}/build
+        shell: bash
+        continue-on-error: true
+        run: |
+          python $GITHUB_WORKSPACE/utilities/run-clang-tidy.py -header-filter=../src
+

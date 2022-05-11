@@ -61,10 +61,10 @@ int main(int argc, char** argv) {
   pt.put("NumSamples", parameterReader.getNumberOfSamples(0));
   pt.put("PrintLevel", 1);
 
-  const unsigned int N = numberOfFusedSims;
-  const unsigned int M = numberOfFusedSims; // /2;
-  pt.put("NumProposals", N);
-  pt.put("NumAccepted", M);
+  const unsigned int numberOfProposals = numberOfFusedSims;
+  const unsigned int numberOfAcceptedProposals = numberOfFusedSims; // /2;
+  pt.put("NumProposals", numberOfProposals);
+  pt.put("NumAccepted", numberOfAcceptedProposals);
   // pt.put("StepSize", 0.5);
 
   std::vector<std::shared_ptr<TransitionKernel>> kernels(1);

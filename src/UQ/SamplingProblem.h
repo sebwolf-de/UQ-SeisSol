@@ -22,20 +22,21 @@ using namespace muq::Utilities;
 
 class MySamplingProblem : public AbstractSamplingProblem {
   public:
+  constexpr static double badLogDensity = -1200000;
   MySamplingProblem(std::shared_ptr<MultiIndex> index, std::shared_ptr<SeisSol::Runner> runner,
                     std::shared_ptr<SeisSol::ReceiverDB> observationsReceiverDB,
                     std::shared_ptr<SeisSol::ReceiverDB> simulationsReceiverDB,
                     std::shared_ptr<IO::MaterialParameterWriter> materialParameterWriter,
                     size_t numberOfSubintervals, size_t numberOfFusedSims,
-                    std::shared_ptr<muq::Modeling::Gaussian> const& targetIn);
+                    std::shared_ptr<muq::Modeling::Gaussian> targetIn);
 
-  virtual ~MySamplingProblem(){};
+  ~MySamplingProblem() override = default;
 
-  virtual double LogDensity(std::shared_ptr<SamplingState> const& state) override;
-  virtual std::shared_ptr<SamplingState> QOI() override;
+  double LogDensity(std::shared_ptr<SamplingState> const& state) override;
+  std::shared_ptr<SamplingState> QOI() override;
   // Needed for MALAProposal:
-  virtual Eigen::VectorXd GradLogDensity(std::shared_ptr<SamplingState> const& state,
-                                         unsigned const blockWrt);
+  Eigen::VectorXd GradLogDensity(std::shared_ptr<SamplingState> const& state,
+                                 unsigned blockWrt) override;
 
   private:
   std::shared_ptr<SeisSol::Runner> runner;

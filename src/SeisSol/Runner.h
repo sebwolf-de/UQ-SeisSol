@@ -8,8 +8,8 @@ class Runner {
   public:
   Runner(std::string seisSolBinaryPath);
   void run(size_t index) const;
-  void prepareFilesystem(size_t runCount) const;
-  void archivePreviousRun() const;
+  static void prepareFilesystem(size_t runCount);
+  static void archivePreviousRun();
 
   private:
   const std::string binaryPath;

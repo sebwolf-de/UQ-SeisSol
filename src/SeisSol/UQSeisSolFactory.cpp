@@ -31,8 +31,10 @@ SeisSol::UQSeisSolFactory::createMaterialParameterWriter() const {
   materialFileTemplateBuffer << materialFileTemplate.rdbuf();
 
   std::string outputFilename = templateFilename;
-  size_t locationOfKey = outputFilename.find("template");
-  outputFilename.replace(locationOfKey, 8, "chain");
+  std::string key = "template";
+  size_t locationOfKey = outputFilename.find(key);
+  size_t sizeOfKey = key.length();
+  outputFilename.replace(locationOfKey, sizeOfKey, "chain");
 
   auto parameterKeys = parameterReader.getMaterialFileTemplateKeys();
 

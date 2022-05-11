@@ -46,7 +46,7 @@ std::shared_ptr<UQ::MCMCProposal> UQ::MyMIComponentFactory::CoarseProposal(
     std::shared_ptr<SingleChainMCMC> const& coarseChain) {
   pt::ptree ptProposal;
   ptProposal.put("BlockIndex", 0);
-  int subsampling = 5;
+  const int subsampling = 5;
   ptProposal.put("MLMCMC.Subsampling_0", subsampling);
   return std::make_shared<SubsamplingMIProposal>(ptProposal, coarseProblem, coarseIndex,
                                                  coarseChain);
@@ -87,8 +87,8 @@ UQ::MyMIComponentFactory::MyMIComponentFactory(
     std::shared_ptr<IO::MaterialParameterWriter> materialParameterWriter,
     const IO::ValuesAndVariances& startingParameters, size_t finestIndex,
     size_t numberOfSubintervals, size_t numberOfFusedSims)
-    : runner(runner), observationsReceiverDB(observationsReceiverDB),
-      simulationsReceiverDB(simulationsReceiverDB),
-      materialParameterWriter(materialParameterWriter), startingParameters(startingParameters),
-      finestIndex(finestIndex), numberOfSubintervals(numberOfSubintervals),
-      numberOfFusedSims(numberOfFusedSims) {}
+    : runner(std::move(runner)), observationsReceiverDB(std::move(observationsReceiverDB)),
+      simulationsReceiverDB(std::move(simulationsReceiverDB)),
+      materialParameterWriter(std::move(materialParameterWriter)),
+      startingParameters(std::move(startingParameters)), finestIndex(finestIndex),
+      numberOfSubintervals(numberOfSubintervals), numberOfFusedSims(numberOfFusedSims) {}

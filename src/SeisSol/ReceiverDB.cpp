@@ -18,7 +18,7 @@ void SeisSol::ReceiverDB::addAllReceivers(size_t fsn) {
   const auto fileNames = IO::getReceiversInDirectory(directory, prefix);
   for (const auto& entry : fileNames) {
     SeisSol::Receiver receiver;
-    receiverReader.parseReceiver(entry.second, receiver);
+    IO::ReceiverReader::parseReceiver(entry.second, receiver);
     receivers[fsn][entry.first] = receiver;
   }
 }

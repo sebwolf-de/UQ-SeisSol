@@ -4,7 +4,7 @@
 
 #include <iostream>
 
-SeisSol::Receiver::Receiver() : relevantQuantities({7, 8, 9}) {}
+SeisSol::Receiver::Receiver() : relevantQuantities({uIndex, vIndex, wIndex}) {}
 
 std::vector<double> SeisSol::Receiver::l1Difference(const Receiver& otherReceiver,
                                                     size_t numberOfSubintervals) const {
@@ -66,7 +66,9 @@ std::vector<double> SeisSol::Receiver::l1Norm(size_t numberOfSubintervals) const
 
 void SeisSol::Receiver::clear() { receiverData.clear(); }
 
-void SeisSol::Receiver::appendData(std::array<double, 10> data) { receiverData.emplace_back(data); }
+void SeisSol::Receiver::appendData(std::array<double, lineWidth> data) {
+  receiverData.emplace_back(data);
+}
 
 double SeisSol::Receiver::operator()(size_t t, size_t q) const {
   assert(t < receiverData.size());

@@ -43,7 +43,7 @@ IO::ValuesAndVariances IO::ParameterReader::getInitialMaterialParameterValuesAnd
   size_t i = 0;
 
   for (YAML::const_iterator iter = parametersNode.begin(); iter != parametersNode.end(); ++iter) {
-    const std::vector<double> parameterVector = iter->second.as<std::vector<double>>();
+    const auto parameterVector = iter->second.as<std::vector<double>>();
     parameterValues(i) = parameterVector.at(0);
     parameterVariances(i) = parameterVector.at(1);
     i++;
@@ -75,7 +75,7 @@ size_t IO::ParameterReader::getNumberOfSubintervals() const {
 }
 
 std::string IO::ParameterReader::getReceiverPrefix() const {
-  if (root["ReceiverPrefix"]) {
+  if (root["ReceiverPrefix"] != nullptr) {
     return root["ReceiverPrefix"].as<std::string>();
   } else {
     return "observation";

@@ -17,7 +17,8 @@ using namespace muq::Utilities;
 
 class MyInterpolation : public MIInterpolation {
   public:
-  std::shared_ptr<SamplingState> Interpolate(std::shared_ptr<SamplingState> const& coarseProposal,
-                                             std::shared_ptr<SamplingState> const& fineProposal);
+  std::shared_ptr<SamplingState>
+  Interpolate(std::shared_ptr<SamplingState> const& coarseProposal,
+              std::shared_ptr<SamplingState> const& fineProposal) override;
 };
 } // namespace UQ

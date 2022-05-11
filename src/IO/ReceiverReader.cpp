@@ -12,7 +12,7 @@
 #include <iostream>
 
 IO::ReceiverReader::ReceiverReader(std::string dir, std::string prefix)
-    : observationsDirectory(dir), receiverPrefix(prefix) {}
+    : observationsDirectory(std::move(dir)), receiverPrefix(std::move(prefix)) {}
 
 std::map<size_t, std::string> IO::getReceiversInDirectory(std::string directory,
                                                           std::string prefix) {
@@ -50,7 +50,7 @@ void IO::ReceiverReader::parseReceiver(size_t number, SeisSol::Receiver& receive
 }
 
 void IO::ReceiverReader::parseReceiver(std::string fileName, SeisSol::Receiver& receiver,
-                                       size_t fsn) const {
+                                       size_t fsn) {
   std::ifstream in(fileName);
   std::string line;
 
@@ -71,7 +71,7 @@ void IO::ReceiverReader::parseReceiver(std::string fileName, SeisSol::Receiver& 
   }
 
   auto parseLineFused = [](std::string line, size_t fsn) {
-    std::array<double, 10> elems;
+    std::array<double, SeisSol::Receiver::lineWidth> elems;
     std::stringstream ss(line);
     std::string item;
     size_t i = 0;
@@ -87,13 +87,13 @@ void IO::ReceiverReader::parseReceiver(std::string fileName, SeisSol::Receiver& 
       i++;
 
       // get to the part of interest
-      for (size_t j = 0; j < (fsn - 1) * 9; j++) {
+      for (size_t j = 0; j < (fsn - 1) * SeisSol::Receiver::numberOfQuantities; j++) {
         ss >> item;
       }
     }
 
     while (ss >> item) {
-      if (i > 9) {
+      if (i > SeisSol::Receiver::numberOfQuantities) {
         break;
       }
       double candidate = std::stod(item);
