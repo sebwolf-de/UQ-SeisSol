@@ -42,16 +42,18 @@ target_link_libraries(main PUBLIC MPI::MPI_C)
 
 find_package(HDF5 REQUIRED)
 target_link_libraries(main PUBLIC ${HDF5_LIBRARIES} ${HDF5_LINK_LIBRARIES})
-include_directories(SYSTEM PUBLIC ${HDF5_INCLUDE_DIRS})
+target_include_directories(main SYSTEM PUBLIC ${HDF5_INCLUDE_DIRS})
 
 find_package(MUQ REQUIRED)
 target_link_libraries(main PUBLIC ${MUQ_LIBRARIES} ${MUQ_LINK_LIBRARIES})
 message(${MUQ_INCLUDE_DIRS})
-include_directories(uq SYSTEM PUBLIC ${MUQ_INCLUDE_DIRS})
+target_include_directories(uq SYSTEM PUBLIC ${MUQ_INCLUDE_DIRS})
 
 find_package(yaml-cpp REQUIRED)
-target_link_libraries(io PUBLIC ${YAML_CPP_LIBRARIES})
-include_directories(SYSTEM PUBLIC ${YAML_CPP_INCLUDE_DIR})
+target_link_libraries(io PUBLIC yaml-cpp)
+target_link_libraries(uq PUBLIC yaml-cpp)
 
 find_package(Boost COMPONENTS system filesystem graph)
+target_include_directories(io SYSTEM PUBLIC ${Boost_INCLUDE_DIR})
 find_package(spdlog CONFIG REQUIRED)
+target_link_libraries(io PUBLIC spdlog::spdlog)
