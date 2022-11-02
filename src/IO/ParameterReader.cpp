@@ -75,7 +75,7 @@ size_t IO::ParameterReader::getNumberOfSubintervals() const {
 }
 
 std::string IO::ParameterReader::getReceiverPrefix() const {
-  if (root["ReceiverPrefix"] != nullptr) {
+  if (root["ReceiverPrefix"]) {
     return root["ReceiverPrefix"].as<std::string>();
   } else {
     return "observation";
