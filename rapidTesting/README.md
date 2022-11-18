@@ -10,3 +10,8 @@ We have references for 2s and 9s runs.
 
 # Run #
 Run with `./main uq.yaml` or have a look at the job script.
+
+# Possible adaptions #
+* Larger mesh: Use `mesh/fine.geo` to generate a new mesh with pumgen. Adapt `parameters_0.par` accordingly.
+* Longer runtime: Adapt `EndTime` in `parameters_0.par` and `ObservationDirectory` to `observations-short`.
+* Different number of fused simluations: Recompile SeisSol with the wanted number of fused simulations. Adapt `NumberOfFusedSims` in `uq.yaml` and `source/source_template.dat`.

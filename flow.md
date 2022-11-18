@@ -14,7 +14,7 @@
 ##### 1. [main.cpp](https://github.com/sebwolf-de/UQ-SeisSol/blob/main/src/main.cpp)
 - Parses the YAML configuration file passed as the first command line argument when running UQ-SeisSol.
     - Uses [IO/ParameterReader.cpp](https://github.com/sebwolf-de/UQ-SeisSol/blob/main/src/IO/ParameterReader.cpp) to assert the existence of the required parameters inside the configuration file and to read them.
-    - Uses [SeisSol/UQSeisSolFactory.cpp](https://github.com/sebwolf-de/UQ-SeisSol/blob/main/src/IO/MaterialParameterWriter.cpp) to build the corresponding instances with the configuration values.
+    - Uses [SeisSol/UQSeisSolFactory.cpp](https://github.com/sebwolf-de/UQ-SeisSol/blob/main/src/SeisSol/UQSeisSolFactory.cpp) to build the corresponding instances with the configuration values.
 - Archives the output files from the previous run inside a directory named `output_archive`. It also makes sure that the directories that will hold the SeisSol output exist.
 - Creates the `UQ/MyMIComponentFactory.cpp` instance. This is the class that configures the `MUQ` uncertainty quantification algorithm.
 - Creates the `ptree` that is passed to `MUQ` for our current uncertainty quantification run. It uses the number of indexes (and the number of samples to take on each index) as specified in the configuration YAML file.
@@ -37,16 +37,16 @@
 - Specifies the starting values of our parameters.
 
 ##### 4. [UQ/SamplingProblem.cpp](https://github.com/sebwolf-de/UQ-SeisSol/blob/main/src/UQ/SamplingProblem.cpp)
-- Updates the material parameter file that SeisSol uses using [IO/MaterialParameterWriter.cpp](https://github.com/sebwolf-de/UQ-SeisSol/blob/main/src/IO/MaterialParameterWriter.cpp).
+- Updates the parameter files that SeisSol uses using [IO/ChainParameterWriter.cpp](https://github.com/sebwolf-de/UQ-SeisSol/blob/main/src/IO/ChainParameterWriter.cpp).
 - Prepares the filesystem for the next SeisSol run using [SeisSol/Runner.cpp](https://github.com/sebwolf-de/UQ-SeisSol/blob/main/src/SeisSol/Runner.cpp). This method moves the receiver files of the last SeisSol run from `output/current` to `output/chain` for potential introspection.
 - Runs SeisSol with the candidate material parameters using `SeisSol/Runner.cpp`.
 - Computes the relative norm between the observation receivers and the simulation receivers and returns it to MUQ to either accept or reject the candidate.
 
 
 #### Notes about the parameter files
-1. [YAML configuration file](https://github.com/sebwolf-de/UQ-SeisSol/blob/main/example/uq.yaml)
+1. [YAML configuration file](https://github.com/sebwolf-de/UQ-SeisSol/blob/main/rapidTesting/uq.yaml)
     - `SeisSolBinary` specifies the name of the SeisSol binary.
-    - `MaterialFileTemplate` specifies the name of the [template file](https://github.com/sebwolf-de/UQ-SeisSol/blob/main/example/material_template.yaml) for your material parameters. What `UQ-SeisSol` does is to replace all the parameter values in the template file that have the format `@parameter_name@` with the candidate sample. The number of `@parameter_name@` tags inside this file must match the number (and names) of the initial values given in `InitialParameters`.
+    - `ChainFileTemplate` specifies the name of the [template file](https://github.com/sebwolf-de/UQ-SeisSol/blob/main/rapidTesting/source/source_template.dat) for your parameters. What `UQ-SeisSol` does is to replace all the parameter values in the template file that have the format `@parameter_name@` with the candidate sample. The number of `@parameter_name@` tags inside this file must match the number (and names) of the initial values given in `InitialParameters`.
     - `InitialParameters` specifies the initial values for each of the material parameters.
     - `ObservationDirectory` specifies the directory where the observation receivers can be parsed from.
     - `ReceiverPrefix` specifies the root of the receiver file names.
