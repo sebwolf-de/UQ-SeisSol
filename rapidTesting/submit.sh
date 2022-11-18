@@ -9,7 +9,7 @@
 #SBATCH --nodes=4
 #SBATCH --ntasks-per-node=1
 #SBATCH --mail-type=end
-#SBATCH --mail-user=nils.sperling@in.tum.de
+#SBATCH --mail-user=<ADD YOUR EMAIL HERE>
 #SBATCH --export=NONE
 #SBATCH --time=05:00:00
   
@@ -21,5 +21,7 @@ export OMP_PLACES="cores(27)"
 #clean output dir just to be sure
 rm -rf output/chain/*
 rm -rf output/current/*
+rm SeisSol_stderr.txt
+rm SeisSol_stdout.txt
 #run UQ
 ./main uq.yaml

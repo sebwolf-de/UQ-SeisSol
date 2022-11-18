@@ -1,20 +1,17 @@
+seismic moment
  0.00000E+00 -0.10000E+19 0.00000E+00
  -0.10000E+19 0.00000E+00 0.00000E+00
  0.00000E+00 0.00000E+00 0.00000E+00
- number of faults
-                     8
- x,y,z,strike, dip, rake, area, onset time.
-     @param_source_x_1@    @param_source_y_1@    @param_source_z_1@     0.00000    00.00000     0.00000  1.0     0.00000
-     @param_source_x_2@    @param_source_y_2@    @param_source_z_2@     0.00000    00.00000     0.00000  1.0     0.00000
-     @param_source_x_3@    @param_source_y_3@    @param_source_z_3@     0.00000    00.00000     0.00000  1.0     0.00000
-     @param_source_x_4@    @param_source_y_4@    @param_source_z_4@     0.00000    00.00000     0.00000  1.0     0.00000
-     @param_source_x_5@    @param_source_y_5@    @param_source_z_5@     0.00000    00.00000     0.00000  1.0     0.00000
-     @param_source_x_6@    @param_source_y_6@    @param_source_z_6@     0.00000    00.00000     0.00000  1.0     0.00000
-     @param_source_x_7@    @param_source_y_7@    @param_source_z_7@     0.00000    00.00000     0.00000  1.0     0.00000
-     @param_source_x_8@    @param_source_y_8@    @param_source_z_8@     0.00000    00.00000     0.00000  1.0     0.00000
- source time function: dela, total sample point
-     0.00020                  20000
- samples
+number of faults
+ 4
+x,y,z,strike, dip, rake, area, onset time.
+ @param_source_x_1@    @param_source_y_1@    @param_source_z_1@     0.00000    00.00000     0.00000  1.0     0.00000
+ @param_source_x_2@    @param_source_y_2@    @param_source_z_2@     0.00000    00.00000     0.00000  1.0     0.00000
+ @param_source_x_3@    @param_source_y_3@    @param_source_z_3@     0.00000    00.00000     0.00000  1.0     0.00000
+ @param_source_x_4@    @param_source_y_4@    @param_source_z_4@     0.00000    00.00000     0.00000  1.0     0.00000
+source time function: dela, total sample point
+ 0.00020 20000
+samples
 0.000000000000000000e+00
 1.996003997334665908e-02
 3.984031957375964994e-02
