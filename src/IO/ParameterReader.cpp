@@ -5,7 +5,7 @@
 
 IO::ParameterReader::ParameterReader(std::string filename) : root(YAML::LoadFile(filename)) {
   assert((root["SeisSolBinary"] && "Parameter file contains link to SeisSol binary"));
-  assert((root["MaterialFileTemplate"] &&
+  assert((root["ChainFileTemplate"] &&
           "Parameter file contains link to SeisSol material file template"));
   assert(
       (root["InitialParameters"] && "Parameter file contains initial material parameter values"));
@@ -20,11 +20,11 @@ std::string IO::ParameterReader::getSeisSolBinary() const {
   return root["SeisSolBinary"].as<std::string>();
 }
 
-std::string IO::ParameterReader::getMaterialFileTemplate() const {
-  return root["MaterialFileTemplate"].as<std::string>();
+std::string IO::ParameterReader::getChainFileTemplate() const {
+  return root["ChainFileTemplate"].as<std::string>();
 }
 
-std::vector<std::string> IO::ParameterReader::getMaterialFileTemplateKeys() const {
+std::vector<std::string> IO::ParameterReader::getChainFileTemplateKeys() const {
   auto parametersNode = root["InitialParameters"];
   std::vector<std::string> parameterKeys;
 
@@ -35,7 +35,7 @@ std::vector<std::string> IO::ParameterReader::getMaterialFileTemplateKeys() cons
   return parameterKeys;
 }
 
-IO::ValuesAndVariances IO::ParameterReader::getInitialMaterialParameterValuesAndVariance() const {
+IO::ValuesAndVariances IO::ParameterReader::getInitialChainParameterValuesAndVariance() const {
   auto parametersNode = root["InitialParameters"];
   Eigen::VectorXd parameterValues(parametersNode.size());
   Eigen::VectorXd parameterVariances(parametersNode.size());

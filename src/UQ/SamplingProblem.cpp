@@ -22,15 +22,14 @@ UQ::MySamplingProblem::MySamplingProblem(
     std::shared_ptr<MultiIndex> index, std::shared_ptr<SeisSol::Runner> runner,
     std::shared_ptr<SeisSol::ReceiverDB> observationsReceiverDB,
     std::shared_ptr<SeisSol::ReceiverDB> simulationsReceiverDB,
-    std::shared_ptr<IO::MaterialParameterWriter> materialParameterWriter,
-    size_t numberOfSubintervals, size_t numberOfFusedSims,
-    std::shared_ptr<muq::Modeling::Gaussian> targetIn)
+    std::shared_ptr<IO::ChainParameterWriter> chainParameterWriter, size_t numberOfSubintervals,
+    size_t numberOfFusedSims, std::shared_ptr<muq::Modeling::Gaussian> targetIn)
     : AbstractSamplingProblem(
-          Eigen::VectorXi::Constant(1, materialParameterWriter->numberOfParameters()),
-          Eigen::VectorXi::Constant(1, materialParameterWriter->numberOfParameters())),
+          Eigen::VectorXi::Constant(1, chainParameterWriter->numberOfParameters()),
+          Eigen::VectorXi::Constant(1, chainParameterWriter->numberOfParameters())),
       runner(std::move(runner)), observationsReceiverDB(std::move(observationsReceiverDB)),
       simulationsReceiverDB(std::move(simulationsReceiverDB)),
-      materialParameterWriter(std::move(materialParameterWriter)), index(index),
+      chainParameterWriter(std::move(chainParameterWriter)), index(index),
       numberOfSubintervals(numberOfSubintervals), numberOfFusedSims(numberOfFusedSims),
       target(std::move(targetIn)) {
   spdlog::info("Run Sampling Problem with index {}", index->GetValue(0));
@@ -48,7 +47,7 @@ double UQ::MySamplingProblem::LogDensity(std::shared_ptr<SamplingState> const& s
   const double epsilon = 1e-2;
   std::vector<double> logDensityArray(numberOfFusedSims);
 
-  materialParameterWriter->updateParameters(state->state);
+  chainParameterWriter->updateParameters(state->state);
 
   size_t numOutOfMesh = 0;
   for (size_t fsn = 1; fsn <= numberOfFusedSims; fsn++) {

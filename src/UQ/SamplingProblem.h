@@ -10,7 +10,7 @@
 #include "MUQ/SamplingAlgorithms/SubsamplingMIProposal.h"
 #include "MUQ/Utilities/MultiIndices/MultiIndex.h"
 
-#include "IO/MaterialParameterWriter.h"
+#include "IO/ChainParameterWriter.h"
 #include "SeisSol/ReceiverDB.h"
 #include "SeisSol/Runner.h"
 
@@ -26,7 +26,7 @@ class MySamplingProblem : public AbstractSamplingProblem {
   MySamplingProblem(std::shared_ptr<MultiIndex> index, std::shared_ptr<SeisSol::Runner> runner,
                     std::shared_ptr<SeisSol::ReceiverDB> observationsReceiverDB,
                     std::shared_ptr<SeisSol::ReceiverDB> simulationsReceiverDB,
-                    std::shared_ptr<IO::MaterialParameterWriter> materialParameterWriter,
+                    std::shared_ptr<IO::ChainParameterWriter> chainParameterWriter,
                     size_t numberOfSubintervals, size_t numberOfFusedSims,
                     std::shared_ptr<muq::Modeling::Gaussian> targetIn);
 
@@ -42,7 +42,7 @@ class MySamplingProblem : public AbstractSamplingProblem {
   std::shared_ptr<SeisSol::Runner> runner;
   std::shared_ptr<SeisSol::ReceiverDB> observationsReceiverDB;
   std::shared_ptr<SeisSol::ReceiverDB> simulationsReceiverDB;
-  std::shared_ptr<IO::MaterialParameterWriter> materialParameterWriter;
+  std::shared_ptr<IO::ChainParameterWriter> chainParameterWriter;
   std::shared_ptr<SamplingState> lastState = nullptr;
   std::shared_ptr<MultiIndex> index;
   static size_t runCount;

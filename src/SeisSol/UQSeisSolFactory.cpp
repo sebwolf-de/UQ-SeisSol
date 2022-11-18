@@ -23,12 +23,12 @@ SeisSol::UQSeisSolFactory::createSimulationsReceiverDB() const {
                                                parameterReader.getNumberOfFusedSims());
 }
 
-std::shared_ptr<IO::MaterialParameterWriter>
-SeisSol::UQSeisSolFactory::createMaterialParameterWriter() const {
-  std::string templateFilename = parameterReader.getMaterialFileTemplate();
-  std::ifstream materialFileTemplate(templateFilename);
-  std::stringstream materialFileTemplateBuffer;
-  materialFileTemplateBuffer << materialFileTemplate.rdbuf();
+std::shared_ptr<IO::ChainParameterWriter>
+SeisSol::UQSeisSolFactory::createChainParameterWriter() const {
+  std::string templateFilename = parameterReader.getChainFileTemplate();
+  std::ifstream chainFileTemplate(templateFilename);
+  std::stringstream chainFileTemplateBuffer;
+  chainFileTemplateBuffer << chainFileTemplate.rdbuf();
 
   std::string outputFilename = templateFilename;
   std::string key = "template";
@@ -36,10 +36,10 @@ SeisSol::UQSeisSolFactory::createMaterialParameterWriter() const {
   size_t sizeOfKey = key.length();
   outputFilename.replace(locationOfKey, sizeOfKey, "chain");
 
-  auto parameterKeys = parameterReader.getMaterialFileTemplateKeys();
+  auto parameterKeys = parameterReader.getChainFileTemplateKeys();
 
-  return std::make_shared<IO::MaterialParameterWriter>(materialFileTemplateBuffer.str(),
-                                                       outputFilename, parameterKeys);
+  return std::make_shared<IO::ChainParameterWriter>(chainFileTemplateBuffer.str(), outputFilename,
+                                                    parameterKeys);
 }
 
 std::shared_ptr<SeisSol::Runner> SeisSol::UQSeisSolFactory::createSeisSolRunner() const {

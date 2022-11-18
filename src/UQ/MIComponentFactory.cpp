@@ -17,7 +17,7 @@ std::shared_ptr<UQ::MCMCProposal> UQ::MyMIComponentFactory::Proposal(
   pt::ptree pt;
   pt.put("BlockIndex", 0);
 
-  size_t numberOfParameters = materialParameterWriter->numberOfParameters();
+  size_t numberOfParameters = chainParameterWriter->numberOfParameters();
 
   auto mu = Eigen::VectorXd::Zero(numberOfParameters);
   Eigen::MatrixXd cov = Eigen::MatrixXd::Identity(numberOfParameters, numberOfParameters);
@@ -54,7 +54,7 @@ std::shared_ptr<UQ::MCMCProposal> UQ::MyMIComponentFactory::CoarseProposal(
 
 std::shared_ptr<UQ::AbstractSamplingProblem>
 UQ::MyMIComponentFactory::SamplingProblem(std::shared_ptr<MultiIndex> const& index) {
-  size_t numberOfParameters = materialParameterWriter->numberOfParameters();
+  size_t numberOfParameters = chainParameterWriter->numberOfParameters();
 
   auto mu = Eigen::VectorXd::Zero(numberOfParameters);
   Eigen::MatrixXd cov = Eigen::MatrixXd::Identity(numberOfParameters, numberOfParameters);
@@ -66,7 +66,7 @@ UQ::MyMIComponentFactory::SamplingProblem(std::shared_ptr<MultiIndex> const& ind
 
   auto prior = std::make_shared<Gaussian>(mu, cov, Gaussian::Mode::Covariance);
   return std::make_shared<MySamplingProblem>(index, runner, observationsReceiverDB,
-                                             simulationsReceiverDB, materialParameterWriter,
+                                             simulationsReceiverDB, chainParameterWriter,
                                              numberOfSubintervals, numberOfFusedSims, prior);
 }
 
@@ -84,11 +84,11 @@ UQ::MyMIComponentFactory::MyMIComponentFactory(
     std::shared_ptr<SeisSol::Runner> runner,
     std::shared_ptr<SeisSol::ReceiverDB> observationsReceiverDB,
     std::shared_ptr<SeisSol::ReceiverDB> simulationsReceiverDB,
-    std::shared_ptr<IO::MaterialParameterWriter> materialParameterWriter,
+    std::shared_ptr<IO::ChainParameterWriter> chainParameterWriter,
     const IO::ValuesAndVariances& startingParameters, size_t finestIndex,
     size_t numberOfSubintervals, size_t numberOfFusedSims)
     : runner(std::move(runner)), observationsReceiverDB(std::move(observationsReceiverDB)),
       simulationsReceiverDB(std::move(simulationsReceiverDB)),
-      materialParameterWriter(std::move(materialParameterWriter)),
+      chainParameterWriter(std::move(chainParameterWriter)),
       startingParameters(std::move(startingParameters)), finestIndex(finestIndex),
       numberOfSubintervals(numberOfSubintervals), numberOfFusedSims(numberOfFusedSims) {}

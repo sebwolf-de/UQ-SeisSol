@@ -15,9 +15,9 @@ class ParameterReader {
   public:
   ParameterReader(std::string filename);
   std::string getSeisSolBinary() const;
-  std::string getMaterialFileTemplate() const;
-  std::vector<std::string> getMaterialFileTemplateKeys() const;
-  ValuesAndVariances getInitialMaterialParameterValuesAndVariance() const;
+  std::string getChainFileTemplate() const;
+  std::vector<std::string> getChainFileTemplateKeys() const;
+  ValuesAndVariances getInitialChainParameterValuesAndVariance() const;
   std::string getObservationDir() const;
   size_t getNumberOfReceivers() const;
   size_t getNumberOfSamples(size_t index) const;

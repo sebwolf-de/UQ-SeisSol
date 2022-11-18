@@ -8,10 +8,10 @@
 
 namespace IO {
 
-class MaterialParameterWriter {
+class ChainParameterWriter {
   public:
-  MaterialParameterWriter(std::string templateFileContent, std::string outputFilename,
-                          std::vector<std::string> parameterKeys);
+  ChainParameterWriter(std::string templateFileContent, std::string outputFilename,
+                       std::vector<std::string> parameterKeys);
   void updateParameters(Eigen::VectorXd parameters) const;
   void updateParameters(std::vector<Eigen::VectorXd> parameters) const;
   [[nodiscard]] size_t numberOfParameters() const;

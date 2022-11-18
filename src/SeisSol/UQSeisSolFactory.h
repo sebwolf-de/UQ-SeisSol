@@ -1,6 +1,6 @@
 #pragma once
 
-#include "IO/MaterialParameterWriter.h"
+#include "IO/ChainParameterWriter.h"
 #include "IO/ParameterReader.h"
 #include "ReceiverDB.h"
 #include "Runner.h"
@@ -13,7 +13,7 @@ class UQSeisSolFactory {
 
   [[nodiscard]] std::shared_ptr<SeisSol::ReceiverDB> createObservationsReceiverDB() const;
   [[nodiscard]] std::shared_ptr<SeisSol::ReceiverDB> createSimulationsReceiverDB() const;
-  [[nodiscard]] std::shared_ptr<IO::MaterialParameterWriter> createMaterialParameterWriter() const;
+  [[nodiscard]] std::shared_ptr<IO::ChainParameterWriter> createChainParameterWriter() const;
   [[nodiscard]] std::shared_ptr<SeisSol::Runner> createSeisSolRunner() const;
 
   private:

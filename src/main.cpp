@@ -34,18 +34,18 @@ int main(int argc, char** argv) {
 
   auto observationsReceiverDB = uqSeisSolFactory.createObservationsReceiverDB();
   auto simulationsReceiverDB = uqSeisSolFactory.createSimulationsReceiverDB();
-  auto materialParameterWriter = uqSeisSolFactory.createMaterialParameterWriter();
+  auto chainParameterWriter = uqSeisSolFactory.createChainParameterWriter();
   auto runner = uqSeisSolFactory.createSeisSolRunner();
 
   runner->archivePreviousRun();
 
   auto initialParameterValuesAndVariance =
-      parameterReader.getInitialMaterialParameterValuesAndVariance();
+      parameterReader.getInitialChainParameterValuesAndVariance();
   size_t numberOfSubintervals = parameterReader.getNumberOfSubintervals();
   size_t numberOfFusedSims = parameterReader.getNumberOfFusedSims();
 
   auto miComponentFactory = std::make_shared<UQ::MyMIComponentFactory>(
-      runner, observationsReceiverDB, simulationsReceiverDB, materialParameterWriter,
+      runner, observationsReceiverDB, simulationsReceiverDB, chainParameterWriter,
       initialParameterValuesAndVariance, parameterReader.getNumberOfIndices() - 1,
       numberOfSubintervals, numberOfFusedSims);
 

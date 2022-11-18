@@ -1,14 +1,14 @@
 #include "spdlog/spdlog.h"
 
-#include "MaterialParameterWriter.h"
+#include "ChainParameterWriter.h"
 
-IO::MaterialParameterWriter::MaterialParameterWriter(const std::string templateFileContent,
-                                                     const std::string outputFilename,
-                                                     const std::vector<std::string> parameterKeys)
+IO::ChainParameterWriter::ChainParameterWriter(const std::string templateFileContent,
+                                               const std::string outputFilename,
+                                               const std::vector<std::string> parameterKeys)
     : templateFileContent(std::move(templateFileContent)),
       outputFilename(std::move(outputFilename)), parameterKeys(std::move(parameterKeys)) {}
 
-void IO::MaterialParameterWriter::updateParameters(Eigen::VectorXd parameters) const {
+void IO::ChainParameterWriter::updateParameters(Eigen::VectorXd parameters) const {
   std::string unsavedFileContent = templateFileContent;
 
   for (size_t i = 0; i < parameterKeys.size(); i++) {
@@ -20,13 +20,13 @@ void IO::MaterialParameterWriter::updateParameters(Eigen::VectorXd parameters) c
     spdlog::info("{:<25s}: {:e}", key, parameters(i));
   }
 
-  std::ofstream materialParametersFile(outputFilename);
+  std::ofstream chainParametersFile(outputFilename);
 
-  materialParametersFile << unsavedFileContent;
-  materialParametersFile.close();
+  chainParametersFile << unsavedFileContent;
+  chainParametersFile.close();
 }
 
-void IO::MaterialParameterWriter::updateParameters(std::vector<Eigen::VectorXd> parameters) const {
+void IO::ChainParameterWriter::updateParameters(std::vector<Eigen::VectorXd> parameters) const {
   std::string unsavedFileContent = templateFileContent;
   for (size_t j = 0; j < parameters.size(); j++) {
     for (size_t i = 0; i < parameterKeys.size(); i++) {
@@ -39,10 +39,10 @@ void IO::MaterialParameterWriter::updateParameters(std::vector<Eigen::VectorXd> 
     }
   }
 
-  std::ofstream materialParametersFile(outputFilename);
+  std::ofstream chainParametersFile(outputFilename);
 
-  materialParametersFile << unsavedFileContent;
-  materialParametersFile.close();
+  chainParametersFile << unsavedFileContent;
+  chainParametersFile.close();
 }
 
-size_t IO::MaterialParameterWriter::numberOfParameters() const { return parameterKeys.size(); }
+size_t IO::ChainParameterWriter::numberOfParameters() const { return parameterKeys.size(); }

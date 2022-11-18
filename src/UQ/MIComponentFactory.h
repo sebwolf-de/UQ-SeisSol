@@ -10,7 +10,7 @@
 #include "MUQ/SamplingAlgorithms/SubsamplingMIProposal.h"
 #include "MUQ/Utilities/MultiIndices/MultiIndex.h"
 
-#include "IO/MaterialParameterWriter.h"
+#include "IO/ChainParameterWriter.h"
 #include "IO/ParameterReader.h"
 #include "SeisSol/ReceiverDB.h"
 #include "SeisSol/Runner.h"
@@ -40,7 +40,7 @@ class MyMIComponentFactory : public MIComponentFactory {
   MyMIComponentFactory(std::shared_ptr<SeisSol::Runner> runner,
                        std::shared_ptr<SeisSol::ReceiverDB> observationsReceiverDB,
                        std::shared_ptr<SeisSol::ReceiverDB> simulationsReceiverDB,
-                       std::shared_ptr<IO::MaterialParameterWriter> materialParameterWriter,
+                       std::shared_ptr<IO::ChainParameterWriter> chainParameterWriter,
                        const IO::ValuesAndVariances& startingParameters, size_t finestIndex,
                        size_t numberOfSubintervals, size_t numberOfFusedSims);
 
@@ -48,7 +48,7 @@ class MyMIComponentFactory : public MIComponentFactory {
   const std::shared_ptr<SeisSol::Runner> runner;
   const std::shared_ptr<SeisSol::ReceiverDB> observationsReceiverDB;
   const std::shared_ptr<SeisSol::ReceiverDB> simulationsReceiverDB;
-  const std::shared_ptr<IO::MaterialParameterWriter> materialParameterWriter;
+  const std::shared_ptr<IO::ChainParameterWriter> chainParameterWriter;
   const IO::ValuesAndVariances& startingParameters;
   const size_t finestIndex;
   size_t numberOfSubintervals;
