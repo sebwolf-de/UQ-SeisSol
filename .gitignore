@@ -36,7 +36,6 @@ settings.json
 example/output/*
 example/source/source.nrf
 rapidTesting/output/*
-SeisSol_stdout.txt
-SeisSol_stderr.txt
-*.h5
+rapidTesting/SeisSol_stdout.txt
+rapidTesting/SeisSol_stderr.txt
 
