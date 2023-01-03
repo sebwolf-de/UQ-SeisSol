@@ -47,24 +47,28 @@ double UQ::MySamplingProblem::LogDensity(std::shared_ptr<SamplingState> const& s
   const double epsilon = 1e-2;
   std::vector<double> logDensityArray(numberOfFusedSims);
 
-  chainParameterWriter->updateParameters(state->state);
-
   size_t numOutOfMesh = 0;
   for (size_t fsn = 1; fsn <= numberOfFusedSims; fsn++) {
     if (state->state[fsn - 1][0] < 0) {
       logDensityArray.at(fsn - 1) = badLogDensity;
-      spdlog::info("LogDensity {} = {}", fsn, logDensityArray[fsn - 1]);
       numOutOfMesh++;
     }
   }
 
   if (numOutOfMesh == numberOfFusedSims) {
+    spdlog::info("######################");
+    spdlog::info("Skipping SeisSol on index {}, since all sources are outside of the mesh", 
+        index->GetValue(0));
+
     state->meta["LogTarget"] = logDensityArray;
     return logDensityArray.at(0);
   }
 
-  spdlog::info("----------------------");
+  spdlog::info("######################");
   spdlog::info("Running SeisSol on index {}", index->GetValue(0));
+  spdlog::info("----------------------");
+  chainParameterWriter->updateParameters(state->state);
+  spdlog::info("----------------------");
   runner->prepareFilesystem(runCount);
   runner->run(0);
 
@@ -107,7 +111,13 @@ double UQ::MySamplingProblem::LogDensity(std::shared_ptr<SamplingState> const& s
 
     relativeNorm /= observationsReceiverDB->numberOfReceivers(1);
     logDensityArray.at(fsn - 1) = -std::pow(relativeNorm, 4);
-    spdlog::info("LogDensity {} = {}", fsn, logDensityArray[fsn - 1]);
+  }
+  for (size_t fsn = 1; fsn <= numberOfFusedSims; fsn++) {
+    if (state->state[fsn - 1][0] < 0) {
+      spdlog::info("LogDensity {} = {}, source out of mesh", fsn, logDensityArray[fsn - 1]);
+    } else {
+      spdlog::info("LogDensity {} = {}", fsn, logDensityArray[fsn - 1]);
+    }
   }
 
   state->meta["LogTarget"] = logDensityArray;
