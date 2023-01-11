@@ -29,8 +29,9 @@ std::shared_ptr<UQ::MCMCProposal> UQ::MyMIComponentFactory::Proposal(
 
   auto prior = std::make_shared<Gaussian>(mu, cov, Gaussian::Mode::Covariance);
 
-  return std::make_shared<InfMALAProposal>(pt, samplingProblem,
-                                           prior); //   InfMALAProposal MHProposal
+  return std::make_shared<MHProposal>(pt, samplingProblem, prior);
+  // return std::make_shared<MALAProposal>(pt, samplingProblem, prior);
+  // return std::make_shared<InfMALAProposal>(pt, samplingProblem, prior);
 }
 
 std::shared_ptr<UQ::MultiIndex> UQ::MyMIComponentFactory::FinestIndex() {

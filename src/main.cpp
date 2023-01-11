@@ -58,7 +58,7 @@ int main(int argc, char* argv[]) {
   // parameters for the sampler
   boost::property_tree::ptree pt;
   pt.put("verbosity", 1); // show some output
-  pt.put("BurnIn", 1);
+  pt.put("BurnIn", numberOfFusedSims);
   pt.put("NumSamples", parameterReader.getNumberOfSamples(0));
   pt.put("PrintLevel", 1);
 
