@@ -31,7 +31,7 @@ ClusteredLTS = 2
 /
 
 &Output
-OutputFile = 'output/current/output_3'
+OutputFile = 'output/current/output'
 Format = 10
 !             |stress     |vel  
 iOutputMask = 1 1 1 1 1 1 1 1 1 
