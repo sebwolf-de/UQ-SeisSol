@@ -11,7 +11,7 @@
 
 SeisSol::Runner::Runner(std::string seisSolBinaryPath) : binaryPath(std::move(seisSolBinaryPath)) {}
 
-void SeisSol::Runner::run(size_t index) const {
+int SeisSol::Runner::run(size_t index) const {
   int status;
   int seissolError;
   int pid = fork();
@@ -31,20 +31,21 @@ void SeisSol::Runner::run(size_t index) const {
     // execl does not return if the command was successful
 
     std::string parameterFile = "parameters_" + std::to_string(index) + ".par";
-    seissolError = execlp("srun", "srun", binaryPath.c_str(), parameterFile.c_str(), NULL);
+    seissolError = execlp("mpiexec", "mpiexec", binaryPath.c_str(), parameterFile.c_str(), NULL);
 
     if (seissolError == -1) {
       exit(1);
-    }
-  } else {
-    waitpid(pid, &status, 0);
-
-    if (WEXITSTATUS(status) != 0) {
-      spdlog::error("SeisSol exited with an error exit code, exiting UQ-SeisSol.");
-      spdlog::error("You can check 'SeisSol_stderr.txt' for more information.");
-      exit(1);
+    } else {
+      exit(0);
     }
   }
+  waitpid(pid, &status, 0);
+
+  if (WEXITSTATUS(status) != 0) {
+    spdlog::warn("SeisSol exited with an error exit code.");
+    spdlog::warn("You can check 'SeisSol_stderr.txt' for more information.");
+  }
+  return status;
 }
 
 void SeisSol::Runner::prepareFilesystem(size_t runCount) {

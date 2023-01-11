@@ -52,6 +52,8 @@ class MySamplingProblem : public AbstractSamplingProblem {
 
   /// The target distribution (the prior in the inference case)
   std::shared_ptr<muq::Modeling::Gaussian> target;
+  // Compute log densities for all fused simulations
+  std::vector<double> computeLogDensities(std::shared_ptr<SamplingState> const& state);
 };
 
 } // namespace UQ
