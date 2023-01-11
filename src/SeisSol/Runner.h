@@ -7,7 +7,7 @@ namespace SeisSol {
 class Runner {
   public:
   Runner(std::string seisSolBinaryPath);
-  int run(size_t index) const;
+  [[nodiscard]] int run(size_t index) const;
   static void prepareFilesystem(size_t runCount);
   static void archivePreviousRun();
 

@@ -22,9 +22,10 @@ std::map<size_t, std::string> IO::getReceiversInDirectory(std::string directory,
   }
 
   std::string fileName;
-  std::regex matcher(prefix + "-([0-9]{5})-.{5}\\.dat");
+  const std::regex matcher(prefix + "-([0-9]{5})-.{5}\\.dat");
 
-  for (boost::filesystem::directory_entry& e : boost::filesystem::directory_iterator(directory)) {
+  for (const boost::filesystem::directory_entry& e :
+       boost::filesystem::directory_iterator(directory)) {
     if (!boost::filesystem::is_directory(e.path())) {
       std::smatch m;
       if (std::regex_match(e.path().filename().string(), m, matcher)) {
@@ -59,7 +60,7 @@ void IO::ReceiverReader::parseReceiver(std::string fileName, SeisSol::Receiver& 
   // coincide
   std::getline(in, line);
   std::getline(in, line);
-  std::string headline = line;
+  const std::string headline = line;
   // assert("VARIABLES = \"Time\",\"xx\",\"yy\",\"zz\",\"xy\",\"yz\",\"xz\",\"u\",\"v\",\"w\"" ==
   //        line);
   // VARIABLES =
@@ -71,7 +72,7 @@ void IO::ReceiverReader::parseReceiver(std::string fileName, SeisSol::Receiver& 
   }
 
   auto parseLineFused = [](std::string line, size_t fsn) {
-    std::array<double, SeisSol::Receiver::lineWidth> elems;
+    std::array<double, SeisSol::Receiver::lineWidth> elems{};
     std::stringstream ss(line);
     std::string item;
     size_t i = 0;
@@ -79,11 +80,11 @@ void IO::ReceiverReader::parseReceiver(std::string fileName, SeisSol::Receiver& 
     if (fsn > 1) {
       // extract time information
       ss >> item;
-      double candidate = std::stod(item);
+      const double candidate = std::stod(item);
       if (!std::isfinite(candidate)) {
         throw std::invalid_argument("Found non-finite value in receiver input.");
       }
-      elems[i] = candidate;
+      elems.at(i) = candidate;
       i++;
 
       // get to the part of interest
@@ -96,11 +97,11 @@ void IO::ReceiverReader::parseReceiver(std::string fileName, SeisSol::Receiver& 
       if (i > SeisSol::Receiver::numberOfQuantities) {
         break;
       }
-      double candidate = std::stod(item);
+      const double candidate = std::stod(item);
       if (!std::isfinite(candidate)) {
         throw std::invalid_argument("Found non-finite value in receiver input.");
       }
-      elems[i] = candidate;
+      elems.at(i) = candidate;
       i++;
     }
 

@@ -1,4 +1,4 @@
-Checks: '-*,clang-diagnostic-*,llvm-*,misc-*,-misc-unused-parameters,-llvm-header-guard,-misc-non-private-member-variables-in-classes,readability-*,-readability-else-after-return,-llvm-else-after-return,modernize-*,-modernize-use-trailing-return-type'
+Checks: '-*,clang-diagnostic-*,llvm-*,misc-*,-misc-unused-parameters,-llvm-header-guard,-misc-non-private-member-variables-in-classes,readability-*,-readability-else-after-return,-readability-identifier-length,-llvm-else-after-return,modernize-*,-modernize-use-trailing-return-type,cppcoreguidelines-*'
 WarningsAsErrors: '*'
 CheckOptions:
 #  - key:             readability-identifier-naming.AbstractClassCase

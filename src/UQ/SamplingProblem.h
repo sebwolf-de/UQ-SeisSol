@@ -30,8 +30,6 @@ class MySamplingProblem : public AbstractSamplingProblem {
                     size_t numberOfSubintervals, size_t numberOfFusedSims,
                     std::shared_ptr<muq::Modeling::Gaussian> targetIn);
 
-  ~MySamplingProblem() override = default;
-
   double LogDensity(std::shared_ptr<SamplingState> const& state) override;
   std::shared_ptr<SamplingState> QOI() override;
   // Needed for MALAProposal:

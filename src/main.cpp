@@ -25,11 +25,12 @@ using namespace muq::Modeling;
 using namespace muq::SamplingAlgorithms;
 using namespace muq::Utilities;
 
-int main(int argc, char** argv) {
+int main(int argc, char* argv[]) {
   assert(argc == 2);
   spdlog::set_level(spdlog::level::debug); // Set global log level to debug
 
-  auto parameterReader = IO::ParameterReader(argv[1]);
+  const auto parameterFileName = std::string(argv[1]);
+  auto parameterReader = IO::ParameterReader(parameterFileName);
   auto uqSeisSolFactory = SeisSol::UQSeisSolFactory(parameterReader);
 
   auto observationsReceiverDB = uqSeisSolFactory.createObservationsReceiverDB();
@@ -41,8 +42,8 @@ int main(int argc, char** argv) {
 
   auto initialParameterValuesAndVariance =
       parameterReader.getInitialChainParameterValuesAndVariance();
-  size_t numberOfSubintervals = parameterReader.getNumberOfSubintervals();
-  size_t numberOfFusedSims = parameterReader.getNumberOfFusedSims();
+  const size_t numberOfSubintervals = parameterReader.getNumberOfSubintervals();
+  const size_t numberOfFusedSims = parameterReader.getNumberOfFusedSims();
 
   auto miComponentFactory = std::make_shared<UQ::MyMIComponentFactory>(
       runner, observationsReceiverDB, simulationsReceiverDB, chainParameterWriter,
@@ -72,7 +73,7 @@ int main(int argc, char** argv) {
 
   auto chain = std::make_shared<SingleChainMCMC>(pt, kernels);
   chain->SetState(initialParameterValuesAndVariance.values);
-  std::shared_ptr<SampleCollection> samps = chain->Run();
+  const std::shared_ptr<SampleCollection> samps = chain->Run();
 
   samps->WriteToFile("test.h5");
   std::cout << "Sample Mean = " << samps->Mean().transpose() << std::endl;

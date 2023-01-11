@@ -17,7 +17,7 @@ std::shared_ptr<UQ::MCMCProposal> UQ::MyMIComponentFactory::Proposal(
   pt::ptree pt;
   pt.put("BlockIndex", 0);
 
-  size_t numberOfParameters = chainParameterWriter->numberOfParameters();
+  const size_t numberOfParameters = chainParameterWriter->numberOfParameters();
 
   auto mu = Eigen::VectorXd::Zero(numberOfParameters);
   Eigen::MatrixXd cov = Eigen::MatrixXd::Identity(numberOfParameters, numberOfParameters);
@@ -54,7 +54,7 @@ std::shared_ptr<UQ::MCMCProposal> UQ::MyMIComponentFactory::CoarseProposal(
 
 std::shared_ptr<UQ::AbstractSamplingProblem>
 UQ::MyMIComponentFactory::SamplingProblem(std::shared_ptr<MultiIndex> const& index) {
-  size_t numberOfParameters = chainParameterWriter->numberOfParameters();
+  const size_t numberOfParameters = chainParameterWriter->numberOfParameters();
 
   auto mu = Eigen::VectorXd::Zero(numberOfParameters);
   Eigen::MatrixXd cov = Eigen::MatrixXd::Identity(numberOfParameters, numberOfParameters);

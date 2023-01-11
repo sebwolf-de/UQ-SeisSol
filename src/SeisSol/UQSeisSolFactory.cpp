@@ -25,18 +25,18 @@ SeisSol::UQSeisSolFactory::createSimulationsReceiverDB() const {
 
 std::shared_ptr<IO::ChainParameterWriter>
 SeisSol::UQSeisSolFactory::createChainParameterWriter() const {
-  std::string templateFilename = parameterReader.getChainFileTemplate();
-  std::ifstream chainFileTemplate(templateFilename);
+  const std::string templateFilename = parameterReader.getChainFileTemplate();
+  const std::ifstream chainFileTemplate(templateFilename);
   std::stringstream chainFileTemplateBuffer;
   chainFileTemplateBuffer << chainFileTemplate.rdbuf();
 
   std::string outputFilename = templateFilename;
-  std::string key = "template";
-  size_t locationOfKey = outputFilename.find(key);
-  size_t sizeOfKey = key.length();
+  const std::string key = "template";
+  const size_t locationOfKey = outputFilename.find(key);
+  const size_t sizeOfKey = key.length();
   outputFilename.replace(locationOfKey, sizeOfKey, "chain");
 
-  auto parameterKeys = parameterReader.getChainFileTemplateKeys();
+  const auto parameterKeys = parameterReader.getChainFileTemplateKeys();
 
   return std::make_shared<IO::ChainParameterWriter>(chainFileTemplateBuffer.str(), outputFilename,
                                                     parameterKeys);

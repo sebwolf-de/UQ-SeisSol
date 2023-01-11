@@ -12,9 +12,9 @@ void IO::ChainParameterWriter::updateParameters(Eigen::VectorXd parameters) cons
   std::string unsavedFileContent = templateFileContent;
 
   for (size_t i = 0; i < parameterKeys.size(); i++) {
-    std::string key = parameterKeys[i];
+    const std::string key = parameterKeys[i];
 
-    size_t locationOfKey = unsavedFileContent.find("@" + key + "@");
+    const size_t locationOfKey = unsavedFileContent.find("@" + key + "@");
 
     unsavedFileContent.replace(locationOfKey, key.length() + 2, std::to_string(parameters(i)));
     spdlog::info("{:<25s}: {:e}", key, parameters(i));
@@ -30,9 +30,9 @@ void IO::ChainParameterWriter::updateParameters(std::vector<Eigen::VectorXd> par
   std::string unsavedFileContent = templateFileContent;
   for (size_t j = 0; j < parameters.size(); j++) {
     for (size_t i = 0; i < parameterKeys.size(); i++) {
-      std::string key = parameterKeys[i] + "_" + std::to_string(j + 1);
+      const std::string key = parameterKeys[i] + "_" + std::to_string(j + 1);
 
-      size_t locationOfKey = unsavedFileContent.find("@" + key + "@");
+      const size_t locationOfKey = unsavedFileContent.find("@" + key + "@");
 
       unsavedFileContent.replace(locationOfKey, key.length() + 2, std::to_string(parameters[j](i)));
       spdlog::info("{:<25s}: {:e}: {}", key, parameters[j](i), j);
