@@ -20,7 +20,7 @@ FileName = 'source/source_chain.dat'                        ! input file.
 /
             
 &MeshNml
-MeshFile = 'mesh/ultracoarse.h5'
+MeshFile = 'mesh/coarse.h5'
 meshgenerator = 'PUML'
 /
 
