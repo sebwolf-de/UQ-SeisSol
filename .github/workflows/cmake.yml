@@ -3,71 +3,86 @@ name: CMake
 on: [push]
 
 jobs:
-    prepare:
-      runs-on: ubuntu-20.04
-
-      steps:
-      - uses: actions/checkout@v2
-
-      - name: install dependencies
+  # look into the cache, if the latest MUQ build is cached, load the cache, otherwise build new cache.
+  # upload MUQ build into artifact to be picked up by the next job.
+  install-muq:
+    runs-on: ubuntu-latest
+    steps: 
+      - name: Checkout MUQ
+        id: checkout-muq
         run: |
-          sudo apt-get install libeigen3-dev libhdf5-dev libboost-filesystem-dev libboost-dev libboost-graph-dev libyaml-cpp-dev libopenmpi-dev doxygen libnlopt-dev libspdlog-dev otf-trace
+            cd ${{ runner.workspace }}
+            mkdir opt
+            git clone https://github.com/sebwolf-de/MUQ
+            cd MUQ
+            git checkout fused-simulations
+            echo "muq-id=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
 
-      - name: install MUQ
-        run: |
-          cd ..
-          mkdir -p $HOME/opt
-          ls -la
-          git clone https://github.com/sebwolf-de/MUQ
-          cd MUQ/build
-          git checkout fused-simulations
-          cmake .. -DCMAKE_INSTALL_PREFIX=$HOME/opt -DMUQ_USE_MPI=ON
-          make install -j $(nproc) 
-          cd $HOME/opt
-          ls -la
-
-      - uses: actions/upload-artifact@master
+      - name: Cache MUQ
+        id: cache-muq
+        uses: actions/cache@v3
         with:
-          name: prebuilt-muq
-          path: /home/runner/opt
+          path: ${{ runner.workspace }}/opt
+          key: ${{ steps.checkout-muq.outputs.muq-id }}
 
-    build:
-      runs-on: ubuntu-20.04
-      needs: prepare
+      - if: ${{ steps.cache-muq.outputs.cache-hit != 'true' }}
+        name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -qq libeigen3-dev libhdf5-dev libboost-filesystem-dev libboost-dev libboost-graph-dev libyaml-cpp-dev libopenmpi-dev doxygen libnlopt-dev libspdlog-dev otf-trace
 
-      strategy:
-        matrix:
-          build_type: ["Release", "Debug", "ALL_WARNINGS"]
+      - if: ${{ steps.cache-muq.outputs.cache-hit != 'true' }}
+        name: Install MUQ
+        run: |
+            cd ${{ runner.workspace }}/MUQ
+            ls -la
+            cd build
+            git checkout fused-simulations
+            cmake .. -DCMAKE_INSTALL_PREFIX=${{ runner.workspace }}/opt -DMUQ_USE_MPI=ON
+            make install -j $(nproc) 
 
-      steps: 
-      - uses: actions/checkout@v2
-
-      - uses: actions/download-artifact@master
+      - name: Upload MUQ
+        uses: actions/upload-artifact@v3
         with:
-          name: prebuilt-muq
-          path: /home/runner/opt
+          name: muq
+          path: ${{ runner.workspace }}/opt
+  
+  # Build UQ-SeisSol in Release and Debug version
+  build-uq-seissol:
+    runs-on: ubuntu-latest
+    needs: install-muq
+  
+    strategy:
+      matrix:
+        build_type: ["Release", "Debug", "ALL_WARNINGS"]
+  
+    steps: 
+      - uses: actions/checkout@v3
 
-      - name: Create Build Environment
+      - name: Install dependencies
         run: |
-          sudo apt-get install libeigen3-dev libhdf5-dev libboost-filesystem-dev libboost-dev libboost-graph-dev libyaml-cpp-dev libopenmpi-dev doxygen libnlopt-dev libspdlog-dev otf-trace clang-tidy
-          cmake -E make_directory ${{github.workspace}}/build
+          sudo apt-get update
+          sudo apt-get -qq install python3 libeigen3-dev libhdf5-dev libboost-filesystem-dev libboost-dev libboost-graph-dev libyaml-cpp-dev libopenmpi-dev doxygen libnlopt-dev libspdlog-dev otf-trace clang-tidy
 
-      - name: Configure CMake
-        shell: bash
-        working-directory: ${{github.workspace}}/build
+      - name: Download MUQ
+        uses: actions/download-artifact@v3
+        with:
+          name: muq
+          path: ${{ runner.workspace }}/opt
+  
+      - name: Configure UQ-SeisSol
+        working-directory: ${{ github.workspace }}
         run: |
-          cmake $GITHUB_WORKSPACE -DCMAKE_CXX_FLAGS_ALL_WARNINGS:STRING="-Wall -Wextra -Wpedantic -Werror" -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} -DCMAKE_PREFIX_PATH=$HOME/opt -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
-
+          mkdir build_${{ matrix.build_type}} && cd build_${{ matrix.build_type}}
+          cmake .. -DCMAKE_CXX_FLAGS_ALL_WARNINGS:STRING="-Wall -Wextra -Wpedantic -Werror" -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} -DCMAKE_PREFIX_PATH=${{ runner.workspace }}/opt -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
+  
       - name: Build
-        working-directory: ${{github.workspace}}/build
-        shell: bash
-        run: |
-          cmake --build . -j $(nproc)
-
+        working-directory: ${{ github.workspace }}/build_${{ matrix.build_type }}
+        run: cmake --build . -j $(nproc)
+  
       - name: clang-tidy
-        working-directory: ${{github.workspace}}/build
-        shell: bash
+        working-directory: ${{ github.workspace }}/build_${{ matrix.build_type }}
         continue-on-error: true
         run: |
-          python $GITHUB_WORKSPACE/utilities/run-clang-tidy.py -header-filter=../src
-
+          python ${{ github.workspace }}/utilities/run-clang-tidy.py -header-filter=../src
+  
