@@ -24,6 +24,14 @@ std::string IO::ParameterReader::getChainFileTemplate() const {
   return root["ChainFileTemplate"].as<std::string>();
 }
 
+std::string IO::ParameterReader::getMPICommand() const {
+  if (root["MPICommand"]) {
+    return root["MPICommand"].as<std::string>();
+  } else {
+    return "mpiexec";
+  }
+}
+
 std::vector<std::string> IO::ParameterReader::getChainFileTemplateKeys() const {
   auto parametersNode = root["InitialParameters"];
   std::vector<std::string> parameterKeys;

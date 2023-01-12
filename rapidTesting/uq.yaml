@@ -1,5 +1,6 @@
 SeisSolBinary:          "SeisSol_Release_dhsw_6_elastic"
 ParametersFile:         "parameters.par"
+MPICommand:             "srun"
 
 ChainFileTemplate:   "source/source_template.dat"
 InitialParameters:

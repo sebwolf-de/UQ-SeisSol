@@ -9,7 +9,8 @@
 #include "spdlog/spdlog.h"
 #include <boost/filesystem.hpp>
 
-SeisSol::Runner::Runner(std::string seisSolBinaryPath) : binaryPath(std::move(seisSolBinaryPath)) {}
+SeisSol::Runner::Runner(std::string seisSolBinaryPath, std::string mpiCommand)
+    : binaryPath(std::move(seisSolBinaryPath)), mpiCommand(std::move(mpiCommand)) {}
 
 int SeisSol::Runner::run(size_t index) const {
   int status = 0;
@@ -30,8 +31,8 @@ int SeisSol::Runner::run(size_t index) const {
     // execl does not return if the command was successful
 
     const std::string parameterFile = "parameters_" + std::to_string(index) + ".par";
-    const int seissolError =
-        execlp("mpiexec", "mpiexec", binaryPath.c_str(), parameterFile.c_str(), NULL);
+    const int seissolError = execlp(mpiCommand.c_str(), mpiCommand.c_str(), binaryPath.c_str(),
+                                    parameterFile.c_str(), NULL);
 
     if (seissolError == -1) {
       exit(1);

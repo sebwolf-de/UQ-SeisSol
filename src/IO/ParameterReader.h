@@ -16,6 +16,7 @@ class ParameterReader {
   ParameterReader(std::string filename);
   std::string getSeisSolBinary() const;
   std::string getChainFileTemplate() const;
+  std::string getMPICommand() const;
   std::vector<std::string> getChainFileTemplateKeys() const;
   ValuesAndVariances getInitialChainParameterValuesAndVariance() const;
   std::string getObservationDir() const;
