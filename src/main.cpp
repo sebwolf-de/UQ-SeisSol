@@ -21,15 +21,12 @@
 #include <Eigen/Dense>
 #include <iostream>
 
-#include <mpi.h>
-
 using namespace muq::Modeling;
 using namespace muq::SamplingAlgorithms;
 using namespace muq::Utilities;
 
 int main(int argc, char* argv[]) {
   assert(argc == 2);
-  MPI_Init(&argc, &argv);
   spdlog::set_level(spdlog::level::debug); // Set global log level to debug
 
   const auto parameterFileName = std::string(argv[1]);
@@ -84,6 +81,5 @@ int main(int argc, char* argv[]) {
   std::cout << "ESS = " << samps->ESS().transpose() << std::endl;
   std::cout << "Finished all" << std::endl;
 
-  MPI_Finalize();
   return 0;
 }

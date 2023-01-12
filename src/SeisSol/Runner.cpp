@@ -5,8 +5,6 @@
 #include <sys/wait.h>
 #include <unistd.h>
 
-#include <mpi.h>
-
 #include "IO/ReceiverReader.h"
 #include "spdlog/spdlog.h"
 #include <boost/filesystem.hpp>
@@ -16,11 +14,6 @@ SeisSol::Runner::Runner(std::string seisSolBinaryPath) : binaryPath(std::move(se
 int SeisSol::Runner::run(size_t index) const {
   int status = 0;
   const int pid = fork();
-  int size = 0;
-  MPI_Comm_size(MPI_COMM_WORLD, &size);
-  // TODO: use C++20 std::format
-  char buffer[4];
-  sprintf(buffer, "%03lu", size);
 
   // pid < 0 means the child process creation failed
   // pid == 0 means we are in the child process
@@ -30,15 +23,15 @@ int SeisSol::Runner::run(size_t index) const {
     spdlog::error("Child process creation to run SeisSol was unsuccessful, exiting UQ-SeisSol.");
     exit(1);
   } else if (pid == 0) {
-    // freopen("SeisSol_stdout.txt", "a", stdout);
-    // freopen("SeisSol_stderr.txt", "w", stderr);
+    freopen("SeisSol_stdout.txt", "a", stdout);
+    freopen("SeisSol_stderr.txt", "w", stderr);
 
     // execl returns -1 if there was an error
     // execl does not return if the command was successful
 
     const std::string parameterFile = "parameters_" + std::to_string(index) + ".par";
     const int seissolError =
-        execlp("mpirun", "mpirun", binaryPath.c_str(), parameterFile.c_str(), NULL);
+        execlp("mpiexec", "mpiexec", binaryPath.c_str(), parameterFile.c_str(), NULL);
 
     if (seissolError == -1) {
       exit(1);
