@@ -52,8 +52,8 @@ RFileName = 'mesh/receivers.dat'
 /
 
 &AbortCriteria
-!EndTime = 2.01 
-EndTime = 0.11
+EndTime = 2.01 
+!EndTime = 0.11
 /
 
 &Analysis
