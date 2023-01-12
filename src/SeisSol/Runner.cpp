@@ -31,7 +31,7 @@ int SeisSol::Runner::run(size_t index) const {
 
     const std::string parameterFile = "parameters_" + std::to_string(index) + ".par";
     const int seissolError =
-        execlp("mpiexec", "mpiexec", binaryPath.c_str(), parameterFile.c_str(), NULL);
+        execlp("srun", "srun", binaryPath.c_str(), parameterFile.c_str(), NULL);
 
     if (seissolError == -1) {
       exit(1);
