@@ -1,5 +1,6 @@
 #include "Runner.h"
 
+#include <ctime>
 #include <map>
 #include <string>
 #include <sys/wait.h>

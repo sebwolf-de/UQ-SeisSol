@@ -64,14 +64,17 @@ double UQ::MySamplingProblem::LogDensity(std::shared_ptr<SamplingState> const& s
     chainParameterWriter->updateParameters(state->state);
     spdlog::info("----------------------");
     runner->prepareFilesystem(runCount);
+    const std::time_t startTime = std::time(nullptr);
     const auto seisSolStatus = runner->run(0);
+    const std::time_t endTime = std::time(nullptr);
     runCount++;
 
     if (seisSolStatus != 0) {
       spdlog::warn("Executed SeisSol {} times, last execution was not succesful", runCount);
       std::fill(logDensityArray.begin(), logDensityArray.end(), badLogDensity);
     } else {
-      spdlog::info("Executed SeisSol successfully {} times", runCount);
+      const auto duration = endTime - startTime;
+      spdlog::info("Executed SeisSol successfully {} times, took {} seconds.", runCount, duration);
       logDensityArray = computeLogDensities(state);
     }
   }
