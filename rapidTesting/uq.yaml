@@ -1,16 +1,17 @@
-SeisSolBinary:          "SeisSol_Release_dhsw_6_elastic"
+SeisSolBinary:          "SeisSol_Release_dhsw_6_elastic-8"
 ParametersFile:         "parameters.par"
 MPICommand:             "srun"
 
 ChainFileTemplate:   "source/source_template.dat"
 InitialParameters:
-  param_source_z:  [2000, 40000]
-  param_source_y:  [ 0.0, 40000]
-  param_source_x:  [ 0.0, 40000]
+  param_source_z:  [1835, 250000]
+  param_source_y:  [  12, 250000]
+  param_source_x:  [  32, 250000]
+  strike:  [  0, 10]
 
 ObservationDirectory:   "observations-short"
 ReceiverPrefix:         "output-receiver"
-NumberOfReceivers:      6
-NumberOfSamples:        [140]
+NumberOfReceivers:      4
+NumberOfSamples:        [64]
 NumberOfSubintervals:   1
-NumberOfFusedSims:      4
+NumberOfFusedSims:      8
