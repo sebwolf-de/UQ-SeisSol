@@ -20,7 +20,7 @@ FileName = 'source/source_chain.dat'                        ! input file.
 /
             
 &MeshNml
-MeshFile = 'mesh/coarse.h5'
+MeshFile = 'mesh/fine.h5'
 meshgenerator = 'PUML'
 /
 
@@ -45,7 +45,7 @@ SurfaceOutputInterval = 0.01
 
 ! Receiver Output
 printIntervalCriterion = 2
-ReceiverOutputInterval = 0.1
+ReceiverOutputInterval = 1.0
 pickdt = 0.0200
 pickDtType = 1
 RFileName = 'mesh/receivers.dat'

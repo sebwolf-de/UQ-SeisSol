@@ -4,15 +4,14 @@
 #SBATCH -D ./
 #SBATCH --get-user-env
 #SBATCH --clusters=cm2
-###SBATCH --clusters=cm2
-###SBATCH --partition=cm2_std
-###SBATCH --qos=cm2_std
-#SBATCH --nodes=8
+#SBATCH --partition=cm2_large
+#SBATCH --qos=cm2_large
+#SBATCH --nodes=32
 #SBATCH --ntasks-per-node=1
 #SBATCH --mail-type=end
-#SBATCH --mail-user=wolf.sebastian@in.tum.de
+#SBATCH --mail-user=wolf.sebastian@cit.tum.de
 #SBATCH --export=NONE
-#SBATCH --time=00:50:00
+#SBATCH --time=24:00:00
   
 module load slurm_setup
 unset KMP_AFFINITY

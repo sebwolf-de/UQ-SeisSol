@@ -7,11 +7,10 @@ InitialParameters:
   param_source_z:  [1835, 250000]
   param_source_y:  [  12, 250000]
   param_source_x:  [  32, 250000]
-  strike:  [  0, 10]
 
 ObservationDirectory:   "observations-short"
 ReceiverPrefix:         "output-receiver"
 NumberOfReceivers:      4
-NumberOfSamples:        [64]
+NumberOfSamples:        [640]
 NumberOfSubintervals:   1
 NumberOfFusedSims:      8

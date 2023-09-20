@@ -15,7 +15,7 @@ Point(9) = {32000, 32000, 34000, cl_1};
 Point(10) = {-26000, 32000, 34000, cl_1};
 Point(11) = {32000, -26000, 34000, cl_1};
 Point(12) = {-26000, -26000, 34000, cl_1};
-Point(13) = {4000, 4000, 1500, cl_1};
+Point(13) = {0, 0, 1, cl_1};
 Line(1) = {4, 5};
 Line(2) = {5, 8};
 Line(3) = {8, 7};
@@ -69,23 +69,32 @@ Physical Volume(2) = {1};
 
 // define refined box
 Field[1] = Box;
-Field[1].VIn = 200;
-Field[1].VOut = 3000;
-Field[1].XMax = 12000;
-Field[1].XMin = -2500;
-Field[1].YMax = 12000;
-Field[1].YMin = -2500;
-Field[1].ZMax = 6000;
-Field[1].ZMin = 0;
+Field[1].VIn = 400;
+Field[1].VOut = 6000;
+Field[1].XMin = -2000;
+Field[1].XMax = 8000;
+Field[1].YMin = -2000;
+Field[1].YMax = 8000;
+Field[1].ZMin = -1;
+Field[1].ZMax = 3000;
+Field[1].Thickness = 10000;
 // define distance to reference point 13
 Field[2] = Distance;
 Field[2].NodesList = {13};
 // define radial refinement method
-Field[3] = MathEval;
-Field[3].F = "(150 + F2^2/6000^2*100)";
+Field[3] = Box;
+Field[3].VIn = 100;
+Field[3].VOut = 6000;
+Field[3].XMin = -1000;
+Field[3].XMax = 5000;
+Field[3].YMin = -1000;
+Field[3].YMax = 5000;
+Field[3].ZMin = -1;
+Field[3].ZMax = 2500;
+Field[3].Thickness = 10000;
+// final 
 Field[4] = Min;
 Field[4].FieldsList = {1, 3};
-// final 
 Background Field = 4;
 // specify gmsh version 
 Mesh.MshFileVersion = 2.2;

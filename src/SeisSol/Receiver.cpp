@@ -8,9 +8,10 @@ SeisSol::Receiver::Receiver() : relevantQuantities({uIndex, vIndex, wIndex}) {}
 
 std::vector<double> SeisSol::Receiver::l1Difference(const Receiver& otherReceiver,
                                                     size_t numberOfSubintervals) const {
-  // std::cout << "receiverData.size(): " << receiverData.size() << std::endl;
-  // std::cout << "otherReceiver.receiverData.size(): " << otherReceiver.receiverData.size() <<
-  // std::endl;
+  if (receiverData.size() != otherReceiver.receiverData.size()) {
+    std::cout << "receiverData.size(): " << receiverData.size() << std::endl;
+    std::cout << "otherReceiver.receiverData.size(): " << otherReceiver.receiverData.size() << std::endl;
+  }
   assert(receiverData.size() == otherReceiver.receiverData.size());
 
   std::vector<double> diffs;
