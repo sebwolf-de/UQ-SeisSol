@@ -10,9 +10,10 @@
 #include "IO/ReceiverReader.h"
 #include "spdlog/spdlog.h"
 
-SeisSol::Runner::Runner(std::string seisSolBinaryPath, std::string mpiCommand, std::string receiverPrefix) 
+SeisSol::Runner::Runner(std::string seisSolBinaryPath, std::string mpiCommand,
+                        std::string receiverPrefix)
     : binaryPath(std::move(seisSolBinaryPath)), mpiCommand(std::move(mpiCommand)),
-    receiverPrefix(std::move(receiverPrefix)) {}
+      receiverPrefix(std::move(receiverPrefix)) {}
 
 int SeisSol::Runner::run(size_t index) const {
   int status = 0;
@@ -33,7 +34,9 @@ int SeisSol::Runner::run(size_t index) const {
     // execl does not return if the command was successful
 
     const std::string parameterFile = "parameters_" + std::to_string(index) + ".par";
-    const int seissolError = execlp(mpiCommand.c_str(), mpiCommand.c_str(), "--bind-to", "none", "-n", "4", "./launch.sh", binaryPath.c_str(), parameterFile.c_str(), NULL);
+    const int seissolError =
+        execlp(mpiCommand.c_str(), mpiCommand.c_str(), "--bind-to", "none", "-n", "4",
+               "./launch.sh", binaryPath.c_str(), parameterFile.c_str(), NULL);
 
     if (seissolError == -1) {
       exit(1);

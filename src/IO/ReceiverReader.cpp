@@ -23,8 +23,7 @@ std::map<size_t, std::string> IO::getReceiversInDirectory(std::string directory,
 
   const std::regex matcher(prefix + "-([0-9]{5})-.{5}\\.dat");
 
-  for (const std::filesystem::directory_entry& e :
-       std::filesystem::directory_iterator(directory)) {
+  for (const std::filesystem::directory_entry& e : std::filesystem::directory_iterator(directory)) {
     if (!std::filesystem::is_directory(e.path())) {
       const auto fileName = e.path().filename().string();
       std::smatch m;
