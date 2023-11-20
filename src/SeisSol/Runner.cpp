@@ -1,6 +1,7 @@
 #include "Runner.h"
 
 #include <ctime>
+#include <filesystem>
 #include <map>
 #include <string>
 #include <sys/wait.h>
@@ -8,10 +9,10 @@
 
 #include "IO/ReceiverReader.h"
 #include "spdlog/spdlog.h"
-#include <boost/filesystem.hpp>
 
-SeisSol::Runner::Runner(std::string seisSolBinaryPath, std::string mpiCommand)
-    : binaryPath(std::move(seisSolBinaryPath)), mpiCommand(std::move(mpiCommand)) {}
+SeisSol::Runner::Runner(std::string seisSolBinaryPath, std::string mpiCommand, std::string receiverPrefix) 
+    : binaryPath(std::move(seisSolBinaryPath)), mpiCommand(std::move(mpiCommand)),
+    receiverPrefix(std::move(receiverPrefix)) {}
 
 int SeisSol::Runner::run(size_t index) const {
   int status = 0;
@@ -32,8 +33,7 @@ int SeisSol::Runner::run(size_t index) const {
     // execl does not return if the command was successful
 
     const std::string parameterFile = "parameters_" + std::to_string(index) + ".par";
-    const int seissolError = execlp(mpiCommand.c_str(), mpiCommand.c_str(), binaryPath.c_str(),
-                                    parameterFile.c_str(), NULL);
+    const int seissolError = execlp(mpiCommand.c_str(), mpiCommand.c_str(), "--bind-to", "none", "-n", "4", "./launch.sh", binaryPath.c_str(), parameterFile.c_str(), NULL);
 
     if (seissolError == -1) {
       exit(1);
@@ -52,55 +52,59 @@ int SeisSol::Runner::run(size_t index) const {
 
 void SeisSol::Runner::prepareFilesystem(size_t runCount) {
   // Copies the old receiver data to output/chain and removes them from output/current
-  const std::string chain = "output/chain";
-  if (!boost::filesystem::exists(chain)) {
-    boost::filesystem::create_directory(chain);
+  const std::string chainDirectory = "output/chain";
+  if (!std::filesystem::exists(chainDirectory)) {
+    std::filesystem::create_directory(chainDirectory);
   }
-  const std::string current = "output/current";
-  const auto receiverList = IO::getReceiversInDirectory(current, "output-receiver");
+  const std::string currentDirectory = "output/current";
+  const auto receiverList = IO::getReceiversInDirectory(currentDirectory, receiverPrefix);
+  // TODO: use C++20 std::format
+  char buffer[6];
+  sprintf(buffer, "%05lu", runCount);
   for (const auto& it : receiverList) {
-    // TODO: use C++20 std::format
-    char buffer[6];
-    sprintf(buffer, "%05lu", runCount);
-    const std::string output =
-        chain + "/receiver-" + std::to_string(it.first) + "-chain-" + buffer + ".dat";
-    boost::filesystem::copy_file(it.second, output);
+    const std::string newFilename =
+        chainDirectory + "/receiver-" + std::to_string(it.first) + "-chain-" + buffer + ".dat";
+    spdlog::debug("cp {} {}", it.second, newFilename);
+    std::filesystem::copy(it.second, newFilename);
   }
-  boost::filesystem::remove_all(current);
-  boost::filesystem::create_directory(current);
+  const std::string newDirectory = chainDirectory + "/output-" + buffer;
+  if (std::filesystem::exists(currentDirectory)) {
+    std::filesystem::copy(currentDirectory, newDirectory, std::filesystem::copy_options::recursive);
+  }
+
+  spdlog::info("Copied latest SeisSol output to output/chain.");
+  std::filesystem::remove_all(currentDirectory);
+  std::filesystem::create_directory(currentDirectory);
+  spdlog::info("Cleared output/current.");
 }
 
 void SeisSol::Runner::archivePreviousRun() {
   // Archives receiver output from previous UQ-SeisSol runs
   const std::string chainDirectory = "output/chain";
 
-  if (boost::filesystem::exists(chainDirectory)) {
+  if (std::filesystem::exists(chainDirectory)) {
     spdlog::info("Archiving the previous run...");
 
     const std::string archiveDirectory = "output_archive";
-    if (!boost::filesystem::exists(archiveDirectory)) {
-      boost::filesystem::create_directory(archiveDirectory);
+    if (!std::filesystem::exists(archiveDirectory)) {
+      std::filesystem::create_directory(archiveDirectory);
     }
 
-    size_t numOfArchivedRuns = 0;
+    const auto now = std::chrono::system_clock::now();
+    const auto in_time_t = std::chrono::system_clock::to_time_t(now);
 
-    for ([[maybe_unused]] const boost::filesystem::directory_entry& e :
-         boost::filesystem::directory_iterator(archiveDirectory)) {
-      numOfArchivedRuns += 1;
-    }
+    std::stringstream ss;
+    ss << std::put_time(std::localtime(&in_time_t), "%Y-%m-%d %X");
+    const auto timestamp = ss.str();
+    const std::string newDirectory = archiveDirectory + "/run-" + timestamp;
+    std::filesystem::copy(chainDirectory, newDirectory);
 
-    boost::filesystem::create_directory(archiveDirectory + "/run-" +
-                                        std::to_string(numOfArchivedRuns + 1));
+    std::filesystem::remove_all(chainDirectory);
+    std::filesystem::create_directory(chainDirectory);
 
-    for (const boost::filesystem::directory_entry& e :
-         boost::filesystem::directory_iterator(chainDirectory)) {
-      boost::filesystem::copy_file(e.path(), archiveDirectory + "/run-" +
-                                                 std::to_string(numOfArchivedRuns + 1) + "/" +
-                                                 e.path().filename().string());
-    }
-
-    boost::filesystem::remove_all(chainDirectory);
-    boost::filesystem::create_directory(chainDirectory);
+    const std::string currentDirectory = "output/current";
+    std::filesystem::remove_all(currentDirectory);
+    std::filesystem::create_directory(currentDirectory);
 
     spdlog::info("Archiving done.");
   }

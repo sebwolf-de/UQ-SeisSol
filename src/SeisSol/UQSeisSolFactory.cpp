@@ -44,5 +44,6 @@ SeisSol::UQSeisSolFactory::createChainParameterWriter() const {
 
 std::shared_ptr<SeisSol::Runner> SeisSol::UQSeisSolFactory::createSeisSolRunner() const {
   return std::make_shared<SeisSol::Runner>(parameterReader.getSeisSolBinary(),
-                                           parameterReader.getMPICommand());
+                                           parameterReader.getMPICommand(),
+                                           parameterReader.getReceiverPrefix());
 }

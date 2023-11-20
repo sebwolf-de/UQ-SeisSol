@@ -1,7 +1,7 @@
 #include "ReceiverReader.h"
-#include <boost/filesystem.hpp>
 #include <cassert>
 #include <cmath>
+#include <filesystem>
 #include <fstream>
 #include <map>
 #include <regex>
@@ -17,21 +17,21 @@ IO::ReceiverReader::ReceiverReader(std::string dir, std::string prefix)
 std::map<size_t, std::string> IO::getReceiversInDirectory(std::string directory,
                                                           std::string prefix) {
   std::map<size_t, std::string> fileList;
-  if (!boost::filesystem::exists(directory)) {
+  if (!std::filesystem::exists(directory)) {
     return fileList;
   }
 
-  std::string fileName;
   const std::regex matcher(prefix + "-([0-9]{5})-.{5}\\.dat");
 
-  for (const boost::filesystem::directory_entry& e :
-       boost::filesystem::directory_iterator(directory)) {
-    if (!boost::filesystem::is_directory(e.path())) {
+  for (const std::filesystem::directory_entry& e :
+       std::filesystem::directory_iterator(directory)) {
+    if (!std::filesystem::is_directory(e.path())) {
+      const auto fileName = e.path().filename().string();
       std::smatch m;
-      if (std::regex_match(e.path().filename().string(), m, matcher)) {
-        fileName = e.path().string();
+      if (std::regex_match(fileName, m, matcher)) {
+        const auto filePath = e.path().string();
         try {
-          fileList.insert({std::stoi(m[1]), fileName});
+          fileList.insert({std::stoi(m[1]), filePath});
         } catch (const std::exception& e) {
           // m[1] und fileName loggen
           spdlog::debug("ReceiverReader - m[1]: {} with fileName: {}", m.str(1), fileName);
